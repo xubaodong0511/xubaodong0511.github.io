@@ -1,0 +1,681 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Mr.xu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1、yum安装MySQL#关闭防火墙 12systemctl stop firewalldsetenforce 0  清理环境1234yum erase mariadb mariadb-server mariadb-libs mariadb-devel -yuserdel -r mysqlrm -rf &#x2F;etc&#x2F;my*			&#x2F;&#x2F;配置文件rm -rf &#x2F;var&#x2F;lib&#x2F;mysql	&#x2F;&#x2F;初始化生成密码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安装MySQL">
+<meta property="og:url" content="http://example.com/2025/01/09/%E5%AE%89%E8%A3%85MySQL/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1、yum安装MySQL#关闭防火墙 12systemctl stop firewalldsetenforce 0  清理环境1234yum erase mariadb mariadb-server mariadb-libs mariadb-devel -yuserdel -r mysqlrm -rf &#x2F;etc&#x2F;my*			&#x2F;&#x2F;配置文件rm -rf &#x2F;var&#x2F;lib&#x2F;mysql	&#x2F;&#x2F;初始化生成密码">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-01-09T10:51:48.000Z">
+<meta property="article:modified_time" content="2025-01-09T10:54:41.449Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="mysql">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>安装MySQL - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="安装MySQL"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-01-09 18:51" pubdate>
+          2025年1月9日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          816 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          7 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">安装MySQL</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="1、yum安装MySQL"><a href="#1、yum安装MySQL" class="headerlink" title="1、yum安装MySQL"></a>1、yum安装MySQL</h1><p>#关闭防火墙</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">systemctl</span> stop firewalld<br><span class="hljs-attribute">setenforce</span> <span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="清理环境"><a href="#清理环境" class="headerlink" title="清理环境"></a>清理环境</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">yum erase mariadb mariadb-server mariadb-libs mariadb-devel -y<br>userdel -r mysql<br>rm -rf /etc/my*			//配置文件<br>rm -rf /var/lib/mysql	//初始化生成密码的路径目录<br></code></pre></td></tr></table></figure>
+
+<h1 id="编辑yum文件"><a href="#编辑yum文件" class="headerlink" title="编辑yum文件"></a>编辑yum文件</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@localhost yum.repos.d]# vim mysql.repo<br>[mysql]<br>name=mysql<br>baseurl=https://mirrors.tuna.tsinghua.edu.cn/mysql/yum/mysql-5.7-community-el7-x86_64/<br>gpgcheck=1<br>enabled=1<br>gpgkey=https://mirrors.ustc.edu.cn/mysql-repo/RPM-GPG-KEY-mysql<br></code></pre></td></tr></table></figure>
+
+<h1 id="安装软件"><a href="#安装软件" class="headerlink" title="安装软件"></a>安装软件</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">yum repolist enabled | grep mysql</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">yum -y install mysql-community-server</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">systemctl start mysqld                        //第一次启动会自动始化数据库</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">systemctl <span class="hljs-built_in">enable</span>   mysqld</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">grep password /var/log/mysqld.log</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="修改密码"><a href="#修改密码" class="headerlink" title="修改密码"></a><strong>修改密码</strong></h1><p>5.7默认有临时密码，需要修改，两种方式：<br>第一种</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">mysql -uroot -p<span class="hljs-string">&#x27;uopCBgXBu8,k&#x27;</span></span><br><span class="hljs-meta prompt_">mysql&gt; </span><span class="language-bash">alter user <span class="hljs-string">&#x27;root&#x27;</span>@<span class="hljs-string">&#x27;localhost&#x27;</span> identified by <span class="hljs-string">&#x27;Qianfeng123!@&#x27;</span>;</span><br></code></pre></td></tr></table></figure>
+
+<p>第二种</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># mysqladmin -u root -p&#x27;uopCBgXBu8,k&#x27; password &#x27;Qianfeng123!@&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>关闭弱密码限制</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash">rpm安装的5.7如下方式修改<br><span class="hljs-comment"># vim /etc/my.cnf</span><br>validate_password=off<br><br>编译安装的5.7如下方式修改<br>[mysqld]<br>basedir=/usr/local/mysql<br>datadir=/usr/local/mysql/data<br><br>[mysqld_safe]<br>validate_password=off<br></code></pre></td></tr></table></figure>
+
+<h1 id="2、编译安装MySQL"><a href="#2、编译安装MySQL" class="headerlink" title="2、编译安装MySQL"></a>2、编译安装MySQL</h1><p>#关闭防火墙</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">systemctl</span> stop firewalld<br><span class="hljs-attribute">setenforce</span> <span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="清理环境-1"><a href="#清理环境-1" class="headerlink" title="清理环境"></a>清理环境</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">yum erase mariadb mariadb-server mariadb-libs mariadb-devel -y<br>userdel -r mysql<br><span class="hljs-built_in">rm</span> -rf /etc/my*<br><span class="hljs-built_in">rm</span> -rf /var/lib/mysql<br></code></pre></td></tr></table></figure>
+
+<h1 id="创建MySQL用户"><a href="#创建MySQL用户" class="headerlink" title="创建MySQL用户"></a>创建MySQL用户</h1><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">useradd -r mysql -M -s <span class="hljs-regexp">/sbin/</span>nologin<br><span class="hljs-comment"># -M指定不安装家目录</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="安装编译工具，以及依赖软件"><a href="#安装编译工具，以及依赖软件" class="headerlink" title="安装编译工具，以及依赖软件"></a>安装编译工具，以及依赖软件</h1><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">yum -y <span class="hljs-keyword">install </span>ncurses ncurses-devel openssl-devel <span class="hljs-keyword">bison </span>gcc gcc-c++ make cmake<br></code></pre></td></tr></table></figure>
+
+<h1 id="创建mysql目录"><a href="#创建mysql目录" class="headerlink" title="创建mysql目录"></a>创建mysql目录</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> -p /usr/local/&#123;data,mysql,<span class="hljs-built_in">log</span>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="官方下载MySQL的boost包"><a href="#官方下载MySQL的boost包" class="headerlink" title="官方下载MySQL的boost包"></a>官方下载MySQL的boost包</h1><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">wget</span> https://mirrors.aliyun.com/mysql/MySQL-<span class="hljs-number">5</span>.<span class="hljs-number">7</span>/mysql-boost-<span class="hljs-number">5</span>.<span class="hljs-number">7</span>.<span class="hljs-number">36</span>.tar.gz?spm=a2c6h.<span class="hljs-number">25603864</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.b21f63aftvppVw<br></code></pre></td></tr></table></figure>
+
+<h1 id="更改包名"><a href="#更改包名" class="headerlink" title="更改包名"></a>更改包名</h1><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">mv</span> mysql-boost-<span class="hljs-number">5</span>.<span class="hljs-number">7</span>.<span class="hljs-number">36</span>.tar.gz?spm=a2c6h.<span class="hljs-number">25603864</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.b21f63aftvppVw mysql-boost-<span class="hljs-number">5</span>.<span class="hljs-number">7</span>.<span class="hljs-number">36</span>.tar.gz<br></code></pre></td></tr></table></figure>
+
+<h1 id="解压下载的软件包"><a href="#解压下载的软件包" class="headerlink" title="解压下载的软件包"></a>解压下载的软件包</h1><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">tar</span> zxvf mysql-boost-<span class="hljs-number">5</span>.<span class="hljs-number">7</span>.<span class="hljs-number">36</span>.tar.gz -C /usr/local/<br></code></pre></td></tr></table></figure>
+
+<h1 id="切换目录"><a href="#切换目录" class="headerlink" title="切换目录"></a>切换目录</h1><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">cd</span> /usr/local/mysql-<span class="hljs-number">5</span>.<span class="hljs-number">7</span>.<span class="hljs-number">36</span>/<br></code></pre></td></tr></table></figure>
+
+<h1 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h1><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs routeros">cmake . \<br><span class="hljs-attribute">-DWITH_BOOST</span>=boost/boost_1_59_0/ \<br><span class="hljs-attribute">-DCMAKE_INSTALL_PREFIX</span>=/usr/local/mysql \<br><span class="hljs-attribute">-DSYSCONFDIR</span>=/etc \<br><span class="hljs-attribute">-DMYSQL_DATADIR</span>=/usr/local/mysql/data \<br><span class="hljs-attribute">-DINSTALL_MANDIR</span>=/usr/share/man \<br><span class="hljs-attribute">-DMYSQL_TCP_PORT</span>=3306 \<br><span class="hljs-attribute">-DMYSQL_UNIX_ADDR</span>=/tmp/mysql.sock \<br><span class="hljs-attribute">-DDEFAULT_CHARSET</span>=utf8 \<br><span class="hljs-attribute">-DEXTRA_CHARSETS</span>=all \<br><span class="hljs-attribute">-DDEFAULT_COLLATION</span>=utf8_general_ci \<br><span class="hljs-attribute">-DWITH_READLINE</span>=1 \<br><span class="hljs-attribute">-DWITH_SSL</span>=system \<br><span class="hljs-attribute">-DWITH_EMBEDDED_SERVER</span>=1 \<br><span class="hljs-attribute">-DENABLED_LOCAL_INFILE</span>=1 \<br><span class="hljs-attribute">-DWITH_INNOBASE_STORAGE_ENGINE</span>=1<br></code></pre></td></tr></table></figure>
+
+<h1 id="编译安装-1"><a href="#编译安装-1" class="headerlink" title="编译安装"></a>编译安装</h1><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">make -<span class="hljs-keyword">j2 </span>&amp;&amp; make -<span class="hljs-keyword">j2 </span><span class="hljs-keyword">install</span><br><span class="hljs-keyword"></span><span class="hljs-comment"># -j2是指定2核</span><br></code></pre></td></tr></table></figure>
+
+<p>#如果安装出错，想重新安装：不用重新解压，只需要删除安装目录中的缓存文件</p>
+<h1 id="配置文件添加命令路径"><a href="#配置文件添加命令路径" class="headerlink" title="配置文件添加命令路径"></a>配置文件添加命令路径</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> &gt;&gt; /etc/profile &lt;&lt;<span class="hljs-string">EOF</span><br><span class="hljs-string">mysql=/user/local/mysql/bin/</span><br><span class="hljs-string">EOF</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="重启profile文件"><a href="#重启profile文件" class="headerlink" title="重启profile文件"></a>重启profile文件</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> /etc/profile<br></code></pre></td></tr></table></figure>
+
+<p>#找到安装目录，拷贝mysql.service脚本文件到&#x2F;etc&#x2F;init.d&#x2F;目录下，添加开机启动</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs awk">cp <span class="hljs-regexp">/usr/</span>local<span class="hljs-regexp">/mysql/</span>support-files<span class="hljs-regexp">/mysql.service /</span>etc<span class="hljs-regexp">/init.d/my</span>sqld<br>chmod a+x <span class="hljs-regexp">/etc/i</span>nit.d/mysqld<br><span class="hljs-comment"># chkconfig: 2346 63 80</span><br>chkconfig--add mysqld<br>systemctl daemon-reload<br></code></pre></td></tr></table></figure>
+
+<h1 id="进入安装目录修改权限"><a href="#进入安装目录修改权限" class="headerlink" title="进入安装目录修改权限"></a>进入安装目录修改权限</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">chown</span> -R mysql.mysql .<br></code></pre></td></tr></table></figure>
+
+<h1 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs bash">./bin/mysqld --initialize --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data<br>```<br><span class="hljs-comment"># 初始化,只需要初始化一次，初始化完成之后，一定要记住提示最后的密码用于登陆或者修改密码</span><br><span class="hljs-comment"># 添加配置文件,删除旧配置文件之后，再添加如下内容</span><br>```<br><span class="hljs-built_in">cat</span> &gt;&gt; /etc/my.cnf &lt;&lt; <span class="hljs-string">EOF</span><br><span class="hljs-string">[mysqld]</span><br><span class="hljs-string">basedir=/usr/local/mysql       #指定安装目录</span><br><span class="hljs-string">datadir=/usr/local/mysql/data  #指定数据存放目录</span><br><span class="hljs-string">EOF</span><br>```<br><span class="hljs-comment"># 杀死原进程</span><br>```<br>pkill mysqld<br>```<br><span class="hljs-comment"># 重启MySQL服务</span><br>```<br>systemctl start mysqld 	前提关闭之前的进程，再用start启动MySQL<br><span class="hljs-comment">#systemctl status mysqld</span><br><span class="hljs-comment">#systemctl stop mysqld</span><br><span class="hljs-comment">#sh mysqld restart</span><br>```<br><span class="hljs-comment"># 启动</span><br>```<br><span class="hljs-built_in">cd</span> /usr/local/mysql<br>./bin/mysqld_safe --user=mysql &amp;<br>```<br><span class="hljs-comment"># 获取密码</span><br>```<br><span class="hljs-comment">#temp_password=$(sudo cat bin/mysqld --initialize --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data | grep &#x27;temporary localhost&#x27; | awk &#x27;&#123;print $NF&#125;&#x27;)</span><br><span class="hljs-comment">#mysql -uroot -p&quot;$&#123;temp_password&#125;&quot; --connect-expired-password &lt;&lt;EOF</span><br><span class="hljs-comment">#ALTER USER &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED BY &quot;$&#123;Mysql_Pass&#125;&quot;;</span><br><span class="hljs-comment">#FLUSH PRIVILEGES;</span><br><span class="hljs-comment">#EOF</span><br>```<br><span class="hljs-comment"># 登录测试</span><br>```<br><span class="hljs-comment"># /usr/local/mysql/bin/mysql -uroot -p&#x27;ZrSw)Ns_*9iR&#x27;</span><br>```<br><span class="hljs-comment">#如果需要重新初始化...</span><br>```<br><span class="hljs-comment"># killall mysqld</span><br><span class="hljs-comment"># rm -rf /usr/local/mysql/data</span><br><span class="hljs-comment"># bin/mysqld --initialize --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data</span><br>```<br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/linux/" class="print-no-link">#linux</a>
+      
+        <a href="/tags/mysql/" class="print-no-link">#mysql</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>安装MySQL</div>
+      <div>http://example.com/2025/01/09/安装MySQL/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Mr.xu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年1月9日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/01/09/%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE/" title="域名配置">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">域名配置</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/01/09/Git%E4%BD%BF%E7%94%A8%E4%BB%A5%E5%8F%8A%E6%8E%A8%E9%80%81%E4%BB%A3%E7%A0%81%E5%88%B0Github/" title="Git使用以及推送代码到Github">
+                        <span class="hidden-mobile">Git使用以及推送代码到Github</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
