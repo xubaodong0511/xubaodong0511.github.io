@@ -19,21 +19,21 @@
   <meta name="author" content="Mr.xu">
   <meta name="keywords" content="">
   
-    <meta name="description" content="emqx–集群作用EMQX（Erlang MQTT Broker）是一个高性能、可扩展的开源 MQTT 消息代理服务器。它基于 Erlang&#x2F;OTP 开发，专为大规模物联网（IoT）应用设计。EMQX 的核心作用和功能如下：  消息代理：EMQX 作为 MQTT 消息代理，负责在发布者和订阅者之间路由消息。它支持 MQTT 协议的所有功能，包括 QoS（Quality of Servic">
+    <meta name="description" content="TDEngine–集群作用TDEngine 是一种高性能、分布式、时间序列数据库（TSDB），专门为物联网（IoT）、工业互联网、车联网、金融、IT 运维监控等领域设计。它具有高效的数据写入和查询性能，适合处理大规模的时间序列数据。以下是 TDEngine 的主要作用和用途：  物联网（IoT）数据存储和分析:  TDEngine 能够高效地存储和处理来自各种 IoT 设备和传感器的大量时间序列数">
 <meta property="og:type" content="article">
-<meta property="og:title" content="EMQX集群部署">
-<meta property="og:url" content="http://example.com/2025/11/05/EMQX%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:title" content="TDEngine时序数据库部署">
+<meta property="og:url" content="http://example.com/2025/11/06/TDEngine%E6%97%B6%E5%BA%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="emqx–集群作用EMQX（Erlang MQTT Broker）是一个高性能、可扩展的开源 MQTT 消息代理服务器。它基于 Erlang&#x2F;OTP 开发，专为大规模物联网（IoT）应用设计。EMQX 的核心作用和功能如下：  消息代理：EMQX 作为 MQTT 消息代理，负责在发布者和订阅者之间路由消息。它支持 MQTT 协议的所有功能，包括 QoS（Quality of Servic">
+<meta property="og:description" content="TDEngine–集群作用TDEngine 是一种高性能、分布式、时间序列数据库（TSDB），专门为物联网（IoT）、工业互联网、车联网、金融、IT 运维监控等领域设计。它具有高效的数据写入和查询性能，适合处理大规模的时间序列数据。以下是 TDEngine 的主要作用和用途：  物联网（IoT）数据存储和分析:  TDEngine 能够高效地存储和处理来自各种 IoT 设备和传感器的大量时间序列数">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-11-05T14:15:49.000Z">
-<meta property="article:modified_time" content="2025-11-05T14:16:39.850Z">
+<meta property="article:published_time" content="2025-11-06T08:11:01.000Z">
+<meta property="article:modified_time" content="2025-11-06T08:11:19.873Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>EMQX集群部署 - Hexo</title>
+  <title>TDEngine时序数据库部署 - Hexo</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -199,7 +199,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="EMQX集群部署"></span>
+            <span id="subtitle" data-typed-text="TDEngine时序数据库部署"></span>
           
         </div>
 
@@ -210,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-11-05 22:15" pubdate>
-          2025年11月5日 晚上
+        <time datetime="2025-11-06 16:11" pubdate>
+          2025年11月6日 下午
         </time>
       </span>
     
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.1k 字
+          1.6k 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          10 分钟
+          14 分钟
         
       </span>
     
@@ -270,143 +270,185 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">EMQX集群部署</h1>
+            <h1 id="seo-header">TDEngine时序数据库部署</h1>
             
             
               <div class="markdown-body">
                 
-                <h3 id="emqx–集群"><a href="#emqx–集群" class="headerlink" title="emqx–集群"></a>emqx–集群</h3><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>EMQX（Erlang MQTT Broker）是一个高性能、可扩展的开源 MQTT 消息代理服务器。它基于 Erlang&#x2F;OTP 开发，专为大规模物联网（IoT）应用设计。EMQX 的核心作用和功能如下：</p>
+                <h3 id="TDEngine–集群"><a href="#TDEngine–集群" class="headerlink" title="TDEngine–集群"></a>TDEngine–集群</h3><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>TDEngine 是一种高性能、分布式、时间序列数据库（TSDB），专门为物联网（IoT）、工业互联网、车联网、金融、IT 运维监控等领域设计。它具有高效的数据写入和查询性能，适合处理大规模的时间序列数据。以下是 TDEngine 的主要作用和用途：</p>
 <ol>
-<li><strong>消息代理</strong>：EMQX 作为 MQTT 消息代理，负责在发布者和订阅者之间路由消息。它支持 MQTT 协议的所有功能，包括 QoS（Quality of Service）级别、持久会话和遗嘱消息等。</li>
-<li><strong>设备连接管理</strong>：EMQX 可以管理大量 IoT 设备的连接，支持数百万级别的并发连接，适用于大规模的物联网应用。</li>
-<li><strong>数据分发</strong>：EMQX 能够高效地分发数据，确保消息在发布者和订阅者之间的快速传递，支持多种消息格式和传输协议。</li>
-<li><strong>扩展性</strong>：EMQX 支持插件机制，用户可以根据需求扩展其功能，如数据持久化、规则引擎、认证和授权等。</li>
+<li><p><strong>物联网（IoT）数据存储和分析</strong>:</p>
+<ul>
+<li>TDEngine 能够高效地存储和处理来自各种 IoT 设备和传感器的大量时间序列数据，支持实时数据写入和复杂查询。</li>
+</ul>
+</li>
+<li><p><strong>工业互联网</strong>:</p>
+<ul>
+<li>在工业互联网应用中，TDEngine 可以用于存储和分析工业设备的运行数据、传感器数据、生产线数据等，帮助进行设备监控、预测性维护和优化生产流程。</li>
+</ul>
+</li>
+<li><p><strong>车联网</strong>:</p>
+<ul>
+<li>TDEngine 能够存储和处理车辆的运行数据、位置数据、传感器数据等，支持实时数据分析和查询，适用于车联网应用中的数据管理和分析。</li>
+</ul>
+</li>
+<li><p><strong>金融数据分析</strong>:</p>
+<ul>
+<li>在金融领域，TDEngine 可以用于存储和分析股票、期货、外汇等金融市场的时间序列数据，支持高频交易数据的存储和实时查询分析。</li>
+</ul>
+</li>
+<li><p><strong>IT 运维监控</strong>:</p>
+<ul>
+<li>TDEngine 适用于 IT 运维监控场景，可以存储和分析服务器性能数据、应用程序日志、网络流量数据等，帮助运维人员进行系统监控和故障排除。</li>
+</ul>
+</li>
+<li><p><strong>高效的数据写入和查询</strong>:</p>
+<ul>
+<li>TDEngine 具有高效的数据写入和查询性能，能够处理每秒数百万条数据的写入和查询操作，适合大规模时间序列数据的存储和分析。</li>
+</ul>
+</li>
+<li><p><strong>分布式架构</strong>:</p>
+<ul>
+<li>TDEngine 采用分布式架构，支持数据的水平扩展和高可用性，能够处理海量数据并保证系统的稳定性和可靠性。</li>
+</ul>
+</li>
+<li><p><strong>内置计算能力</strong>:</p>
+<ul>
+<li>TDEngine 提供了丰富的内置计算能力，包括聚合计算、统计分析、数据过滤等，支持复杂的查询和数据分析操作。</li>
+</ul>
+</li>
+<li><p><strong>低存储成本</strong>:</p>
+<ul>
+<li>TDEngine 采用高效的数据压缩算法，能够显著降低存储成本，同时保证数据的高效查询和分析。</li>
+</ul>
+</li>
+<li><p><strong>支持多种数据接口</strong>:</p>
+<ul>
+<li>TDEngine 支持多种数据接口和协议，包括 SQL、RESTful API、MQTT 等，方便与各种应用和系统进行集成。</li>
+</ul>
+</li>
+<li><p><strong>实时流处理</strong>:</p>
+<ul>
+<li>TDEngine 支持实时流处理，可以对流数据进行实时计算和分析，适用于需要实时数据处理的应用场景。</li>
+</ul>
+</li>
 </ol>
-<p><strong>主要功能</strong></p>
-<ol>
-<li><p><strong>支持多种协议</strong></p>
-<ul>
-<li><strong>MQTT&#x2F;MQTT-SN</strong>：原生支持 MQTT 3.1.1 和 MQTT 5.0 协议。</li>
-<li><strong>HTTP&#x2F;HTTPS</strong>：支持通过 HTTP&#x2F;HTTPS 协议进行消息发布和订阅。</li>
-<li><strong>CoAP</strong>：支持 Constrained Application Protocol（CoAP），适用于资源受限的设备。</li>
-<li><strong>WebSocket</strong>：支持通过 WebSocket 进行 MQTT 通信，方便 Web 应用集成。</li>
-</ul>
-</li>
-<li><p><strong>高性能和高可用性</strong></p>
-<ul>
-<li><strong>高并发连接</strong>：支持数百万级别的并发连接，适用于大规模 IoT 部署。</li>
-<li><strong>集群支持</strong>：支持集群部署，提供高可用性和负载均衡。</li>
-<li><strong>水平扩展</strong>：可以通过增加节点来扩展系统容量。</li>
-</ul>
-</li>
-<li><p><strong>安全性</strong></p>
-<ul>
-<li><strong>认证和授权</strong>：支持多种认证方式（如用户名&#x2F;密码、客户端证书、LDAP 等）和细粒度的访问控制。</li>
-<li><strong>加密通信</strong>：支持 TLS&#x2F;SSL 加密，确保数据传输的安全性。</li>
-</ul>
-</li>
-<li><p><strong>规则引擎</strong></p>
-<ul>
-<li><strong>数据处理</strong>：内置规则引擎，可以根据预定义的规则对消息进行处理、过滤和转发。</li>
-<li><strong>集成外部系统</strong>：支持与数据库、消息队列、HTTP 服务等外部系统集成。</li>
-</ul>
-</li>
-<li><p><strong>监控和管理</strong></p>
-<ul>
-<li><strong>管理控制台</strong>：提供友好的 Web 管理控制台，方便用户进行配置和管理。</li>
-<li><strong>监控和告警</strong>：支持实时监控系统状态和性能，提供告警机制。</li>
-</ul>
-</li>
-</ol>
-<p><strong>典型应用场景</strong></p>
-<ol>
-<li><strong>智能家居</strong>：管理和控制大量智能家居设备，实现设备间的消息通信和数据共享。</li>
-<li><strong>工业物联网</strong>：在工业环境中，管理各种传感器和设备的数据采集和传输。</li>
-<li><strong>车联网</strong>：支持车辆与云端的实时通信，管理车辆数据和远程控制。</li>
-<li><strong>智慧城市</strong>：管理城市基础设施（如路灯、交通信号灯、环境监测设备等）的数据通信。</li>
-</ol>
+<p>综上所述，TDEngine 是一种专门为时间序列数据设计的高性能数据库，适合处理大规模、高频率的时间序列数据，广泛应用于物联网、工业互联网、车联网、金融、IT 运维监控等领域。</p>
 <h4 id="资源需求"><a href="#资源需求" class="headerlink" title="资源需求"></a>资源需求</h4><ul>
 <li><strong>CPU</strong>: 4 核 </li>
 <li><strong>内存</strong>:  8 GB </li>
-<li><strong>存储</strong>: 300G</li>
+<li><strong>存储</strong>: 1T</li>
 <li><strong>节点</strong>：2</li>
 </ul>
-<h4 id="网络端口"><a href="#网络端口" class="headerlink" title="网络端口"></a>网络端口</h4><ol>
-<li><strong>默认管理端口</strong><ul>
-<li><strong>端口号</strong>: 18083</li>
-<li><strong>用途</strong>: EMQX Dashboard（管理控制台）端口，用于管理和监控 EMQX。</li>
+<h4 id="网络端口"><a href="#网络端口" class="headerlink" title="网络端口"></a>网络端口</h4><ul>
+<li><p><strong>客户端连接端口</strong></p>
+<ul>
+<li><p><strong>默认端口</strong>: 6030</p>
+</li>
+<li><p><strong>用途</strong>: 客户端（如应用程序、用户）通过该端口连接到 TDEngine 进行数据查询和写入操作。</p>
+</li>
 </ul>
 </li>
-<li><strong>MQTT 端口</strong><ul>
-<li><strong>端口号</strong>: 1883</li>
-<li><strong>用途</strong>: MQTT 协议默认端口，用于客户端连接。</li>
+<li><p><strong>管理端口</strong></p>
+<ul>
+<li><strong>默认端口</strong>: 6041</li>
+<li><strong>用途</strong>: 用于 TDEngine 管理工具（如 taos）连接到服务器进行管理操作。</li>
 </ul>
 </li>
-<li><strong>MQTT&#x2F;TLS 端口</strong><ul>
-<li><strong>端口号</strong>: 8883</li>
-<li><strong>用途</strong>: 使用 TLS&#x2F;SSL 加密的 MQTT 连接端口。</li>
+<li><p><strong>数据传输端口</strong></p>
+<ul>
+<li><strong>默认端口</strong>: 6042</li>
+<li><strong>用途</strong>: 用于集群内部节点之间的数据传输和同步。</li>
 </ul>
 </li>
-<li><strong>WebSocket 端口</strong><ul>
-<li><strong>端口号</strong>: 8083</li>
-<li><strong>用途</strong>: 支持 WebSocket 的 MQTT 连接端口。</li>
+<li><p><strong>RESTful API 端口</strong></p>
+<ul>
+<li><strong>默认端口</strong>: 6043</li>
+<li><strong>用途</strong>: 提供 RESTful API 服务，允许通过 HTTP 协议进行数据操作。</li>
 </ul>
 </li>
-<li><strong>WebSocket&#x2F;TLS 端口</strong><ul>
-<li><strong>端口号</strong>: 8084</li>
-<li><strong>用途</strong>: 使用 TLS&#x2F;SSL 加密的 WebSocket 连接端口。</li>
+<li><p><strong>MQTT 端口</strong></p>
+<ul>
+<li><strong>默认端口</strong>: 6044</li>
+<li><strong>用途</strong>: 支持 MQTT 协议，用于物联网设备的数据接入。</li>
 </ul>
 </li>
-<li><strong>集群通信端口</strong><ul>
-<li><strong>端口号</strong>: 4369, 6000-6999</li>
-<li><strong>用途</strong>: EMQX 集群节点之间的通信端口。</li>
 </ul>
-</li>
-</ol>
-<h4 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h4><pre><code class="hljs"># 下载安装包
-wget https://www.emqx.com/zh/downloads/broker/5.7.0/emqx-5.7.0-el7-amd64.tar.gz
-
-mkdir -p /data/emqx/data
-# 创建目录、解压
-mkdir -p /data/emqx/data &amp;&amp; tar -zxvf emqx-5.7.0-el7-amd64.tar.gz -C /data/emqx
-# 编辑配置文件
-cd /data/emqx
-vim etc/emqx.conf
-# 将原有的改为以下内容--在每个节点上添加更改，更后按顺序启动
-node &#123;
-  name = &quot;emqx@10.100.40.171&quot;     # 本机IP
-  cookie = &quot;emqxsecretcookie&quot;
-  data_dir = &quot;/data/emqx/data&quot;     # 数据存放目录
-&#125;
-
-cluster &#123;
-  name = emqxcl
-  discovery_strategy = manual
-  static &#123;
-    seeds = [
-      &quot;emqx@10.100.40.171&quot;,     # 添加集群
-      &quot;emqx@10.100.40.172&quot;
-    ]
-  &#125;
-&#125;
-
+<h4 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h4><pre><code class="hljs">#下载地址
+https://docs.taosdata.com/get-started/package/#!
+从列表中下载获得 tar.gz 安装包；
+TDengine-server-3.1.1.0-Linux-x64.tar.gz (126.7 M)      # Linux客户端下载
+# 创建目录
+mkdir -p /data/tasosi
+# 解压到指定目录
+tar xzf TDengine-server-3.1.1.0-Linux-x64.tar.gz -C /data/tasosi/
+# 切换目录
+cd /data/tasosi/TDengine-server-3.1.1.0/
 # 启动
-./emqx/bin/emqx start
+./install.sh -e no
+# install.sh 安装脚本在执行过程中，会通过命令行交互界面询问一些配置信息。如果希望采取无交互安装方式，那么可以运行 ./install.sh -e no。运行 ./install.sh -h 指令可以查看所有参数的详细说明信息。
+# 安装是交互式操作
+1、提供机器的 IP 地址：#填写本机的IP
+2、当安装第一个节点时，出现 Enter FQDN: 提示的时候，不需要输入任何内容。只有当安装第二个或以后更多的节点时，才需要输入已有集群中任何一个可用节点的 FQDN，支持该新节点加入集群。当然也可以不输入，而是在新节点启动前，配置到新节点的配置文件中：#直接回车
+3、选择是否输入电子邮件地址，选择跳过： #直接回车
 
-# 加入集群--在从机器上操作
-cd /data/emqx
-./bin/emqx_ctl cluster join emqx@10.100.40.172      # 在从机器上操作，写主节点的IP
+# 先不要启动--添加好集群再启动-单节点直接启动
+vim  /etc/taos/taos.cfg    # 此文件下可以修改端口，增加节点，修改数据、日记的存储目录
+# firstEp     hostname:6030  改为  firstEp       10.100.40.171:6030
+fqdn          10.100.40.171  改为  写本机的IP地址
+logDir                    /data/tasosi/log
+dataDir                   /data/tasosi/data
 
-# 验证--在主机器上操作，查看状态
-./bin/emqx_ctl cluster status
+#创建目录并赋予权限
+mkdir -p /data/tasosi/data
+mkdir -p /data/tasosi/log
+chown -R taos:taos /data/tasosi/data
+chown -R taos:taos /data/tasosi/log
+chmod -R 755 /data/tasosi/*
+# 复制原有数据--如果是有数据的前提下
+# cp -r /var/lib/taos /data/tasosi/data
+# 所有集群的配置文件都改好后-从节点一按顺序启动
+systemctl start taosd
+# 所有的启动后在（主节点）上添加集群
+taos
+show dnodes;
+create dnode &quot;10.100.40.172&quot;;  #若有多个添加多次IP，从节点的IP 
+# 验证
+show dnodes;   # 此时就可以看到多台集群信息了
 
-# 验证数据目录路径
-[root@emqx01 data]# grep &#39;data_dir&#39; /data/emqx/etc/emqx.conf
-  data_dir = &quot;/data/emqx/data&quot;
+# 删除节点
+DROP DNODE &quot;fqdn:port&quot;;
+或
+DROP DNODE dnodeId;
 
-# 访问
-10.1.15.101:18083		默认账号: admin 默认密码：public
-10.1.15.102:18083		默认账号: admin 默认密码：public
+扩展：
+# 启动命令分为
+systemctl start taosd
+systemctl start taosadapter
+systemctl start taoskeeper
+systemctl start taos-explorer
+
+systemctl stop taosd
+systemctl restart taosd
+systemctl status taosd
+如果系统中不支持 systemd，也可以用手动运行 /usr/local/taos/bin/taosd 方式启动 TDengine 服务
+# 进入命令
+taos
+# 在 TDengine CLI 中，用户可以通过 SQL 命令来创建/删除数据库、表等，并进行数据库（Database）插入查询操作。在终端中运行的 SQL 语句需要以分号（;）结束来运行。示例：
+CREATE DATABASE demo;
+USE demo;
+CREATE TABLE t (ts TIMESTAMP, speed INT);
+INSERT INTO t VALUES (&#39;2019-07-15 00:00:00&#39;, 10);
+INSERT INTO t VALUES (&#39;2019-07-15 01:00:00&#39;, 20);
+SELECT * FROM t;
+           ts            |    speed    |
+========================================
+ 2019-07-15 00:00:00.000 |          10 |
+ 2019-07-15 01:00:00.000 |          20 |
+Query OK, 2 row(s) in set (0.003128s)
+# 修改端口号
+vim /etc/taos/taos.cfg
+# 此文件下可以修改端口，增加节点，修改数据、日记的存储目录
 </code></pre>
 
                 
@@ -425,8 +467,8 @@ cd /data/emqx
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>EMQX集群部署</div>
-      <div>http://example.com/2025/11/05/EMQX集群部署/</div>
+      <div>TDEngine时序数据库部署</div>
+      <div>http://example.com/2025/11/06/TDEngine时序数据库部署/</div>
     </div>
     <div class="license-meta">
       
@@ -438,7 +480,7 @@ cd /data/emqx
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年11月5日</div>
+          <div>2025年11月6日</div>
         </div>
       
       
@@ -470,9 +512,9 @@ cd /data/emqx
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/11/06/Nacos%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" title="Nacos集群部署">
+                      <a href="/2025/11/06/MongoDB%E9%83%A8%E7%BD%B2/" title="MongoDB部署">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Nacos集群部署</span>
+                        <span class="hidden-mobile">MongoDB部署</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -480,8 +522,8 @@ cd /data/emqx
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/11/05/Minio%E5%AD%98%E5%82%A8%E9%83%A8%E7%BD%B2/" title="Minio存储部署">
-                        <span class="hidden-mobile">Minio存储部署</span>
+                      <a href="/2025/11/06/Nacos%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" title="Nacos集群部署">
+                        <span class="hidden-mobile">Nacos集群部署</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

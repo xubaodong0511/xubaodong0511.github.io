@@ -19,21 +19,21 @@
   <meta name="author" content="Mr.xu">
   <meta name="keywords" content="">
   
-    <meta name="description" content="emqx–集群作用EMQX（Erlang MQTT Broker）是一个高性能、可扩展的开源 MQTT 消息代理服务器。它基于 Erlang&#x2F;OTP 开发，专为大规模物联网（IoT）应用设计。EMQX 的核心作用和功能如下：  消息代理：EMQX 作为 MQTT 消息代理，负责在发布者和订阅者之间路由消息。它支持 MQTT 协议的所有功能，包括 QoS（Quality of Servic">
+    <meta name="description" content="Nacos–集群作用Nacos（Dynamic Naming and Configuration Service）是阿里巴巴开源的一个动态服务发现、配置管理和服务管理平台。它主要用于微服务架构中的服务注册与发现、分布式配置管理和动态 DNS 服务。Nacos 的核心功能和作用如下：  服务发现和注册   服务注册：Nacos 允许服务实例在启动时向 Nacos 注册自己的信息（如 IP 地址、端口">
 <meta property="og:type" content="article">
-<meta property="og:title" content="EMQX集群部署">
-<meta property="og:url" content="http://example.com/2025/11/05/EMQX%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:title" content="Nacos集群部署">
+<meta property="og:url" content="http://example.com/2025/11/06/Nacos%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="emqx–集群作用EMQX（Erlang MQTT Broker）是一个高性能、可扩展的开源 MQTT 消息代理服务器。它基于 Erlang&#x2F;OTP 开发，专为大规模物联网（IoT）应用设计。EMQX 的核心作用和功能如下：  消息代理：EMQX 作为 MQTT 消息代理，负责在发布者和订阅者之间路由消息。它支持 MQTT 协议的所有功能，包括 QoS（Quality of Servic">
+<meta property="og:description" content="Nacos–集群作用Nacos（Dynamic Naming and Configuration Service）是阿里巴巴开源的一个动态服务发现、配置管理和服务管理平台。它主要用于微服务架构中的服务注册与发现、分布式配置管理和动态 DNS 服务。Nacos 的核心功能和作用如下：  服务发现和注册   服务注册：Nacos 允许服务实例在启动时向 Nacos 注册自己的信息（如 IP 地址、端口">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-11-05T14:15:49.000Z">
-<meta property="article:modified_time" content="2025-11-05T14:16:39.850Z">
+<meta property="article:published_time" content="2025-11-06T08:10:08.000Z">
+<meta property="article:modified_time" content="2025-11-06T08:10:36.831Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>EMQX集群部署 - Hexo</title>
+  <title>Nacos集群部署 - Hexo</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -199,7 +199,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="EMQX集群部署"></span>
+            <span id="subtitle" data-typed-text="Nacos集群部署"></span>
           
         </div>
 
@@ -210,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-11-05 22:15" pubdate>
-          2025年11月5日 晚上
+        <time datetime="2025-11-06 16:10" pubdate>
+          2025年11月6日 下午
         </time>
       </span>
     
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.1k 字
+          1.2k 字
         
       </span>
     
@@ -270,60 +270,62 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">EMQX集群部署</h1>
+            <h1 id="seo-header">Nacos集群部署</h1>
             
             
               <div class="markdown-body">
                 
-                <h3 id="emqx–集群"><a href="#emqx–集群" class="headerlink" title="emqx–集群"></a>emqx–集群</h3><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>EMQX（Erlang MQTT Broker）是一个高性能、可扩展的开源 MQTT 消息代理服务器。它基于 Erlang&#x2F;OTP 开发，专为大规模物联网（IoT）应用设计。EMQX 的核心作用和功能如下：</p>
+                <h3 id="Nacos–集群"><a href="#Nacos–集群" class="headerlink" title="Nacos–集群"></a>Nacos–集群</h3><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>Nacos（Dynamic Naming and Configuration Service）是阿里巴巴开源的一个动态服务发现、配置管理和服务管理平台。它主要用于微服务架构中的服务注册与发现、分布式配置管理和动态 DNS 服务。Nacos 的核心功能和作用如下：</p>
 <ol>
-<li><strong>消息代理</strong>：EMQX 作为 MQTT 消息代理，负责在发布者和订阅者之间路由消息。它支持 MQTT 协议的所有功能，包括 QoS（Quality of Service）级别、持久会话和遗嘱消息等。</li>
-<li><strong>设备连接管理</strong>：EMQX 可以管理大量 IoT 设备的连接，支持数百万级别的并发连接，适用于大规模的物联网应用。</li>
-<li><strong>数据分发</strong>：EMQX 能够高效地分发数据，确保消息在发布者和订阅者之间的快速传递，支持多种消息格式和传输协议。</li>
-<li><strong>扩展性</strong>：EMQX 支持插件机制，用户可以根据需求扩展其功能，如数据持久化、规则引擎、认证和授权等。</li>
+<li><strong>服务发现和注册</strong></li>
 </ol>
-<p><strong>主要功能</strong></p>
-<ol>
-<li><p><strong>支持多种协议</strong></p>
 <ul>
-<li><strong>MQTT&#x2F;MQTT-SN</strong>：原生支持 MQTT 3.1.1 和 MQTT 5.0 协议。</li>
-<li><strong>HTTP&#x2F;HTTPS</strong>：支持通过 HTTP&#x2F;HTTPS 协议进行消息发布和订阅。</li>
-<li><strong>CoAP</strong>：支持 Constrained Application Protocol（CoAP），适用于资源受限的设备。</li>
-<li><strong>WebSocket</strong>：支持通过 WebSocket 进行 MQTT 通信，方便 Web 应用集成。</li>
+<li><strong>服务注册</strong>：Nacos 允许服务实例在启动时向 Nacos 注册自己的信息（如 IP 地址、端口、服务名称等），从而使其他服务能够发现它们。</li>
+<li><strong>服务发现</strong>：服务消费者可以通过 Nacos 查询到所需服务的实例信息，从而实现服务间的调用。Nacos 支持多种服务发现机制，如 DNS 和 HTTP。</li>
 </ul>
-</li>
-<li><p><strong>高性能和高可用性</strong></p>
-<ul>
-<li><strong>高并发连接</strong>：支持数百万级别的并发连接，适用于大规模 IoT 部署。</li>
-<li><strong>集群支持</strong>：支持集群部署，提供高可用性和负载均衡。</li>
-<li><strong>水平扩展</strong>：可以通过增加节点来扩展系统容量。</li>
-</ul>
-</li>
-<li><p><strong>安全性</strong></p>
-<ul>
-<li><strong>认证和授权</strong>：支持多种认证方式（如用户名&#x2F;密码、客户端证书、LDAP 等）和细粒度的访问控制。</li>
-<li><strong>加密通信</strong>：支持 TLS&#x2F;SSL 加密，确保数据传输的安全性。</li>
-</ul>
-</li>
-<li><p><strong>规则引擎</strong></p>
-<ul>
-<li><strong>数据处理</strong>：内置规则引擎，可以根据预定义的规则对消息进行处理、过滤和转发。</li>
-<li><strong>集成外部系统</strong>：支持与数据库、消息队列、HTTP 服务等外部系统集成。</li>
-</ul>
-</li>
-<li><p><strong>监控和管理</strong></p>
-<ul>
-<li><strong>管理控制台</strong>：提供友好的 Web 管理控制台，方便用户进行配置和管理。</li>
-<li><strong>监控和告警</strong>：支持实时监控系统状态和性能，提供告警机制。</li>
-</ul>
-</li>
+<ol start="2">
+<li><strong>分布式配置管理</strong></li>
 </ol>
+<ul>
+<li><strong>配置管理</strong>：Nacos 提供了集中化的配置管理功能，允许开发者将应用配置存储在 Nacos 服务器上。配置的变更可以实时推送到各个服务实例，避免了因配置变更而重启服务的需求。</li>
+<li><strong>动态配置</strong>：通过 Nacos，配置可以在运行时动态更新，服务实例会自动感知配置的变化并做出相应调整。</li>
+</ul>
+<ol start="3">
+<li><strong>动态 DNS 服务</strong></li>
+</ol>
+<ul>
+<li><strong>动态 DNS</strong>：Nacos 支持动态 DNS 服务，可以将服务名解析为服务实例的 IP 地址和端口，方便服务间的调用和负载均衡。</li>
+</ul>
+<ol start="4">
+<li><strong>集群管理</strong></li>
+</ol>
+<ul>
+<li><strong>集群管理</strong>：Nacos 支持对服务实例进行健康检查和集群管理，确保服务的高可用性和可靠性。它可以自动剔除不健康的实例，并在实例恢复后重新加入到服务列表中。</li>
+</ul>
+<ol start="5">
+<li><strong>多语言支持</strong></li>
+</ol>
+<ul>
+<li><strong>多语言支持</strong>：Nacos 提供了丰富的客户端 SDK，支持 Java、Go、C++ 等多种编程语言，方便开发者在不同语言的项目中集成 Nacos。</li>
+</ul>
+<ol start="6">
+<li><strong>可视化管理界面</strong></li>
+</ol>
+<ul>
+<li><strong>可视化界面</strong>：Nacos 提供了友好的 Web 管理界面，方便开发者和运维人员对服务和配置进行管理和监控。</li>
+</ul>
+<ol start="7">
+<li><strong>高可用和扩展性</strong></li>
+</ol>
+<ul>
+<li><strong>高可用</strong>：Nacos 支持集群部署，保证服务的高可用性和容错性。</li>
+<li><strong>扩展性</strong>：Nacos 设计灵活，支持插件机制，可以根据需要扩展功能。</li>
+</ul>
 <p><strong>典型应用场景</strong></p>
 <ol>
-<li><strong>智能家居</strong>：管理和控制大量智能家居设备，实现设备间的消息通信和数据共享。</li>
-<li><strong>工业物联网</strong>：在工业环境中，管理各种传感器和设备的数据采集和传输。</li>
-<li><strong>车联网</strong>：支持车辆与云端的实时通信，管理车辆数据和远程控制。</li>
-<li><strong>智慧城市</strong>：管理城市基础设施（如路灯、交通信号灯、环境监测设备等）的数据通信。</li>
+<li><strong>微服务架构</strong>：在微服务架构中，Nacos 作为服务注册与发现的核心组件，简化了服务间的通信和管理。</li>
+<li><strong>分布式系统</strong>：在分布式系统中，Nacos 提供集中化的配置管理，简化了配置的管理和推送。</li>
+<li><strong>云原生应用</strong>：在云原生应用中，Nacos 提供动态 DNS 和服务发现功能，支持服务的弹性伸缩和动态管理。</li>
 </ol>
 <h4 id="资源需求"><a href="#资源需求" class="headerlink" title="资源需求"></a>资源需求</h4><ul>
 <li><strong>CPU</strong>: 4 核 </li>
@@ -332,81 +334,89 @@
 <li><strong>节点</strong>：2</li>
 </ul>
 <h4 id="网络端口"><a href="#网络端口" class="headerlink" title="网络端口"></a>网络端口</h4><ol>
-<li><strong>默认管理端口</strong><ul>
-<li><strong>端口号</strong>: 18083</li>
-<li><strong>用途</strong>: EMQX Dashboard（管理控制台）端口，用于管理和监控 EMQX。</li>
-</ul>
-</li>
-<li><strong>MQTT 端口</strong><ul>
-<li><strong>端口号</strong>: 1883</li>
-<li><strong>用途</strong>: MQTT 协议默认端口，用于客户端连接。</li>
-</ul>
-</li>
-<li><strong>MQTT&#x2F;TLS 端口</strong><ul>
-<li><strong>端口号</strong>: 8883</li>
-<li><strong>用途</strong>: 使用 TLS&#x2F;SSL 加密的 MQTT 连接端口。</li>
-</ul>
-</li>
-<li><strong>WebSocket 端口</strong><ul>
-<li><strong>端口号</strong>: 8083</li>
-<li><strong>用途</strong>: 支持 WebSocket 的 MQTT 连接端口。</li>
-</ul>
-</li>
-<li><strong>WebSocket&#x2F;TLS 端口</strong><ul>
-<li><strong>端口号</strong>: 8084</li>
-<li><strong>用途</strong>: 使用 TLS&#x2F;SSL 加密的 WebSocket 连接端口。</li>
+<li><strong>默认端口</strong><ul>
+<li><strong>端口号</strong>: 8848</li>
+<li><strong>用途</strong>: Nacos 的 HTTP API 端口，用于服务注册、配置管理和其他 API 调用。</li>
 </ul>
 </li>
 <li><strong>集群通信端口</strong><ul>
-<li><strong>端口号</strong>: 4369, 6000-6999</li>
-<li><strong>用途</strong>: EMQX 集群节点之间的通信端口。</li>
+<li><strong>端口号</strong>: 7848</li>
+<li><strong>用途</strong>: Nacos 集群节点之间的通信端口。</li>
 </ul>
 </li>
 </ol>
-<h4 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h4><pre><code class="hljs"># 下载安装包
-wget https://www.emqx.com/zh/downloads/broker/5.7.0/emqx-5.7.0-el7-amd64.tar.gz
+<h4 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h4><pre><code class="hljs"># 安装jdk
+wget https://a.xbd666.cn/d/Aliyun/Cloud_computing/Software_package/tomcat-jdk/jdk-8u271-linux-x64.tar.gz
+jdk在/usr/local目录下，设置变量
 
-mkdir -p /data/emqx/data
-# 创建目录、解压
-mkdir -p /data/emqx/data &amp;&amp; tar -zxvf emqx-5.7.0-el7-amd64.tar.gz -C /data/emqx
-# 编辑配置文件
-cd /data/emqx
-vim etc/emqx.conf
-# 将原有的改为以下内容--在每个节点上添加更改，更后按顺序启动
-node &#123;
-  name = &quot;emqx@10.100.40.171&quot;     # 本机IP
-  cookie = &quot;emqxsecretcookie&quot;
-  data_dir = &quot;/data/emqx/data&quot;     # 数据存放目录
-&#125;
+# 下载nacos安装包
+wget https://a.xbd666.cn/d/Aliyun/Cloud_computing/Software_package/nacos/nacos-server-1.2.1.tar.gz
 
-cluster &#123;
-  name = emqxcl
-  discovery_strategy = manual
-  static &#123;
-    seeds = [
-      &quot;emqx@10.100.40.171&quot;,     # 添加集群
-      &quot;emqx@10.100.40.172&quot;
-    ]
-  &#125;
-&#125;
+#创建目录
+mkdir -p /data/nacos
+# 解压
+tar xzf nacos-server-2.3.2.tar.gz -C /data/nacos
+cd /data/nacos/nacos/conf
+# 编辑连数据库的 配置文件
+vim application.properties
+更改以下内容
+spring.datasource.platform=mysql      # 去除注释
+# spring.sql.init.platform=mysql
+
+### Count of DB:
+db.num=1    # 去除注释
+
+### Connect URL of DB:
+db.url.0=jdbc:mysql://10.100.40.171:3306/nacos?characterEncoding=utf8&amp;connectTimeout=1000&amp;socketTimeout=3000&amp;autoReconnect=true&amp;useUnicode=true&amp;useSSL=false&amp;serverTimezone=UTC    # 改MySQL机器的IP地址
+db.user.0=root     # 改为root用户
+db.password.0=Kunyue@123     # 改为MySQL的密码
+spring.data.dir=/data/nacos/data		#定义数据存放目录
+
+#创建目录
+mkdir -p /data/nacos/data
+chmod -R 755 /data/nacos
+# 导入数据--并创建nacos数据库
+CREATE USER &#39;root&#39;@&#39;%&#39; IDENTIFIED BY &#39;123456&#39;;
+GRANT ALL PRIVILEGES ON *.* TO &#39;root&#39;@&#39;%&#39;;
+flush privileges;
+
+# 编辑集群配置文件--添加集群IP地址
+cp cluster.conf.example cluster.conf.example.bak
+mv cluster.conf.example cluster.conf
+vim cluster.conf
+添加nacos集群的IP地址
+10.100.40.170:8848
+10.100.40.171:8848
+10.100.40.172:8848
 
 # 启动
-./emqx/bin/emqx start
+./bin/startup.sh
+# 停止
+./bin/shutdown.sh
 
-# 加入集群--在从机器上操作
-cd /data/emqx
-./bin/emqx_ctl cluster join emqx@10.100.40.172      # 在从机器上操作，写主节点的IP
+# 登入、验证
+http://IP + 8848/nacos
+在web界面左侧栏--集群管理--节点管理   # 可以看到所有集群的状态
+           
+           
+           
+### 开启鉴权
+通过base64命令随机生成token
+[root@emqx01 conf]# echo -n &#39;ThisIsARandomlyGeneratedSecureKey32CharactersLong&#39; | base64
+VGhpc0lzQVJhbmRvbWx5R2VuZXJhdGVkU2VjdXJlS2V5MzJDaGFyYWN0ZXJzTG9uZw==
 
-# 验证--在主机器上操作，查看状态
-./bin/emqx_ctl cluster status
+#编辑配置
+vim /data/nacos/nacos/conf/application.properties
+nacos.core.auth.enabled=true
 
-# 验证数据目录路径
-[root@emqx01 data]# grep &#39;data_dir&#39; /data/emqx/etc/emqx.conf
-  data_dir = &quot;/data/emqx/data&quot;
+### 关闭使用user-agent判断服务端请求并放行鉴权的功能
+nacos.core.auth.enable.userAgentAuthWhite=false
 
-# 访问
-10.1.15.101:18083		默认账号: admin 默认密码：public
-10.1.15.102:18083		默认账号: admin 默认密码：public
+### 配置自定义身份识别的key（不可为空）和value（不可为空）
+nacos.core.auth.server.identity.key=example
+nacos.core.auth.server.identity.value=example
+
+nacos.core.auth.plugin.nacos.token.secret.key=VGhpc0lzQVJhbmRvbWx5R2VuZXJhdGVkU2VjdXJlS2V5MzJDaGFyYWN0ZXJzTG9uZw==
 </code></pre>
 
                 
@@ -425,8 +435,8 @@ cd /data/emqx
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>EMQX集群部署</div>
-      <div>http://example.com/2025/11/05/EMQX集群部署/</div>
+      <div>Nacos集群部署</div>
+      <div>http://example.com/2025/11/06/Nacos集群部署/</div>
     </div>
     <div class="license-meta">
       
@@ -438,7 +448,7 @@ cd /data/emqx
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年11月5日</div>
+          <div>2025年11月6日</div>
         </div>
       
       
@@ -470,9 +480,9 @@ cd /data/emqx
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/11/06/Nacos%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" title="Nacos集群部署">
+                      <a href="/2025/11/06/TDEngine%E6%97%B6%E5%BA%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/" title="TDEngine时序数据库部署">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Nacos集群部署</span>
+                        <span class="hidden-mobile">TDEngine时序数据库部署</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -480,8 +490,8 @@ cd /data/emqx
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/11/05/Minio%E5%AD%98%E5%82%A8%E9%83%A8%E7%BD%B2/" title="Minio存储部署">
-                        <span class="hidden-mobile">Minio存储部署</span>
+                      <a href="/2025/11/05/EMQX%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" title="EMQX集群部署">
+                        <span class="hidden-mobile">EMQX集群部署</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

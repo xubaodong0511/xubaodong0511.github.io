@@ -19,21 +19,21 @@
   <meta name="author" content="Mr.xu">
   <meta name="keywords" content="">
   
-    <meta name="description" content="emqx–集群作用EMQX（Erlang MQTT Broker）是一个高性能、可扩展的开源 MQTT 消息代理服务器。它基于 Erlang&#x2F;OTP 开发，专为大规模物联网（IoT）应用设计。EMQX 的核心作用和功能如下：  消息代理：EMQX 作为 MQTT 消息代理，负责在发布者和订阅者之间路由消息。它支持 MQTT 协议的所有功能，包括 QoS（Quality of Servic">
+    <meta name="description" content="zipkin日志收集部署jar包部署1234567891011121314151617181920212223242526272829303132333435363738# 安装jdk8[root@dev ~]# wget https:&#x2F;&#x2F;a.xbd666.cn&#x2F;d&#x2F;Aliyun&#x2F;Cloud_computing&#x2F;Software_package&#x2F;tomcat-jdk&#x2F;jdk-8u271-linux">
 <meta property="og:type" content="article">
-<meta property="og:title" content="EMQX集群部署">
-<meta property="og:url" content="http://example.com/2025/11/05/EMQX%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:title" content="zipkin日志收集部署">
+<meta property="og:url" content="http://example.com/2025/11/06/zipkin%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86%E9%83%A8%E7%BD%B2/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="emqx–集群作用EMQX（Erlang MQTT Broker）是一个高性能、可扩展的开源 MQTT 消息代理服务器。它基于 Erlang&#x2F;OTP 开发，专为大规模物联网（IoT）应用设计。EMQX 的核心作用和功能如下：  消息代理：EMQX 作为 MQTT 消息代理，负责在发布者和订阅者之间路由消息。它支持 MQTT 协议的所有功能，包括 QoS（Quality of Servic">
+<meta property="og:description" content="zipkin日志收集部署jar包部署1234567891011121314151617181920212223242526272829303132333435363738# 安装jdk8[root@dev ~]# wget https:&#x2F;&#x2F;a.xbd666.cn&#x2F;d&#x2F;Aliyun&#x2F;Cloud_computing&#x2F;Software_package&#x2F;tomcat-jdk&#x2F;jdk-8u271-linux">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-11-05T14:15:49.000Z">
-<meta property="article:modified_time" content="2025-11-05T14:16:39.850Z">
+<meta property="article:published_time" content="2025-11-06T08:12:10.000Z">
+<meta property="article:modified_time" content="2025-11-06T08:12:32.860Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>EMQX集群部署 - Hexo</title>
+  <title>zipkin日志收集部署 - Hexo</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -199,7 +199,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="EMQX集群部署"></span>
+            <span id="subtitle" data-typed-text="zipkin日志收集部署"></span>
           
         </div>
 
@@ -210,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-11-05 22:15" pubdate>
-          2025年11月5日 晚上
+        <time datetime="2025-11-06 16:12" pubdate>
+          2025年11月6日 下午
         </time>
       </span>
     
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.1k 字
+          295 字
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          10 分钟
+          3 分钟
         
       </span>
     
@@ -270,144 +270,15 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">EMQX集群部署</h1>
+            <h1 id="seo-header">zipkin日志收集部署</h1>
             
             
               <div class="markdown-body">
                 
-                <h3 id="emqx–集群"><a href="#emqx–集群" class="headerlink" title="emqx–集群"></a>emqx–集群</h3><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>EMQX（Erlang MQTT Broker）是一个高性能、可扩展的开源 MQTT 消息代理服务器。它基于 Erlang&#x2F;OTP 开发，专为大规模物联网（IoT）应用设计。EMQX 的核心作用和功能如下：</p>
-<ol>
-<li><strong>消息代理</strong>：EMQX 作为 MQTT 消息代理，负责在发布者和订阅者之间路由消息。它支持 MQTT 协议的所有功能，包括 QoS（Quality of Service）级别、持久会话和遗嘱消息等。</li>
-<li><strong>设备连接管理</strong>：EMQX 可以管理大量 IoT 设备的连接，支持数百万级别的并发连接，适用于大规模的物联网应用。</li>
-<li><strong>数据分发</strong>：EMQX 能够高效地分发数据，确保消息在发布者和订阅者之间的快速传递，支持多种消息格式和传输协议。</li>
-<li><strong>扩展性</strong>：EMQX 支持插件机制，用户可以根据需求扩展其功能，如数据持久化、规则引擎、认证和授权等。</li>
-</ol>
-<p><strong>主要功能</strong></p>
-<ol>
-<li><p><strong>支持多种协议</strong></p>
-<ul>
-<li><strong>MQTT&#x2F;MQTT-SN</strong>：原生支持 MQTT 3.1.1 和 MQTT 5.0 协议。</li>
-<li><strong>HTTP&#x2F;HTTPS</strong>：支持通过 HTTP&#x2F;HTTPS 协议进行消息发布和订阅。</li>
-<li><strong>CoAP</strong>：支持 Constrained Application Protocol（CoAP），适用于资源受限的设备。</li>
-<li><strong>WebSocket</strong>：支持通过 WebSocket 进行 MQTT 通信，方便 Web 应用集成。</li>
-</ul>
-</li>
-<li><p><strong>高性能和高可用性</strong></p>
-<ul>
-<li><strong>高并发连接</strong>：支持数百万级别的并发连接，适用于大规模 IoT 部署。</li>
-<li><strong>集群支持</strong>：支持集群部署，提供高可用性和负载均衡。</li>
-<li><strong>水平扩展</strong>：可以通过增加节点来扩展系统容量。</li>
-</ul>
-</li>
-<li><p><strong>安全性</strong></p>
-<ul>
-<li><strong>认证和授权</strong>：支持多种认证方式（如用户名&#x2F;密码、客户端证书、LDAP 等）和细粒度的访问控制。</li>
-<li><strong>加密通信</strong>：支持 TLS&#x2F;SSL 加密，确保数据传输的安全性。</li>
-</ul>
-</li>
-<li><p><strong>规则引擎</strong></p>
-<ul>
-<li><strong>数据处理</strong>：内置规则引擎，可以根据预定义的规则对消息进行处理、过滤和转发。</li>
-<li><strong>集成外部系统</strong>：支持与数据库、消息队列、HTTP 服务等外部系统集成。</li>
-</ul>
-</li>
-<li><p><strong>监控和管理</strong></p>
-<ul>
-<li><strong>管理控制台</strong>：提供友好的 Web 管理控制台，方便用户进行配置和管理。</li>
-<li><strong>监控和告警</strong>：支持实时监控系统状态和性能，提供告警机制。</li>
-</ul>
-</li>
-</ol>
-<p><strong>典型应用场景</strong></p>
-<ol>
-<li><strong>智能家居</strong>：管理和控制大量智能家居设备，实现设备间的消息通信和数据共享。</li>
-<li><strong>工业物联网</strong>：在工业环境中，管理各种传感器和设备的数据采集和传输。</li>
-<li><strong>车联网</strong>：支持车辆与云端的实时通信，管理车辆数据和远程控制。</li>
-<li><strong>智慧城市</strong>：管理城市基础设施（如路灯、交通信号灯、环境监测设备等）的数据通信。</li>
-</ol>
-<h4 id="资源需求"><a href="#资源需求" class="headerlink" title="资源需求"></a>资源需求</h4><ul>
-<li><strong>CPU</strong>: 4 核 </li>
-<li><strong>内存</strong>:  8 GB </li>
-<li><strong>存储</strong>: 300G</li>
-<li><strong>节点</strong>：2</li>
-</ul>
-<h4 id="网络端口"><a href="#网络端口" class="headerlink" title="网络端口"></a>网络端口</h4><ol>
-<li><strong>默认管理端口</strong><ul>
-<li><strong>端口号</strong>: 18083</li>
-<li><strong>用途</strong>: EMQX Dashboard（管理控制台）端口，用于管理和监控 EMQX。</li>
-</ul>
-</li>
-<li><strong>MQTT 端口</strong><ul>
-<li><strong>端口号</strong>: 1883</li>
-<li><strong>用途</strong>: MQTT 协议默认端口，用于客户端连接。</li>
-</ul>
-</li>
-<li><strong>MQTT&#x2F;TLS 端口</strong><ul>
-<li><strong>端口号</strong>: 8883</li>
-<li><strong>用途</strong>: 使用 TLS&#x2F;SSL 加密的 MQTT 连接端口。</li>
-</ul>
-</li>
-<li><strong>WebSocket 端口</strong><ul>
-<li><strong>端口号</strong>: 8083</li>
-<li><strong>用途</strong>: 支持 WebSocket 的 MQTT 连接端口。</li>
-</ul>
-</li>
-<li><strong>WebSocket&#x2F;TLS 端口</strong><ul>
-<li><strong>端口号</strong>: 8084</li>
-<li><strong>用途</strong>: 使用 TLS&#x2F;SSL 加密的 WebSocket 连接端口。</li>
-</ul>
-</li>
-<li><strong>集群通信端口</strong><ul>
-<li><strong>端口号</strong>: 4369, 6000-6999</li>
-<li><strong>用途</strong>: EMQX 集群节点之间的通信端口。</li>
-</ul>
-</li>
-</ol>
-<h4 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h4><pre><code class="hljs"># 下载安装包
-wget https://www.emqx.com/zh/downloads/broker/5.7.0/emqx-5.7.0-el7-amd64.tar.gz
+                <h2 id="zipkin日志收集部署"><a href="#zipkin日志收集部署" class="headerlink" title="zipkin日志收集部署"></a>zipkin日志收集部署</h2><h3 id="jar包部署"><a href="#jar包部署" class="headerlink" title="jar包部署"></a>jar包部署</h3><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs perl"><span class="hljs-comment"># 安装jdk8</span><br>[root<span class="hljs-variable">@dev</span> ~]<span class="hljs-comment"># wget https://a.xbd666.cn/d/Aliyun/Cloud_computing/Software_package/tomcat-jdk/jdk-8u271-linux-x64.tar.gz</span><br><span class="hljs-comment"># 变量</span><br>[root<span class="hljs-variable">@dev</span> ~]<span class="hljs-comment"># vim /etc/profile</span><br>JAVA_HOME=<span class="hljs-regexp">/usr/l</span>ocal/java<br>MAVEN_HOME=<span class="hljs-regexp">/usr/l</span>ocal/maven<br>PATH=<span class="hljs-variable">$PATH</span>:<span class="hljs-variable">$JAVA_HOME</span>/bin:<span class="hljs-variable">$MAVEN_HOME</span>/bin<br>export JAVA_HOME MAVEN_HOME PATH<br>[root<span class="hljs-variable">@dev</span> ~]<span class="hljs-comment"># source /etc/profile</span><br><br><span class="hljs-comment"># npm环境安装</span><br>这个国内目前知道的只有淘宝有。<br>[root<span class="hljs-variable">@dev</span> ~]<span class="hljs-comment"># alias npm=&quot;npm --registry=https://registry.npm.taobao.org --disturl=https://npm.taobao.org/mirrors/node&quot;</span><br><span class="hljs-comment"># node环境安装（版本：V5.5.0）</span><br>[root<span class="hljs-variable">@dev</span> ~]<span class="hljs-comment"># yum install npm -y</span><br>[root<span class="hljs-variable">@dev</span> ~]<span class="hljs-comment"># git clone https://github.com/creationix/nvm.git /usr/local/nvm</span><br>[root<span class="hljs-variable">@dev</span> ~]<span class="hljs-comment"># source /usr/local/nvm/install.sh</span><br>[root<span class="hljs-variable">@dev</span> ~]<span class="hljs-comment"># nvm --version</span><br>[root<span class="hljs-variable">@dev</span> ~]<span class="hljs-comment"># nvm install v5.5.0	#会报错</span><br><span class="hljs-comment"># 解决办法：--在当前用户家目录的.bash_profile文件中添加如下内容</span><br>[root<span class="hljs-variable">@dev</span> ~]<span class="hljs-comment"># cat /root/.bash_profile</span><br>.....<br>export NVM_DIR=<span class="hljs-string">&quot;/usr/local/nvm&quot;</span><br>[ -s <span class="hljs-string">&quot;<span class="hljs-variable">$NVM_DIR</span>/nvm.sh&quot;</span> ] &amp;&amp; . <span class="hljs-string">&quot;<span class="hljs-variable">$NVM_DIR</span>/nvm.sh&quot;</span>  <span class="hljs-comment"># This loads nvm</span><br><br>[root<span class="hljs-variable">@dev</span> ~]<span class="hljs-comment"># source /root/.bash_profile</span><br>[root<span class="hljs-variable">@dev</span> ~]<span class="hljs-comment"># nvm install v5.5.0		# 再次执行就 OK 了</span><br><br><span class="hljs-comment"># Zipkin安装部署</span><br>[root<span class="hljs-variable">@dev</span> ~]<span class="hljs-comment"># wget -O zipkin.jar &#x27;https://search.maven.org/remote_content?g=io.zipkin.java&amp;a=zipkin-server&amp;v=LATEST&amp;c=exec&#x27;</span><br>[root<span class="hljs-variable">@dev</span> ~]<span class="hljs-comment"># ls</span><br>nohup.out  zipkin.jar<br>[root<span class="hljs-variable">@dev</span> ~]<span class="hljs-comment"># nohup java -jar zipkin.jar &amp;               //回车，放到后台去执行</span><br>[root<span class="hljs-variable">@dev</span> ~]<span class="hljs-comment">#  lsof -i:9411</span><br>COMMAND  PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME<br>java    <span class="hljs-number">8440</span> root   33u  IPv6  <span class="hljs-number">64454</span>      0t0  TCP *:<span class="hljs-number">9411</span> (LISTEN)<br><span class="hljs-comment"># 访问</span><br>浏览器输入： IP + <span class="hljs-number">9411</span><br></code></pre></td></tr></table></figure>
 
-mkdir -p /data/emqx/data
-# 创建目录、解压
-mkdir -p /data/emqx/data &amp;&amp; tar -zxvf emqx-5.7.0-el7-amd64.tar.gz -C /data/emqx
-# 编辑配置文件
-cd /data/emqx
-vim etc/emqx.conf
-# 将原有的改为以下内容--在每个节点上添加更改，更后按顺序启动
-node &#123;
-  name = &quot;emqx@10.100.40.171&quot;     # 本机IP
-  cookie = &quot;emqxsecretcookie&quot;
-  data_dir = &quot;/data/emqx/data&quot;     # 数据存放目录
-&#125;
+<h3 id="dockers部署zipkin"><a href="#dockers部署zipkin" class="headerlink" title="dockers部署zipkin"></a>dockers部署zipkin</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-comment"># 搜索</span><br>docker search zipkin<br><span class="hljs-comment"># 下载</span><br>docker pull openzipkin/zipkin<br><span class="hljs-comment"># 运行</span><br>docker <span class="hljs-built_in">run</span> -d -p 9411:9411 openzipkin/zipkin<br><span class="hljs-comment"># 访问</span><br>浏览器输入：<span class="hljs-built_in"> IP </span>+ 9411<br></code></pre></td></tr></table></figure>
 
-cluster &#123;
-  name = emqxcl
-  discovery_strategy = manual
-  static &#123;
-    seeds = [
-      &quot;emqx@10.100.40.171&quot;,     # 添加集群
-      &quot;emqx@10.100.40.172&quot;
-    ]
-  &#125;
-&#125;
-
-# 启动
-./emqx/bin/emqx start
-
-# 加入集群--在从机器上操作
-cd /data/emqx
-./bin/emqx_ctl cluster join emqx@10.100.40.172      # 在从机器上操作，写主节点的IP
-
-# 验证--在主机器上操作，查看状态
-./bin/emqx_ctl cluster status
-
-# 验证数据目录路径
-[root@emqx01 data]# grep &#39;data_dir&#39; /data/emqx/etc/emqx.conf
-  data_dir = &quot;/data/emqx/data&quot;
-
-# 访问
-10.1.15.101:18083		默认账号: admin 默认密码：public
-10.1.15.102:18083		默认账号: admin 默认密码：public
-</code></pre>
 
                 
               </div>
@@ -425,8 +296,8 @@ cd /data/emqx
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>EMQX集群部署</div>
-      <div>http://example.com/2025/11/05/EMQX集群部署/</div>
+      <div>zipkin日志收集部署</div>
+      <div>http://example.com/2025/11/06/zipkin日志收集部署/</div>
     </div>
     <div class="license-meta">
       
@@ -438,7 +309,7 @@ cd /data/emqx
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年11月5日</div>
+          <div>2025年11月6日</div>
         </div>
       
       
@@ -470,9 +341,9 @@ cd /data/emqx
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/11/06/Nacos%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" title="Nacos集群部署">
+                      <a href="/2025/11/06/Nginx%E5%8F%AF%E8%A7%86%E5%8C%96%E5%88%86%E7%B1%BB%E9%83%A8%E7%BD%B2/" title="Nginx可视化分类部署">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Nacos集群部署</span>
+                        <span class="hidden-mobile">Nginx可视化分类部署</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -480,8 +351,8 @@ cd /data/emqx
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/11/05/Minio%E5%AD%98%E5%82%A8%E9%83%A8%E7%BD%B2/" title="Minio存储部署">
-                        <span class="hidden-mobile">Minio存储部署</span>
+                      <a href="/2025/11/06/MongoDB%E9%83%A8%E7%BD%B2/" title="MongoDB部署">
+                        <span class="hidden-mobile">MongoDB部署</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
