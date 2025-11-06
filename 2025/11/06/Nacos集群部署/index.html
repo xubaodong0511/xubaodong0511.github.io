@@ -1,0 +1,761 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Mr.xu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Nacos–集群作用Nacos（Dynamic Naming and Configuration Service）是阿里巴巴开源的一个动态服务发现、配置管理和服务管理平台。它主要用于微服务架构中的服务注册与发现、分布式配置管理和动态 DNS 服务。Nacos 的核心功能和作用如下：  服务发现和注册   服务注册：Nacos 允许服务实例在启动时向 Nacos 注册自己的信息（如 IP 地址、端口">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nacos集群部署">
+<meta property="og:url" content="http://example.com/2025/11/06/Nacos%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Nacos–集群作用Nacos（Dynamic Naming and Configuration Service）是阿里巴巴开源的一个动态服务发现、配置管理和服务管理平台。它主要用于微服务架构中的服务注册与发现、分布式配置管理和动态 DNS 服务。Nacos 的核心功能和作用如下：  服务发现和注册   服务注册：Nacos 允许服务实例在启动时向 Nacos 注册自己的信息（如 IP 地址、端口">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-11-06T08:10:08.000Z">
+<meta property="article:modified_time" content="2025-11-06T08:10:36.831Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Nacos集群部署 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Nacos集群部署"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-06 16:10" pubdate>
+          2025年11月6日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          10 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Nacos集群部署</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="Nacos–集群"><a href="#Nacos–集群" class="headerlink" title="Nacos–集群"></a>Nacos–集群</h3><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>Nacos（Dynamic Naming and Configuration Service）是阿里巴巴开源的一个动态服务发现、配置管理和服务管理平台。它主要用于微服务架构中的服务注册与发现、分布式配置管理和动态 DNS 服务。Nacos 的核心功能和作用如下：</p>
+<ol>
+<li><strong>服务发现和注册</strong></li>
+</ol>
+<ul>
+<li><strong>服务注册</strong>：Nacos 允许服务实例在启动时向 Nacos 注册自己的信息（如 IP 地址、端口、服务名称等），从而使其他服务能够发现它们。</li>
+<li><strong>服务发现</strong>：服务消费者可以通过 Nacos 查询到所需服务的实例信息，从而实现服务间的调用。Nacos 支持多种服务发现机制，如 DNS 和 HTTP。</li>
+</ul>
+<ol start="2">
+<li><strong>分布式配置管理</strong></li>
+</ol>
+<ul>
+<li><strong>配置管理</strong>：Nacos 提供了集中化的配置管理功能，允许开发者将应用配置存储在 Nacos 服务器上。配置的变更可以实时推送到各个服务实例，避免了因配置变更而重启服务的需求。</li>
+<li><strong>动态配置</strong>：通过 Nacos，配置可以在运行时动态更新，服务实例会自动感知配置的变化并做出相应调整。</li>
+</ul>
+<ol start="3">
+<li><strong>动态 DNS 服务</strong></li>
+</ol>
+<ul>
+<li><strong>动态 DNS</strong>：Nacos 支持动态 DNS 服务，可以将服务名解析为服务实例的 IP 地址和端口，方便服务间的调用和负载均衡。</li>
+</ul>
+<ol start="4">
+<li><strong>集群管理</strong></li>
+</ol>
+<ul>
+<li><strong>集群管理</strong>：Nacos 支持对服务实例进行健康检查和集群管理，确保服务的高可用性和可靠性。它可以自动剔除不健康的实例，并在实例恢复后重新加入到服务列表中。</li>
+</ul>
+<ol start="5">
+<li><strong>多语言支持</strong></li>
+</ol>
+<ul>
+<li><strong>多语言支持</strong>：Nacos 提供了丰富的客户端 SDK，支持 Java、Go、C++ 等多种编程语言，方便开发者在不同语言的项目中集成 Nacos。</li>
+</ul>
+<ol start="6">
+<li><strong>可视化管理界面</strong></li>
+</ol>
+<ul>
+<li><strong>可视化界面</strong>：Nacos 提供了友好的 Web 管理界面，方便开发者和运维人员对服务和配置进行管理和监控。</li>
+</ul>
+<ol start="7">
+<li><strong>高可用和扩展性</strong></li>
+</ol>
+<ul>
+<li><strong>高可用</strong>：Nacos 支持集群部署，保证服务的高可用性和容错性。</li>
+<li><strong>扩展性</strong>：Nacos 设计灵活，支持插件机制，可以根据需要扩展功能。</li>
+</ul>
+<p><strong>典型应用场景</strong></p>
+<ol>
+<li><strong>微服务架构</strong>：在微服务架构中，Nacos 作为服务注册与发现的核心组件，简化了服务间的通信和管理。</li>
+<li><strong>分布式系统</strong>：在分布式系统中，Nacos 提供集中化的配置管理，简化了配置的管理和推送。</li>
+<li><strong>云原生应用</strong>：在云原生应用中，Nacos 提供动态 DNS 和服务发现功能，支持服务的弹性伸缩和动态管理。</li>
+</ol>
+<h4 id="资源需求"><a href="#资源需求" class="headerlink" title="资源需求"></a>资源需求</h4><ul>
+<li><strong>CPU</strong>: 4 核 </li>
+<li><strong>内存</strong>:  8 GB </li>
+<li><strong>存储</strong>: 300G</li>
+<li><strong>节点</strong>：2</li>
+</ul>
+<h4 id="网络端口"><a href="#网络端口" class="headerlink" title="网络端口"></a>网络端口</h4><ol>
+<li><strong>默认端口</strong><ul>
+<li><strong>端口号</strong>: 8848</li>
+<li><strong>用途</strong>: Nacos 的 HTTP API 端口，用于服务注册、配置管理和其他 API 调用。</li>
+</ul>
+</li>
+<li><strong>集群通信端口</strong><ul>
+<li><strong>端口号</strong>: 7848</li>
+<li><strong>用途</strong>: Nacos 集群节点之间的通信端口。</li>
+</ul>
+</li>
+</ol>
+<h4 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h4><pre><code class="hljs"># 安装jdk
+wget https://a.xbd666.cn/d/Aliyun/Cloud_computing/Software_package/tomcat-jdk/jdk-8u271-linux-x64.tar.gz
+jdk在/usr/local目录下，设置变量
+
+# 下载nacos安装包
+wget https://a.xbd666.cn/d/Aliyun/Cloud_computing/Software_package/nacos/nacos-server-1.2.1.tar.gz
+
+#创建目录
+mkdir -p /data/nacos
+# 解压
+tar xzf nacos-server-2.3.2.tar.gz -C /data/nacos
+cd /data/nacos/nacos/conf
+# 编辑连数据库的 配置文件
+vim application.properties
+更改以下内容
+spring.datasource.platform=mysql      # 去除注释
+# spring.sql.init.platform=mysql
+
+### Count of DB:
+db.num=1    # 去除注释
+
+### Connect URL of DB:
+db.url.0=jdbc:mysql://10.100.40.171:3306/nacos?characterEncoding=utf8&amp;connectTimeout=1000&amp;socketTimeout=3000&amp;autoReconnect=true&amp;useUnicode=true&amp;useSSL=false&amp;serverTimezone=UTC    # 改MySQL机器的IP地址
+db.user.0=root     # 改为root用户
+db.password.0=Kunyue@123     # 改为MySQL的密码
+spring.data.dir=/data/nacos/data		#定义数据存放目录
+
+#创建目录
+mkdir -p /data/nacos/data
+chmod -R 755 /data/nacos
+# 导入数据--并创建nacos数据库
+CREATE USER &#39;root&#39;@&#39;%&#39; IDENTIFIED BY &#39;123456&#39;;
+GRANT ALL PRIVILEGES ON *.* TO &#39;root&#39;@&#39;%&#39;;
+flush privileges;
+
+# 编辑集群配置文件--添加集群IP地址
+cp cluster.conf.example cluster.conf.example.bak
+mv cluster.conf.example cluster.conf
+vim cluster.conf
+添加nacos集群的IP地址
+10.100.40.170:8848
+10.100.40.171:8848
+10.100.40.172:8848
+
+# 启动
+./bin/startup.sh
+# 停止
+./bin/shutdown.sh
+
+# 登入、验证
+http://IP + 8848/nacos
+在web界面左侧栏--集群管理--节点管理   # 可以看到所有集群的状态
+           
+           
+           
+### 开启鉴权
+通过base64命令随机生成token
+[root@emqx01 conf]# echo -n &#39;ThisIsARandomlyGeneratedSecureKey32CharactersLong&#39; | base64
+VGhpc0lzQVJhbmRvbWx5R2VuZXJhdGVkU2VjdXJlS2V5MzJDaGFyYWN0ZXJzTG9uZw==
+
+#编辑配置
+vim /data/nacos/nacos/conf/application.properties
+nacos.core.auth.enabled=true
+
+### 关闭使用user-agent判断服务端请求并放行鉴权的功能
+nacos.core.auth.enable.userAgentAuthWhite=false
+
+### 配置自定义身份识别的key（不可为空）和value（不可为空）
+nacos.core.auth.server.identity.key=example
+nacos.core.auth.server.identity.value=example
+
+nacos.core.auth.plugin.nacos.token.secret.key=VGhpc0lzQVJhbmRvbWx5R2VuZXJhdGVkU2VjdXJlS2V5MzJDaGFyYWN0ZXJzTG9uZw==
+</code></pre>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Nacos集群部署</div>
+      <div>http://example.com/2025/11/06/Nacos集群部署/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Mr.xu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/11/06/TDEngine%E6%97%B6%E5%BA%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/" title="TDEngine时序数据库部署">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">TDEngine时序数据库部署</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/11/05/EMQX%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" title="EMQX集群部署">
+                        <span class="hidden-mobile">EMQX集群部署</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

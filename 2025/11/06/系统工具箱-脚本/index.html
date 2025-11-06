@@ -1,0 +1,631 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Mr.xu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="!&#x2F;bin&#x2F;bash本脚本用于系统工具打印当前系统登录用户1234567891011121314print_logged_in_users() &#123;    who | awk &#x27;&#123;print $1&#125;&#x27; | sort | uniq&#125;# 根据用户输入判断软件是否已安装并打印软件信息check_and_print_softwa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="系统工具箱--脚本实验">
+<meta property="og:url" content="http://example.com/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="!&#x2F;bin&#x2F;bash本脚本用于系统工具打印当前系统登录用户1234567891011121314print_logged_in_users() &#123;    who | awk &#x27;&#123;print $1&#125;&#x27; | sort | uniq&#125;# 根据用户输入判断软件是否已安装并打印软件信息check_and_print_softwa">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-11-06T13:13:16.000Z">
+<meta property="article:modified_time" content="2025-11-06T13:13:35.464Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>系统工具箱--脚本实验 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="系统工具箱--脚本实验"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-06 21:13" pubdate>
+          2025年11月6日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          15 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">系统工具箱--脚本实验</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="bin-bash"><a href="#bin-bash" class="headerlink" title="!&#x2F;bin&#x2F;bash"></a>!&#x2F;bin&#x2F;bash</h1><h1 id="本脚本用于系统工具"><a href="#本脚本用于系统工具" class="headerlink" title="本脚本用于系统工具"></a>本脚本用于系统工具</h1><h1 id="打印当前系统登录用户"><a href="#打印当前系统登录用户" class="headerlink" title="打印当前系统登录用户"></a>打印当前系统登录用户</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-function"><span class="hljs-title">print_logged_in_users</span></span>() &#123;<br>    <span class="hljs-built_in">who</span> | awk <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span> | <span class="hljs-built_in">sort</span> | <span class="hljs-built_in">uniq</span><br>&#125;<br><br><span class="hljs-comment"># 根据用户输入判断软件是否已安装并打印软件信息</span><br><span class="hljs-function"><span class="hljs-title">check_and_print_software_info</span></span>() &#123;<br>    <span class="hljs-built_in">read</span> -p <span class="hljs-string">&quot;请输入要检查的软件名称： &quot;</span> software_name<br>    <span class="hljs-keyword">if</span> <span class="hljs-built_in">command</span> -v <span class="hljs-string">&quot;<span class="hljs-variable">$software_name</span>&quot;</span> &amp;&gt; /dev/null; <span class="hljs-keyword">then</span><br>        <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$software_name</span> 已安装&quot;</span><br>        <span class="hljs-comment"># TODO: 打印软件信息命令</span><br>    <span class="hljs-keyword">else</span><br>        <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$software_name</span> 未安装&quot;</span><br>    <span class="hljs-keyword">fi</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="输入时间段和日志路径统计-nginx-访问日志次数最多的-IP"><a href="#输入时间段和日志路径统计-nginx-访问日志次数最多的-IP" class="headerlink" title="输入时间段和日志路径统计 nginx 访问日志次数最多的 IP"></a>输入时间段和日志路径统计 nginx 访问日志次数最多的 IP</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-function"><span class="hljs-title">analyze_nginx_log</span></span>() &#123;<br>    <span class="hljs-built_in">read</span> -p <span class="hljs-string">&quot;请输入日志路径： &quot;</span> log_path<br>    <span class="hljs-built_in">read</span> -p <span class="hljs-string">&quot;请输入开始时间（格式：15/Jul/2023:00:00:00）： &quot;</span> start_time<br>    <span class="hljs-built_in">read</span> -p <span class="hljs-string">&quot;请输入结束时间（格式：15/Jul/2023:00:00:00）： &quot;</span> end_time<br>    <br>    sed -n <span class="hljs-string">&quot;/<span class="hljs-variable">$start_time</span>/,/<span class="hljs-variable">$end_time</span>/p&quot;</span> <span class="hljs-string">&quot;<span class="hljs-variable">$log_path</span>&quot;</span> |awk <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span> |<span class="hljs-built_in">sort</span>|<span class="hljs-built_in">uniq</span> -c |<span class="hljs-built_in">sort</span>|<span class="hljs-built_in">tail</span> -n 1|awk <span class="hljs-string">&#x27;&#123;print $2&#125;&#x27;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="安装指定软件"><a href="#安装指定软件" class="headerlink" title="安装指定软件"></a>安装指定软件</h1><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">install_software() </span>&#123;<br>    read -p <span class="hljs-string">&quot;请选择要安装的软件：1.Nginx 2.MySQL 3.Apache 4.Vsftpd：&quot;</span> choice<br><br>    case $choice in<br>        <span class="hljs-number">1</span>)<br>            <span class="hljs-comment"># 安装 Nginx</span><br>            <span class="hljs-comment"># <span class="hljs-doctag">TODO:</span> 添加 Nginx 安装命令</span><br>            <span class="hljs-comment">;;</span><br>        <span class="hljs-number">2</span>)<br>            <span class="hljs-comment"># 安装 MySQL</span><br>            <span class="hljs-comment"># <span class="hljs-doctag">TODO:</span> 添加 MySQL 安装命令</span><br>            <span class="hljs-comment">;;</span><br>        <span class="hljs-number">3</span>)<br>            <span class="hljs-comment"># 安装 Apache</span><br>            <span class="hljs-comment"># <span class="hljs-doctag">TODO:</span> 添加 Apache 安装命令</span><br>            <span class="hljs-comment">;;</span><br>        <span class="hljs-number">4</span>)<br>            <span class="hljs-comment"># 安装 Vsftpd</span><br>            <span class="hljs-comment"># <span class="hljs-doctag">TODO:</span> 添加 Vsftpd 安装命令</span><br>            <span class="hljs-comment">;;</span><br>        *)<br>            echo <span class="hljs-string">&quot;无效的选择&quot;</span><br>            <span class="hljs-comment">;;</span><br>    esac<br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="获取系统-CPU-排名前-10-的进程"><a href="#获取系统-CPU-排名前-10-的进程" class="headerlink" title="获取系统 CPU 排名前 10 的进程"></a>获取系统 CPU 排名前 10 的进程</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-function"><span class="hljs-title">get_top_cpu_processes</span></span>() &#123;<br>    ps aux --<span class="hljs-built_in">sort</span>=-%cpu | <span class="hljs-built_in">head</span> -n 11<br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="获取系统内存排名前-10-的进程"><a href="#获取系统内存排名前-10-的进程" class="headerlink" title="获取系统内存排名前 10 的进程"></a>获取系统内存排名前 10 的进程</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-function"><span class="hljs-title">get_top_memory_processes</span></span>() &#123;<br>    ps aux --<span class="hljs-built_in">sort</span>=-%mem | <span class="hljs-built_in">head</span> -n 11<br>&#125;<br><br><span class="hljs-function"><span class="hljs-title">change_IP_address</span></span>()&#123;<br>    <span class="hljs-built_in">read</span> -p <span class="hljs-string">&quot;是否已经配置网卡服务[y/n]：&quot;</span> yn<br>    <span class="hljs-keyword">if</span> [ <span class="hljs-variable">$yn</span> = n ];<span class="hljs-keyword">then</span><br>    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;</span><br><span class="hljs-string">    IPADDR=192.168.116.111</span><br><span class="hljs-string">    NETMASK=255.255.255.0</span><br><span class="hljs-string">    GATEWAY=192.168.116.2</span><br><span class="hljs-string">    DNS1=192.168.116.2</span><br><span class="hljs-string">    以上为默认格式，仅供参考！&quot;</span>        <br>        sed -ie <span class="hljs-string">&#x27;s/BOOTPROTO=dhcp/BOOTPROTO=static/;s/ONBOOT=no/ONBOOT=yes/&#x27;</span> /etc/sysconfig/network-scripts/ifcfg-ens33<br>        <span class="hljs-built_in">read</span> -p <span class="hljs-string">&quot;请输入你设置的IP地址：&quot;</span> ip<br>        sed -i <span class="hljs-string">&quot;$ a IPADDR=<span class="hljs-variable">$ip</span>&quot;</span>  /etc/sysconfig/network-scripts/ifcfg-ens33<br>            <span class="hljs-built_in">read</span> -p <span class="hljs-string">&quot;请输入掩码：&quot;</span> net<br>            sed -i <span class="hljs-string">&quot;$ a NETMASK=<span class="hljs-variable">$net</span>&quot;</span> /etc/sysconfig/network-scripts/ifcfg-ens33<br>                <span class="hljs-built_in">read</span> -p <span class="hljs-string">&quot;请输入网关：&quot;</span> way<br>                sed -i <span class="hljs-string">&quot;$ a GATEWAY=<span class="hljs-variable">$way</span>&quot;</span> /etc/sysconfig/network-scripts/ifcfg-ens33<br>                    <span class="hljs-built_in">read</span> -p <span class="hljs-string">&quot;请输入DNS：&quot;</span> dns<br>                    sed -i <span class="hljs-string">&quot;$ a DNS1=<span class="hljs-variable">$dns</span>&quot;</span> /etc/sysconfig/network-scripts/ifcfg-ens33<br>                        <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;网卡配置成功！&quot;</span><br>    <span class="hljs-keyword">else</span><br>        sed -i <span class="hljs-string">&#x27;16,19 s/\(.*\)/#\1/&#x27;</span>  /etc/sysconfig/network-scripts/ifcfg-ens33<br>        <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;注意，16-19段已被注释！！！&quot;</span><br>        <span class="hljs-built_in">read</span> -p <span class="hljs-string">&quot;是否需要配置网卡服务【y/n】：&quot;</span> YN<br>        <span class="hljs-keyword">if</span> [ <span class="hljs-variable">$YN</span> = y ];<span class="hljs-keyword">then</span><br>            <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;</span><br><span class="hljs-string">            IPADDR=192.168.116.111</span><br><span class="hljs-string">            NETMASK=255.255.255.0</span><br><span class="hljs-string">            GATEWAY=192.168.116.2</span><br><span class="hljs-string">            DNS1=192.168.116.2</span><br><span class="hljs-string">            以上为默认格式，仅供参考！&quot;</span>        <br>        sed -ie <span class="hljs-string">&#x27;s/BOOTPROTO=dhcp/BOOTPROTO=static/;s/ONBOOT=no/ONBOOT=yes/&#x27;</span> /etc/sysconfig/network-scripts/ifcfg-ens33<br>        <span class="hljs-built_in">read</span> -p <span class="hljs-string">&quot;请输入你设置的IP地址：&quot;</span> ipp<br>        sed -i <span class="hljs-string">&quot;$ a IPADDR=<span class="hljs-variable">$ipp</span>&quot;</span>  /etc/sysconfig/network-scripts/ifcfg-ens33<br>            <span class="hljs-built_in">read</span> -p <span class="hljs-string">&quot;请输入掩码：&quot;</span> nett<br>            sed -i <span class="hljs-string">&quot;$ a NETMASK=<span class="hljs-variable">$nett</span>&quot;</span> /etc/sysconfig/network-scripts/ifcfg-ens33<br>                <span class="hljs-built_in">read</span> -p <span class="hljs-string">&quot;请输入网关：&quot;</span> wayy<br>                sed -i <span class="hljs-string">&quot;$ a GATEWAY=<span class="hljs-variable">$wayy</span>&quot;</span> /etc/sysconfig/network-scripts/ifcfg-ens33<br>                    <span class="hljs-built_in">read</span> -p <span class="hljs-string">&quot;请输入DNS：&quot;</span> dnss<br>                    sed -i <span class="hljs-string">&quot;$ a DNS1=<span class="hljs-variable">$dnss</span>&quot;</span>  /etc/sysconfig/network-scripts/ifcfg-ens33  <br>                        <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;网卡配置成功！&quot;</span><br>        <span class="hljs-keyword">fi</span><br>    <span class="hljs-keyword">fi</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="关闭防火墙"><a href="#关闭防火墙" class="headerlink" title="关闭防火墙"></a>关闭防火墙</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-function"><span class="hljs-title">disable_firewall</span></span>()&#123;<br>    systemctl stop firewalld;systemctl <span class="hljs-built_in">disable</span> firewalld;<br>        <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;防火墙已关闭,关闭开机自启服务！&quot;</span><br>    sed -i <span class="hljs-string">&#x27;s/SELINUX=enforcing/SELINUX=disabled/g&#x27;</span> /etc/selinux/config<br>        <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;selinux已关闭，已关闭开机自启服务！&quot;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="关闭DNS"><a href="#关闭DNS" class="headerlink" title="关闭DNS"></a>关闭DNS</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-function"><span class="hljs-title">on_DNS</span></span>()&#123;<br>    sed -i <span class="hljs-string">&#x27;115s/#UseDNS yes/UseDNS no/&#x27;</span>    /etc/ssh/sshd_config;systemctl restart sshd<br>    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;DNS已关闭！！！&quot;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="备份"><a href="#备份" class="headerlink" title="备份"></a>备份</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-function"><span class="hljs-title">backup_copy</span></span>()&#123;<br>    <span class="hljs-comment">#每周日进行全量备份，周一到周六进行增量备份</span><br>    <span class="hljs-comment">#关闭防火墙</span><br>    systemctl stop firewalld<br>    setenforce 0<br>    <span class="hljs-comment">#备份路径</span><br>    back_dir=<span class="hljs-string">&quot;/backup&quot;</span><br>    log_dir=<span class="hljs-string">&quot;/backup_log&quot;</span><br>    full_backup_dir=<span class="hljs-string">&quot;backup/full&quot;</span><br>    inc_backup_dir=<span class="hljs-string">&quot;backup/inc&quot;</span><br>    <span class="hljs-comment">#变量时间</span><br>    log_date=$(<span class="hljs-built_in">date</span> <span class="hljs-string">&quot;+%F-%T&quot;</span>)<br>    <span class="hljs-comment">#定义用户，密码</span><br>    MY_USER=<span class="hljs-string">&quot;root&quot;</span><br>    MY_PASS=<span class="hljs-string">&quot;1&quot;</span><br>    <span class="hljs-comment">#验证日志目录路径是否存在</span><br>    [ -d <span class="hljs-variable">$back_dir</span> ] || <span class="hljs-built_in">mkdir</span> <span class="hljs-variable">$back_dir</span><br>    [ -d <span class="hljs-variable">$log_dir</span> ] || <span class="hljs-built_in">mkdir</span> <span class="hljs-variable">$log_dir</span><br>    [ -d <span class="hljs-variable">$full_backup_dir</span> ] || <span class="hljs-built_in">mkdir</span> <span class="hljs-variable">$full_backup_dir</span><br>    [ -d <span class="hljs-variable">$inc_backup_dir</span> ] || <span class="hljs-built_in">mkdir</span> <span class="hljs-variable">$inc_backup_dir</span><br>    <span class="hljs-comment">#全量备份函数</span><br>    <span class="hljs-function"><span class="hljs-title">full_back</span></span>()&#123;<br>    <span class="hljs-comment">#全量备份命令</span><br>    innobackupex --user=<span class="hljs-variable">$MY_USER</span> --password=<span class="hljs-variable">$MY_PASS</span> <span class="hljs-variable">$full_backup_dir</span><br>    <span class="hljs-keyword">if</span> [$? -eq 0];<span class="hljs-keyword">then</span><br>        <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$&#123;log_date&#125;</span> full OK!!!&quot;</span> &gt;&gt; <span class="hljs-variable">$log_dir</span>/OK_log<br>    <span class="hljs-keyword">else</span>    <br>        <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$&#123;log_date&#125;</span> NO found full!!!&quot;</span> &gt;&gt; <span class="hljs-variable">$log_dir</span>/err_log<br>    <span class="hljs-keyword">fi</span><br>    &#125;   <br>    <span class="hljs-comment">#获取上周日时间</span><br>    sunday=$(<span class="hljs-built_in">date</span> -d <span class="hljs-string">&quot;last sunday&quot;</span> +%F)<br>    <span class="hljs-comment">#获取前一天的时间</span><br>    yesterday=$(<span class="hljs-built_in">date</span> -d <span class="hljs-string">&quot;yesterday&quot;</span> +%F)<br>    <span class="hljs-comment">#增量备份函数</span><br>    <span class="hljs-function"><span class="hljs-title">inc_back</span></span>()&#123;<br>    <span class="hljs-comment">#判断当前时间是否是周一</span><br>    <span class="hljs-keyword">if</span> [ <span class="hljs-variable">$week_date</span> -eq 1 ];<span class="hljs-keyword">then</span><br>        <span class="hljs-comment">#查找文件</span><br>        <span class="hljs-built_in">local</span> full_backup_dir=$(find <span class="hljs-variable">$backup_dir</span> -name <span class="hljs-variable">$&#123;sunday&#125;</span>*)<br>        innobackupex --user=<span class="hljs-variable">$MY_USER</span> --password=<span class="hljs-variable">$MY_PASS</span> --incremental <span class="hljs-variable">$&#123;inc_backup_dir&#125;</span> --incremental-basedir=<span class="hljs-variable">$&#123;full_backup_dir&#125;</span><br>        <span class="hljs-comment">#判断是否执行成功，写入定义日志文件</span><br>        <span class="hljs-keyword">if</span> [$? -eq 0];<span class="hljs-keyword">then</span><br>            <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$&#123;log_date&#125;</span> full OK!!!&quot;</span> &gt;&gt; <span class="hljs-variable">$log_dir</span>/OK_log<br>        <span class="hljs-keyword">else</span><br>            <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$&#123;log_date&#125;</span> NO found full!!!&quot;</span> &gt;&gt; <span class="hljs-variable">$log_dir</span>/err_log<br>        <span class="hljs-keyword">fi</span><br>    <span class="hljs-keyword">else</span><br>        <span class="hljs-comment">#查找前一天的文件路径</span><br>        <span class="hljs-built_in">local</span> yesterday_backup_dir=$(find <span class="hljs-variable">$backup_dir</span> -name <span class="hljs-variable">$&#123;yesterday&#125;</span>*)<br>        innobackupex --user=<span class="hljs-variable">$MY_USER</span> --password=<span class="hljs-variable">$MY_PASS</span> --incremental <span class="hljs-variable">$&#123;inc_backup_dir&#125;</span> --incremental-basedir=<span class="hljs-variable">$&#123;yesterday_backup_dir&#125;</span><br>        <span class="hljs-comment"># 判断命令是否执行成功,写入日志文件</span><br>        <span class="hljs-keyword">if</span> [$? -eq 0];<span class="hljs-keyword">then</span><br>            <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$&#123;log_date&#125;</span> full OK!!!&quot;</span> &gt;&gt; <span class="hljs-variable">$log_dir</span>/OK_log<br>        <span class="hljs-keyword">else</span><br>            <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$&#123;log_date&#125;</span> NO found full!!!&quot;</span> &gt;&gt; <span class="hljs-variable">$log_dir</span>/err_log<br>        <span class="hljs-keyword">fi</span><br>    <span class="hljs-keyword">fi</span><br>    &#125;<br><br>    <span class="hljs-comment">#查看当前时间是周几</span><br>    week_date=$(<span class="hljs-built_in">date</span> +%u)<br>    <span class="hljs-comment">#判断当前时间是不是周日，如果是进去全量备份，如果不是就进行增量备份</span><br>    <span class="hljs-keyword">if</span> [ <span class="hljs-variable">$week_date</span> -eq 7 ];<span class="hljs-keyword">then</span><br>        full_backup<br>    <span class="hljs-keyword">else</span><br>        inc_backup<br>    <span class="hljs-keyword">fi</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="对时"><a href="#对时" class="headerlink" title="对时"></a>对时</h1><figure class="highlight dsconfig"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs dsconfig"><span class="hljs-string">check_the_time</span>()&#123;<br>    <span class="hljs-comment"># 关闭防火墙</span><br>    <span class="hljs-string">systemctl</span> <span class="hljs-string">stop</span> <span class="hljs-string">firewalld</span><br>    <span class="hljs-string">setenforce</span> <span class="hljs-string">0</span><br>    <span class="hljs-comment"># 下载软件</span><br>    <span class="hljs-string">yum</span> -<span class="hljs-string">y</span> <span class="hljs-string">instal</span> <span class="hljs-string">ntpdate</span><br>    <span class="hljs-comment"># 查看当前时区</span><br>    <span class="hljs-string">timedatectl</span><br>    <span class="hljs-comment"># 列出可用时区</span><br>    <span class="hljs-comment">#timedatectl list-timezones</span><br>    <span class="hljs-comment"># 修改上海时区</span><br>    <span class="hljs-string">timedatectl</span> <span class="hljs-built_in">set-timezone</span> <span class="hljs-string">Asia</span>/<span class="hljs-string">Shanghai</span><br>    <span class="hljs-comment"># 验证修改是否生效</span><br>    <span class="hljs-string">timedatectl</span><br>    <span class="hljs-comment"># 对时</span><br>    <span class="hljs-string">ntpdate</span> <span class="hljs-string">ntp</span>.<span class="hljs-string">aliyun</span>.<span class="hljs-string">com</span><br>    <span class="hljs-string">echo</span> <span class="hljs-string">&quot;对时成功，当前时间为：&quot;</span> <br>    <span class="hljs-string">date</span> +<span class="hljs-string">&#x27;%F %H:%M:%S&#x27;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="配置IP"><a href="#配置IP" class="headerlink" title="配置IP"></a>配置IP</h1><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs routeros">COPY_INSTALL()&#123;<br><span class="hljs-attribute">master</span>=ip1<br><span class="hljs-attribute">slave</span>=ip2<br>read -p <span class="hljs-string">&quot;请输入master的IP地址：&quot;</span> IP1<br>read -p <span class="hljs-string">&quot;请输入slave的IP地址：&quot;</span> IP2<br><span class="hljs-comment"># 关闭防火墙</span><br>systemctl stop firewalld;setenforce 0<br><span class="hljs-comment"># 域名解析</span><br>cat &gt;&gt; /etc/hosts &lt;&lt; EOF<br><span class="hljs-variable">$IP1</span> master<br><span class="hljs-variable">$IP2</span> slave<br>EOF<br><span class="hljs-comment"># ping下网络</span><span class="hljs-built_in"></span><br><span class="hljs-built_in">ping </span>slave &amp;&gt; /dev/<span class="hljs-literal">null</span><br><span class="hljs-keyword">if</span> [ $? -eq 0 ];then<br>    echo <span class="hljs-string">&quot;网络正常，可以使用&quot;</span><br><span class="hljs-keyword">else</span><br>    echo <span class="hljs-string">&quot;sorry 网络不通&quot;</span><br>fi<br><span class="hljs-comment"># 添加主机配置</span><br>cat &gt;&gt; /etc/my.cnf &lt;&lt; EOF<br><span class="hljs-attribute">log-bin</span>=/var/lib/mysql/master<br><span class="hljs-attribute">server-id</span>=1<br><span class="hljs-attribute">gtid_mode</span>=ON<br><span class="hljs-attribute">enforce_gtid_consistency</span>=1<br>EOF<br><span class="hljs-comment"># 主机授权</span><br>grant replication slave,super,reload on *.* <span class="hljs-keyword">to</span> slave@<span class="hljs-string">&#x27;%&#x27;</span> identified by <span class="hljs-string">&#x27;Qianfeng123!&#x27;</span>;<br><span class="hljs-comment"># 刷新权限</span><br>flush privileges;<br><span class="hljs-comment"># 此项为互为主从配置</span><br>change master <span class="hljs-keyword">to</span> <span class="hljs-attribute">master_host</span>=<span class="hljs-string">&#x27;slave&#x27;</span>,master_user=&#x27;slave&#x27;,master_password=&#x27;1&#x27;,master_auto_position=1;<br><span class="hljs-comment"># 启动slave服务</span><br>start slave;<br><span class="hljs-comment"># 查看服务状态，是否有error</span><br>show slave status\G<br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="退出"><a href="#退出" class="headerlink" title="退出"></a>退出</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-title function_">exit_menu</span>(<span class="hljs-params"></span>)&#123;<br>    echo <span class="hljs-string">&quot;再见！！！&quot;</span><br>    <span class="hljs-keyword">break</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="定义菜单颜色"><a href="#定义菜单颜色" class="headerlink" title="定义菜单颜色"></a>定义菜单颜色</h1><figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs llvm">red()&#123;<br>    echo -e <span class="hljs-string">&quot;<span class="hljs-char escape_">\03</span>3[31m<span class="hljs-char escape_">\03</span>3[01m$1<span class="hljs-char escape_">\03</span>3[0m&quot;</span><br>&#125;<br>green()&#123;<br>    echo -e <span class="hljs-string">&quot;<span class="hljs-char escape_">\03</span>3[32m<span class="hljs-char escape_">\03</span>3[01m$1<span class="hljs-char escape_">\03</span>3[0m&quot;</span><br>&#125;<br>yellow()&#123;<br>    echo -e <span class="hljs-string">&quot;<span class="hljs-char escape_">\03</span>3[33m<span class="hljs-char escape_">\03</span>3[01m$1<span class="hljs-char escape_">\03</span>3[0m&quot;</span><br>&#125;<br>blue()&#123;<br>    echo -e <span class="hljs-string">&quot;<span class="hljs-char escape_">\03</span>3[34m<span class="hljs-char escape_">\03</span>3[01m$1<span class="hljs-char escape_">\03</span>3[0m&quot;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="主菜单选择"><a href="#主菜单选择" class="headerlink" title="主菜单选择"></a>主菜单选择</h1><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">main_menu() &#123;<br>    while true<span class="hljs-comment">; do</span><br>red      <span class="hljs-string">&quot;===============================================&quot;</span><br>green   <span class="hljs-string">&quot;||  ____    _____  _______  _________  _______||&quot;</span><br>yellow  <span class="hljs-string">&quot;|| / __ \  /  _/ |/ / ___/ / __/ __/ |/ / ___/||&quot;</span><br><span class="hljs-keyword">blue </span>   <span class="hljs-string">&quot;||/ /_/ / _/ //    / (_ / / _// _//    / (_ / ||&quot;</span><br>yellow  <span class="hljs-string">&quot;||\___\_\/___/_/|_/\___/ /_/ /___/_/|_/\___/  ||&quot;</span><br>green   <span class="hljs-string">&quot;||                                            ||&quot;</span><br>red     <span class="hljs-string">&quot;===============================================&quot;</span><br><span class="hljs-keyword">blue </span>   <span class="hljs-string">&quot;||            &gt;&gt;&gt;&gt;&gt; 清风徐来 &lt;&lt;&lt;&lt;&lt;            ||&quot;</span><br>red     <span class="hljs-string">&quot;===============================================&quot;</span><br>        echo <span class="hljs-string">&quot;1) 打印当前系统登录用户&quot;</span><br>        echo <span class="hljs-string">&quot;2) 检查软件是否已安装并打印软件信息&quot;</span><br>        echo <span class="hljs-string">&quot;3) 输入时间段和日志路径统计nginx访问日志次数最多的IP&quot;</span><br>        echo <span class="hljs-string">&quot;4) 安装指定软件&quot;</span><br>        echo <span class="hljs-string">&quot;5) 获取系统CPU排名前10的进程&quot;</span><br>        echo <span class="hljs-string">&quot;6) 获取系统内存排名前10的进程&quot;</span><br>        echo <span class="hljs-string">&quot;7) 更改IP&quot;</span><br>        echo <span class="hljs-string">&quot;8) 关闭防火墙&quot;</span><br>        echo <span class="hljs-string">&quot;9) 开启DNS&quot;</span><br>        echo <span class="hljs-string">&quot;10) 备份&quot;</span><br>        echo <span class="hljs-string">&quot;11) 对时&quot;</span><br>        echo <span class="hljs-string">&quot;12) 主从复制&quot;</span><br>        echo <span class="hljs-string">&quot;13) 返回上级菜单&quot;</span><br>        echo <span class="hljs-string">&quot;14) 退出&quot;</span><br>        echo <span class="hljs-string">&quot;============================================&quot;</span><br><br>        read -p <span class="hljs-string">&quot;请输入选项： &quot;</span> select<br>        case $select in<br>            <span class="hljs-number">1</span>)<br>                print_logged_in_users<br>                <span class="hljs-comment">;;</span><br>            <span class="hljs-number">2</span>)<br>                check_and_print_software_info<br>                <span class="hljs-comment">;;</span><br>            <span class="hljs-number">3</span>)<br>                analyze_nginx_log<br>                <span class="hljs-comment">;;</span><br>            <span class="hljs-number">4</span>)<br>                <span class="hljs-keyword">install_software</span><br><span class="hljs-keyword"></span>                <span class="hljs-comment">;;</span><br>            <span class="hljs-number">5</span>)<br>                get_top_cpu_processes<br>                <span class="hljs-comment">;;</span><br>            <span class="hljs-number">6</span>)<br>                get_top_memory_processes<br>                <span class="hljs-comment">;;</span><br>            <span class="hljs-number">7</span>)<br>                change_IP_address<br>                <span class="hljs-comment">;;</span><br>            <span class="hljs-number">8</span>)<br>                <span class="hljs-keyword">disable_firewall</span><br><span class="hljs-keyword"></span>                <span class="hljs-comment">;;</span><br>            <span class="hljs-number">9</span>)<br>                on_DNS<br>                <span class="hljs-comment">;;</span><br>            <span class="hljs-number">10</span>)<br>                <span class="hljs-keyword">backup_copy</span><br><span class="hljs-keyword"></span>                <span class="hljs-comment">;;</span><br>            <br>            <span class="hljs-number">11</span>)<br>                check_the_time<br>                <span class="hljs-comment">;;</span><br>            <span class="hljs-number">12</span>)<br>                COPY_INSTALL<br>                <span class="hljs-comment">;;</span><br>            <span class="hljs-number">13</span>)<br>                echo <span class="hljs-string">&quot;请重新选择你需要的菜单&quot;</span><br>                continue <span class="hljs-number">2</span><br>                <span class="hljs-comment">;;</span><br>            <span class="hljs-number">14</span>)<br>                exit_menu<br>                <span class="hljs-comment">;;</span><br>            *)<br>                echo <span class="hljs-string">&quot;无效的选择，请重新输入&quot;</span><br>                <span class="hljs-comment">;;</span><br>        esac<br><br>        echo <span class="hljs-string">&quot;============================&quot;</span><br>        read -p <span class="hljs-string">&quot;按任意键返回主菜单&quot;</span> any_key<br>        clear<br>    done<br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="运行主菜单"><a href="#运行主菜单" class="headerlink" title="运行主菜单"></a>运行主菜单</h1><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">main_menu</span><br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>系统工具箱--脚本实验</div>
+      <div>http://example.com/2025/11/06/系统工具箱-脚本/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Mr.xu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp实验">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">shell添加用户，计算，vsftp实验</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/11/06/Nginx-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/" title="Nginx 负载均衡&amp;反向代理实验">
+                        <span class="hidden-mobile">Nginx 负载均衡&amp;反向代理实验</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

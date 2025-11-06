@@ -1,0 +1,774 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Mr.xu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="什么是虚拟化:123vmm、Hypervisor 是提供真正虚拟机管理程序的，---创建，删除-开关机。Hypervisor是属于内核功能的，操作系统内核的一个模块。把和内核交互的工具称之为用户肽工具：比如：virsh命令行、virt-manager图形界面，  虚拟化产品分类:桌面级虚拟化企业级虚拟机化 虚拟化产品分类：123456781.Kvm（redhat-----企业级）2.Vmware:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="KVM 虚拟机部署">
+<meta property="og:url" content="http://example.com/2025/11/06/KVM-%E8%99%9A%E6%8B%9F%E6%9C%BA%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="什么是虚拟化:123vmm、Hypervisor 是提供真正虚拟机管理程序的，---创建，删除-开关机。Hypervisor是属于内核功能的，操作系统内核的一个模块。把和内核交互的工具称之为用户肽工具：比如：virsh命令行、virt-manager图形界面，  虚拟化产品分类:桌面级虚拟化企业级虚拟机化 虚拟化产品分类：123456781.Kvm（redhat-----企业级）2.Vmware:">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/upload/kvm1.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm2.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm3.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm4.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm5.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm6.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm7.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm8.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm9.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm10.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm11.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm12.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm13.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm14.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm15.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm16.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm17.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm18.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm19.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm20.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm21.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm22.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm23.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm24.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm25.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm26.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm27.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm28.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm29.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm30.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm31.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm32.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm33.webp">
+<meta property="og:image" content="https://xbd666.cn/upload/kvm34.webp">
+<meta property="article:published_time" content="2025-11-06T12:53:28.000Z">
+<meta property="article:modified_time" content="2025-11-06T12:53:48.180Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/upload/kvm1.webp">
+  
+  
+  
+  <title>KVM 虚拟机部署 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="KVM 虚拟机部署"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-06 20:53" pubdate>
+          2025年11月6日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          49 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">KVM 虚拟机部署</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="什么是虚拟化"><a href="#什么是虚拟化" class="headerlink" title="什么是虚拟化:"></a>什么是虚拟化:</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ini">vmm、Hypervisor 是提供真正虚拟机管理程序的，---创建，删除-开关机。<br><br>Hypervisor是属于内核功能的，操作系统内核的一个模块。把和内核交互的工具称之为用户肽工具：比如：virsh命令行、virt-manager图形界面，<br></code></pre></td></tr></table></figure>
+
+<h2 id="虚拟化产品分类"><a href="#虚拟化产品分类" class="headerlink" title="虚拟化产品分类:"></a>虚拟化产品分类:</h2><p><code>桌面级虚拟化</code><br><code>企业级虚拟机化</code></p>
+<h2 id="虚拟化产品分类："><a href="#虚拟化产品分类：" class="headerlink" title="虚拟化产品分类："></a>虚拟化产品分类：</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs ini">1.Kvm（redhat-----企业级）<br>2.Vmware:<br>Vmware-workstation(windows和linux)----桌面级<br>Vmware-fusion(mac)<br>Vmware-esxi-----(企业级别)本身就是一个操作系统。<br>3.hyper-v(微软）<br>4.Ovm（oracle公司--Windows linux） virtulbox<br>5.Xen（rhel6之前所有版本默认用的虚拟化产品）<br></code></pre></td></tr></table></figure>
+
+<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><p><strong>第一步先在VMware上创建一个虚拟机（内存能多大就做多大）</strong></p>
+<p><code>虚拟机安装好，打开设置--处理器--虚拟化引擎--勾选第一个</code></p>
+<p><img src="/upload/kvm1.webp" srcset="/img/loading.gif" lazyload alt="kvm1.webp"></p>
+<p><strong>打开虚拟机，查看cpu是否支持虚拟化</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># cat /proc/cpuinfo | grep -E &#x27;vmx|svm&#x27;</span><br>cmx|svm支持其中一个就可以<br></code></pre></td></tr></table></figure>
+
+<h2 id="构建环境"><a href="#构建环境" class="headerlink" title="构建环境"></a>构建环境</h2><p><code>关闭防火墙和selinux</code></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs ini">清理环境，卸载机器自带的kvm<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># yum -y remove `rpm -qa | egrep &#x27;qemu|virt|kvm&#x27;`</span><br><span class="hljs-comment">#删除储存虚拟机的介质、虚拟机配置文件</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># rm -rf /var/lib/libvirt  /etc/libvirt/</span><br><span class="hljs-comment">#升级所有包同时也升级软件和系统内核</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># yum upgrade -y</span><br><span class="hljs-comment">#安装软件</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># yum install *qemu*  *virt*  librbd1-devel -y</span><br>其实下载的是下面几款软件<br><span class="hljs-comment"># qemu-kvm libvirt virt-manager  librbd1-devel</span><br>qemu-kvm ： 主包<br>libvirt：api接口<br>virt-manager：图形化界面<br><br><span class="hljs-comment">#在所谓的kvm技术中，应用到的其实有2个东西：qemu+kvm</span><br>kvm负责cpu虚拟化+内存虚拟化，实现了cpu和内存的虚拟化，但kvm不能模拟其他设备；<br>qemu是模拟IO设备（网卡，磁盘），kvm加上qemu之后就能实现真正意义上服务器虚拟化。<br>因为用到了上面两个东西，所以一般都称之为qemu-kvm。<br>libvirt则是调用kvm虚拟化技术的接口用于管理的，用libvirt管理方便，直接用qemu-kvm的接口太繁琐。<br><br><span class="hljs-comment">#启动服务</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># systemctl start libvirtd</span><br><span class="hljs-comment">#查看kvm模块加载</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># lsmod | grep kvm</span><br>kvm_intel             188644  0 <br>kvm                   621480  1 kvm_intel<br>irqbypass              13503  1 kvm<br>如果看到有这两行，说明支持kvm模块<br></code></pre></td></tr></table></figure>
+
+<p><strong>下面就可以在VMware里面再安装虚拟机了</strong></p>
+<h2 id="图形添加虚拟机"><a href="#图形添加虚拟机" class="headerlink" title="图形添加虚拟机"></a>图形添加虚拟机</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini">在终端输入virt-manager--点击电脑图标创建--本地安装介质--选择使用ISO映像，另外<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://xbd666.cn/upload/kvm2.webp" srcset="/img/loading.gif" lazyload alt="kvm2.png"></p>
+<p><img src="https://xbd666.cn/upload/kvm3.webp" srcset="/img/loading.gif" lazyload alt="kvm3.png"></p>
+<p><img src="https://xbd666.cn/upload/kvm4.webp" srcset="/img/loading.gif" lazyload alt="kvm4.png"></p>
+<p><img src="https://xbd666.cn/upload/kvm5.webp" srcset="/img/loading.gif" lazyload alt="kvm5.png"></p>
+<p><img src="https://xbd666.cn/upload/kvm6.webp" srcset="/img/loading.gif" lazyload alt="kvm6.png"></p>
+<p><img src="https://xbd666.cn/upload/kvm7.webp" srcset="/img/loading.gif" lazyload alt="kvm7.png"></p>
+<h2 id="文本添加虚拟机"><a href="#文本添加虚拟机" class="headerlink" title="文本添加虚拟机"></a>文本添加虚拟机</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-comment">#安装ftp，并配置最后将镜像上传到ftp中</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># yum install -y vsftpd</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># mkdir /var/ftp/centos7u4</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># mount /root/CentOS-7-x86_64-DVD-1708.iso /var/ftp/centos7u4/</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virt-install --connect qemu:///system -n vm10 -r 2050 --disk path=/var/lib/libvirt/images/vm10.img,size=5  --os-type=linux --os-variant=centos7.0 --vcpus=1  --location=ftp://10.0.111.182/centos7u4 -x console=ttyS0 --nographics</span><br><br>注意:<br>virt-install <br>bash: virt-install: 未找到命令...<br><span class="hljs-comment"># yum install libguestfs-tools -y</span><br><span class="hljs-comment"># yum install virt-install.noarch -y</span><br><br>如果还是有问题没办法安装，需要vsftp匿名授权，添加以下内容<br>vim /etc/vsftpd/vsftpd.conf		//配置文件<br><span class="hljs-attr">anonymous_enable</span>=<span class="hljs-literal">YES</span> 		 	//开启匿名登录<br><span class="hljs-attr">anon_upload_enable</span>=<span class="hljs-literal">YES</span> 			//匿名读<br><span class="hljs-attr">anon_mkdir_write_enable</span>=<span class="hljs-literal">YES</span> 	//匿名写<br><br><span class="hljs-comment"># 重启下vsftp</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># systemctl restart vsftpd</span><br><br>参数解释：<br>-n name<br>-r  以M为单位指定分配给虚拟机的内存大小<br>--disk 指定作为客户机存储的媒介 size以G为单位的存储<br>--os-type   系统类型<br>--os-variant 系统类型版本<br>--vcpus 指定核数，不能超过物理cpu<br>--location  客户虚拟机安装源下载，必须为镜像挂载在ftp目录下<br>-x <span class="hljs-attr">console</span>=ttyS0 执行终端<span class="hljs-number">0</span><br>--nographics 无图形，文本模式<br><br><span class="hljs-comment">#以下就是进入命令安装</span><br>1、选2，进入use text mode<br>2、将所有的！进行编辑，编辑好的状态是×<br>3、更改时间选2 -- 1 set timezone-- 2 Asia -- 65 Shanghai<br>4、设置磁盘5 -- c to continue -- 2 Use All Space -- c to continue -- 3 LVM -- c to continue <br>5、设置密码8 -- 自己设定一个密码 -- yes<br>6、设置完成-- b<br>7、开始创建，大概20分钟左右<br>8、出现installation complete. press return to quit--按回车退出--下面的操作根据提示点点就可以了<br></code></pre></td></tr></table></figure>
+
+<h2 id="模板镜像-配置文件-方式安装虚拟机—重点"><a href="#模板镜像-配置文件-方式安装虚拟机—重点" class="headerlink" title="模板镜像+配置文件 方式安装虚拟机—重点"></a>模板镜像+配置文件 方式安装虚拟机—重点</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><code class="hljs ini">1.虚拟机配置文件<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># ls /etc/libvirt/qemu</span><br>networks  vm2.xml<br>2.储存虚拟机的介质<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># ls /var/lib/libvirt/images/</span><br><span class="hljs-attr">vm2.img</span><br>==============================<br>define方式创建好，不会启动<br>create方式创建好，会启动<br><br><span class="hljs-comment"># 拷贝模板镜像和配置文件</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># cp /etc/libvirt/qemu/vm2.xml /etc/libvirt/qemu/vm3.xml(自定义名字)</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># cp /var/lib/libvirt/images/vm2.img /var/lib/libvirt/images/vm3.img (自定义名字)</span><br><span class="hljs-comment"># 修改配置文件</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># vim /etc/libvirt/qemu/vm3.xml</span><br>domain <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;kvm&#x27;</span>&gt;<br>  &lt;name&gt;vm3&lt;/name&gt;  <span class="hljs-comment">#名字不能一样需要修改</span><br>  &lt;uuid&gt;2e3fa6db-ff7f-41c3-bc8f-0428e81ebb57&lt;/uuid&gt; <span class="hljs-comment">#uuid不能一样需要修改</span><br>  &lt;memory <span class="hljs-attr">unit</span>=<span class="hljs-string">&#x27;KiB&#x27;</span>&gt;<span class="hljs-number">1024000</span>&lt;/memory&gt;  <span class="hljs-comment">#内存，可选</span><br>  &lt;currentMemory <span class="hljs-attr">unit</span>=<span class="hljs-string">&#x27;KiB&#x27;</span>&gt;<span class="hljs-number">1024000</span>&lt;/currentMemory&gt;  <span class="hljs-comment">#当前内存与上面定义一样</span><br>  &lt;vcpu <span class="hljs-attr">placement</span>=<span class="hljs-string">&#x27;static&#x27;</span>&gt;<span class="hljs-number">2</span>&lt;/vcpu&gt;  <span class="hljs-comment">#cpu可选</span><br>  &lt;os&gt;<br>  。。。<br>  。。。<br>  。。。<br>    &lt;devices&gt;<br>    &lt;emulator&gt;/usr/libexec/qemu-kvm&lt;/emulator&gt;<br>    &lt;disk <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;file&#x27;</span> device=<span class="hljs-string">&#x27;disk&#x27;</span>&gt;<br>      &lt;driver <span class="hljs-attr">name</span>=<span class="hljs-string">&#x27;qemu&#x27;</span> type=<span class="hljs-string">&#x27;qcow2&#x27;</span>/&gt;<br>      &lt;source <span class="hljs-attr">file</span>=<span class="hljs-string">&#x27;/var/lib/libvirt/images/vm3.img&#x27;</span>/&gt;   <span class="hljs-comment">#磁盘镜像需要修改</span><br>      &lt;target <span class="hljs-attr">dev</span>=<span class="hljs-string">&#x27;vda&#x27;</span> bus=<span class="hljs-string">&#x27;virtio&#x27;</span>/&gt;<br>      &lt;address <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;pci&#x27;</span> domain=<span class="hljs-string">&#x27;0x0000&#x27;</span> bus=<span class="hljs-string">&#x27;0x00&#x27;</span> slot=<span class="hljs-string">&#x27;0x07&#x27;</span> function=<span class="hljs-string">&#x27;0x0&#x27;</span>/&gt;<br>    &lt;/disk&gt;<br> 。。。<br> 。。。<br> 。。。<br>     &lt;/controller&gt;<br>    &lt;interface <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;network&#x27;</span>&gt;<br>      &lt;mac <span class="hljs-attr">address</span>=<span class="hljs-string">&#x27;52:54:00:82:d6:3c&#x27;</span>/&gt;  <span class="hljs-comment">#mac地址不能一样需要修改，只能修改后三段。</span><br>      &lt;source <span class="hljs-attr">network</span>=<span class="hljs-string">&#x27;default&#x27;</span>/&gt;<br>      &lt;model <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;virtio&#x27;</span>/&gt;<br><br><span class="hljs-comment">#必须修改name，uuid,mac地址,磁盘文件名字,其余可选</span><br><br>用vim修改完之后需要define一下配置文件<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh define /etc/libvirt/qemu/vm3.xml</span><br>重启一下：<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># systemctl restart libvirtd</span><br>宿主机开启路由转发：<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># vim /etc/sysctl.conf </span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># sysctl -p</span><br><span class="hljs-attr">net.ipv4.ip_forward</span> = <span class="hljs-number">1</span><br>查看虚拟机列表：<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh list --all</span><br> Id    名称                         状态<br>----------------------------------------------------<br> -     vm2                            关闭<br> -     vm3                            关闭<br></code></pre></td></tr></table></figure>
+
+<h2 id="KVM虚拟机管理"><a href="#KVM虚拟机管理" class="headerlink" title="KVM虚拟机管理"></a>KVM虚拟机管理</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh list  #列出在运行状态中的虚拟机</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh list --all  #列出所有虚拟机</span><br>查看kvm虚拟机配置文件：<br><span class="hljs-comment">#语法：virsh dumpxml vm_name</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh dumpxml vm3</span><br><br>启动<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh start vm2</span><br>域 vm2 已开始<br><br>暂停虚拟机：<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh suspend vm_name</span><br>域 vm2 被挂起<br><br>恢复虚拟机：<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh resume vm_name</span><br>域 vm2 被重新恢复<br><br>关闭：<br>方法1：<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh shutdown vm3</span><br>域 vm3 被关闭<br><br>重启：<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh reboot vm3</span><br>域 vm3 正在被重新启动<br><br>重置:<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh reset vm3</span><br>vm3   <span class="hljs-comment">#断电重启。速度快</span><br>Domain vm3 was reset<br><br>删除虚拟机:<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh undefine vm2</span><br>Domain vm2 has been undefined<br>注意:虚拟机在开启的情况下undefine是无法删除的只是将配置文件删除了，不能删除磁盘文件。需要手动rm，最好还是在virt-manager里面右击删除<br><br>虚拟机开机自动启动:<br><span class="hljs-comment">#如果虚拟机开机自启，里面的服务应该设置的有开机自启，不然没有意义</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh autostart vm_name</span><br>域 vm3标记为自动开始<br><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># ls /etc/libvirt/qemu/autostart/     //此目录默认不存在，在有开机启动的虚拟机时自动创建</span><br>vm3.xml<br><br>关闭开机启动<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh autostart --disable vm_name</span><br>域 vm3取消标记为自动开始<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># ls /etc/libvirt/qemu/autostart/</span><br><br>如何查看已启动的虚拟机ip地址<br>假如vm3虚拟机已启动<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh domifaddr vm3</span><br> 名称     MAC 地址           Protocol     Address<br>-------------------------------------------------------------------------------<br> vnet0      52:54:00:82:d6:3c    ipv4         192.168.122.85/24<br></code></pre></td></tr></table></figure>
+
+<h2 id="虚拟机添加设备"><a href="#虚拟机添加设备" class="headerlink" title="虚拟机添加设备"></a>虚拟机添加设备</h2><p>1、图像方式添加</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini">输入virt-manager--右击点击你想要添加设备的虚拟机--查看--详情--左下角--添加硬件--安装需求添加就可以了<br></code></pre></td></tr></table></figure>
+
+<p>2、修改配置文件方式添加</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># qemu-img create -f qcow2 /var/lib/libvirt/images/vm4-1.qcow2 5G</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># cd /etc/libvirt/qemu/</span><br><span class="hljs-section">[root@kvm-server qemu]</span><span class="hljs-comment"># vim vm3.xml</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://xbd666.cn/upload/kvm8.webp" srcset="/img/loading.gif" lazyload alt="kvm8.png"></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs ini">加好之后，启动虚拟机<br><span class="hljs-section">[root@kvm-server qemu]</span><span class="hljs-comment"># systemctl restart libvirtd</span><br><span class="hljs-section">[root@kvm-server qemu]</span><span class="hljs-comment"># virsh list --all</span><br> Id    名称                         状态<br>----------------------------------------------------<br> 6     centos7.0                      running<br> -     vm3                            关闭<br><span class="hljs-section">[root@kvm-server qemu]</span><span class="hljs-comment"># virsh start vm3</span><br><br>可以看到我们新添加的磁盘vdb<br><span class="hljs-comment">#然后可以正常分区，制作文件系统，进行挂载</span><br></code></pre></td></tr></table></figure>
+
+
+<p><img src="https://xbd666.cn/upload/kvm9.webp" srcset="/img/loading.gif" lazyload alt="kvm9.png"></p>
+<h2 id="虚拟机克隆"><a href="#虚拟机克隆" class="headerlink" title="虚拟机克隆"></a>虚拟机克隆</h2><p>1.图形界面：Applications （左上角）—–&gt; System Tools ——&gt;Virtual Machine Manager<br>   <code>关闭要克隆的虚拟机，右键点击虚拟机选择Clone</code></p>
+<p><img src="https://xbd666.cn/upload/kvm10.webp" srcset="/img/loading.gif" lazyload alt="kvm10.png"></p>
+<p>2.在终端执行命令克隆</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virt-clone -o vm2 -n vm5 --auto-clone</span><br>正在分配 &#x27;vm5.qcow2&#x27;                                    | 5.0 GB  00:00     <br>成功克隆 &#x27;vm5&#x27;。<br>-o      origin-原始<br>-n :指定新客户机的名字<br><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh list --all</span><br> Id    名称                         状态<br>----------------------------------------------------<br> -     vm2                            关闭<br> -     vm5		                      关闭<br></code></pre></td></tr></table></figure>
+<h2 id="kvm高级命令"><a href="#kvm高级命令" class="headerlink" title="kvm高级命令"></a>kvm高级命令</h2><p>磁盘镜像文件的格式：<code>raw  qcow2</code></p>
+<ul>
+<li>raw：立刻分配空间，不管你有没有用到那么多空间</li>
+<li>qcow2：只是承诺给你分配空间，但是只有当你需要用空间的时候，才会给你空间。最多只给你承诺空间的大小，避免空间浪费</li>
+</ul>
+<h2 id="建立qcow2格式磁盘文件"><a href="#建立qcow2格式磁盘文件" class="headerlink" title="建立qcow2格式磁盘文件"></a>建立qcow2格式磁盘文件</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@kvm-server images]</span><span class="hljs-comment"># pwd</span><br>/var/lib/libvirt/images<br><span class="hljs-comment">#创建qcow2格式磁盘格式文件（vm1.qcow2是自定义的磁盘名字）</span><br><span class="hljs-section">[root@kvm-server images]</span><span class="hljs-comment"># qemu-img create -f qcow2 vm1.qcow2 5G</span><br>Formatting &#x27;vm1.qcow2&#x27;, <span class="hljs-attr">fmt</span>=qcow2 size=<span class="hljs-number">5368709120</span> encryption=<span class="hljs-literal">off</span> cluster_size=<span class="hljs-number">65536</span> lazy_refcounts=<span class="hljs-literal">off</span> <br><br><span class="hljs-comment">#创建raw格式磁盘格式文件（vm2.raw是自定义的磁盘名字）</span><br><span class="hljs-section">[root@kvm-server images]</span><span class="hljs-comment"># qemu-img create -f raw vm2.raw 5G</span><br>Formatting &#x27;vm2.raw&#x27;, <span class="hljs-attr">fmt</span>=raw size=<span class="hljs-number">5368709120</span> <br><br><span class="hljs-comment">#查看已经创建的虚拟磁盘文件</span><br><span class="hljs-section">[root@kvm-server images]</span><span class="hljs-comment"># qemu-img info vm1.qcow2</span><br><span class="hljs-section">[root@kvm-server images]</span><span class="hljs-comment"># qemu-img info vm2.raw</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="挂载磁盘"><a href="#挂载磁盘" class="headerlink" title="挂载磁盘"></a>挂载磁盘</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-comment"># 将虚拟机先关闭</span><br>查看vm2磁盘镜像分区信息--（需要等一会会）<br><span class="hljs-section">[root@kvm-server images]</span><span class="hljs-comment"># virt-df -h -d vm2</span><br>文件系统                                  大小      已用空间    可用空间     使用百分比%<br>vm2:/dev/sda1                            1014M        92M       922M         10%<br>vm2:/dev/centos/root                      3.5G       863M       2.6G         25%<br><br><span class="hljs-comment"># 创建一个挂载目录</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># mkdir /test</span><br><span class="hljs-comment">#挂载虚拟机的根分区到test目录</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># guestmount -d vm2 -m /dev/centos/root --rw /test/</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># ll /test</span><br>bin   dev  home  lib64  mnt  proc  run   srv  tmp  var<br>boot  etc  lib   media  opt  root  sbin  sys  usr<br><br><span class="hljs-comment"># 取消挂载</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># guestunmount /test</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="KVM存储配置"><a href="#KVM存储配置" class="headerlink" title="KVM存储配置"></a>KVM存储配置</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-comment">#kvm默认存储池的位置：</span><br>    /var/lib/libvirt/images/    <br></code></pre></td></tr></table></figure>
+
+<p>1、图形方式创建存储池</p>
+<p><img src="https://xbd666.cn/upload/kvm11.webp" srcset="/img/loading.gif" lazyload alt="kvm2.png"></p>
+<p><img src="https://xbd666.cn/upload/kvm12.webp" srcset="/img/loading.gif" lazyload alt="kvm2.png"></p>
+<p><img src="https://xbd666.cn/upload/kvm13.webp" srcset="/img/loading.gif" lazyload alt="kvm2.png"></p>
+<p><img src="https://xbd666.cn/upload/kvm14.webp" srcset="/img/loading.gif" lazyload alt="kvm2.png"></p>
+<p>2、命令方式创建存储池</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><code class="hljs ini">1.创建基于文件夹的存储池（目录，可自定义）<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># mkdir -p /data/vmfs</span><br><br>2.定义存储池与其目录--（vm1是存储池名字，自己自定义）<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh pool-define-as vm1 --type dir --target /data/vmfs</span><br>Pool vm1 defined<br><br>3.创建已定义的存储池<br>(1)构建已定义的存储池<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh pool-build vm1</span><br>Pool vm1 built<br><br>(2)查看已定义的存储池，存储池不激活无法使用。<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh pool-list --all</span><br>Name                 State      Autostart <br>-------------------------------------------<br> default             active       yes       <br> ISO                 active       yes       <br> vm1              inactive     no     <br> <br>4.激活并自动启动已定义的存储池<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh pool-start vm1</span><br>Pool vm1 started<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh pool-autostart vm1</span><br>Pool vm1 marked as autostarted<br><br><span class="hljs-comment">#此时查看都是在运行中，并且是开机自启</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh pool-list --all</span><br> Name                 State      Autostart <br>-------------------------------------------<br> default              active     yes       <br> ISO                 active     yes       <br> vm1               active     yes   <br>这里vm1存储池就已经创建好了，可以直接在这个存储池中创建虚拟磁盘文件了。<br><br>5.在存储池中创建虚拟机存储卷--（vm1-1.qcow2是自定义存储卷的名字，2G是自定义的大小）<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh vol-create-as vm1 vm1-1.qcow2 2G --format qcow2 </span><br>Vol vm1-1.qcow2 created<br><br><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># ll /data/vmfs/ -h</span><br>总用量 196K<br>-rw------- 1 root root 193K 10月 25 16:04 vm1-1.qcow2<br><br>6.存储池相关管理命令<br>(1)在存储池中删除虚拟机存储卷<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh vol-delete --pool vm1 vm1-1.qcow2</span><br>Vol vm1-1.qcow2 deleted<br><br>(2)取消激活存储池<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh pool-destroy vm1</span><br>Pool vm1 destroyed<br><br>(3)删除存储池定义的目录/data/vmfs<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh pool-delete vm1</span><br>Pool vm1 deleted<br><br>(4)取消定义存储池<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh pool-undefine vm1</span><br>Pool vm1 has been undefined<br><br>到此kvm存储池配置与管理操作完毕。 <br></code></pre></td></tr></table></figure>
+
+<h2 id="kvm快照"><a href="#kvm快照" class="headerlink" title="kvm快照"></a>kvm快照</h2><p>1、图形方式创建快照</p>
+<p><img src="https://xbd666.cn/upload/kvm15.webp" srcset="/img/loading.gif" lazyload alt="kvm2.png"></p>
+<p>2、命令方式创建快照</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs ini">为虚拟机vm2创建一个快照（磁盘格式必须为qcow2）<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh snapshot-create-as vm2 vm2.snap1</span><br><br>注意：如果在创建快照的时候报错：<br>error: unsupported configuration: internal snapshot for disk vda unsupported for storage type raw<br><br><span class="hljs-comment">#raw不支持snapshot--可以将raw格式转换成qcow2格式</span><br><br>查看磁盘文件格式<br><span class="hljs-section">[root@kvm-server images]</span><span class="hljs-comment"># qemu-img info /var/lib/libvirt/images/vm2.qcow2</span><br>image: /var/lib/libvirt/images/vm2.qcow2<br>file format: qcow2<br>virtual size: 5.0G (5368709120 bytes)<br>disk size: 5.0G<br>cluster_size: 65536<br>Format specific information:<br>    compat: 1.1<br>    lazy refcounts: true<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-comment"># 查看某台虚拟机设备的快照</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh snapshot-list  vm2   </span><br> Name                 Creation Time             State<br>------------------------------------------------------------<br><br><span class="hljs-comment"># 创建一块磁盘</span><br>创建--格式为raw，名字为vm2-1.raw，大小为2G的磁盘<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># qemu-img create -f raw /var/lib/libvirt/images/vm2-1.raw 2G</span><br>Formatting &#x27;/var/lib/libvirt/images/vm2-1.raw&#x27;, <span class="hljs-attr">fmt</span>=raw size=<span class="hljs-number">2147483648</span> <br><span class="hljs-comment"># 查看</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># ll -h /var/lib/libvirt/images/vm2-1.raw</span><br>-rw-r--r-- 1 root root 2.0G 10月 25 16:25 /var/lib/libvirt/images/vm2-1.raw<br><br><span class="hljs-comment"># 将其添加到vm2虚拟机上面</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># cd /etc/libvirt/qemu/</span><br><span class="hljs-section">[root@kvm-server qemu]</span><span class="hljs-comment"># vim vm2.xml </span><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://xbd666.cn/upload/kvm16.webp" srcset="/img/loading.gif" lazyload alt="kvm2.png"></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-comment"># 定义配置文件</span><br><span class="hljs-section">[root@kvm-server images]</span><span class="hljs-comment"># virsh define /etc/libvirt/qemu/vm2.xml</span><br><span class="hljs-section">[root@kvm-server images]</span><span class="hljs-comment"># virsh start vm2</span><br><br><span class="hljs-comment"># 验证raw格式是不能拍快照的</span><br><span class="hljs-section">[root@kvm-server qemu]</span><span class="hljs-comment"># virsh snapshot-create-as vm2 vm2.snap1</span><br>错误：不支持的配置：存储类型 vdb 不支持磁盘 raw 的内部快照<br><br><br><span class="hljs-comment"># 磁盘格式的转换</span><br>由于raw的磁盘格式，不支持快照功能，我们需要将其转换为qcow2的格式<br><span class="hljs-section">[root@kvm-server qemu]</span><span class="hljs-comment"># qemu-img convert -O qcow2 /var/lib/libvirt/images/vm2-1.raw  /var/lib/libvirt/images/vm2-1.qcow2</span><br><br><span class="hljs-section">[root@kvm-server qemu]</span><span class="hljs-comment"># cd /var/lib/libvirt/images/</span><br><span class="hljs-section">[root@kvm-server images]</span><span class="hljs-comment"># ll -h </span><br>总用量 21G<br>-rw------- 1 root root 5.1G 10月 24 18:59 centos7.0.qcow2<br>-rw-r--r-- 1 root root 193K 10月 25 16:44 vm2-1.qcow2<br>-rw-r--r-- 1 root root 2.0G 10月 25 16:25 vm2-1.raw<br>-rw------- 1 root root 5.1G 10月 25 16:13 vm2.qcow2<br><br><span class="hljs-comment"># 查看</span><br><span class="hljs-section">[root@kvm-server images]</span><span class="hljs-comment"># qemu-img info /var/lib/libvirt/images/vm2-1.qcow2</span><br>image: /var/lib/libvirt/images/vm2-1.qcow2<br>file format: qcow2<br>virtual size: 2.0G (2147483648 bytes)<br>disk size: 196K<br>cluster_size: 65536<br>Format specific information:<br>    compat: 1.1<br>    lazy refcounts: false<br>    <br><span class="hljs-comment"># 然后去修改vm2虚拟机的磁盘格式和名称</span><br><span class="hljs-section">[root@kvm-server images]</span><span class="hljs-comment"># vim /etc/libvirt/qemu/vm2.xml</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://xbd666.cn/upload/kvm17.webp" srcset="/img/loading.gif" lazyload alt="kvm2.png"></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@kvm-server images]</span><span class="hljs-comment"># virsh define /etc/libvirt/qemu/vm2.xml</span><br><br><span class="hljs-comment"># 创建快照</span><br><span class="hljs-section">[root@kvm-server qemu]</span><span class="hljs-comment"># virsh snapshot-create-as vm2 vm2.snap2</span><br>已生成域快照 vm2.snap2<br><span class="hljs-comment"># 此时raw格式转换成qcow2格式，并快照成功</span><br><br>以下操作为回溯快照<br><span class="hljs-comment"># 开机并再次创建快照-- 选择一台虚拟机进行快照，此时处于关闭状态</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh snapshot-create-as vm3 vm3-snap1</span><br>已生成域快照 vm3-snap1<br><br><span class="hljs-comment">#此时开启vm3虚拟机，并进行快照</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh start vm3</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh snapshot-create-as vm3 vm3-snap2</span><br>已生成域快照 vm3-snap2<br><br>查看快照<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh snapshot-list vm3 </span><br> 名称               生成时间              状态<br>------------------------------------------------------------<br> vm3-snap1            2019-10-30 15:27:15 +0800 running<br> vm3-snap2            2019-10-30 15:29:37 +0800 shutoff<br><br><br><span class="hljs-comment"># 恢复到快照vm3-snap1，现在虚拟机处于开启状态</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh snapshot-revert vm3 vm3-snap1</span><br>此时你再看虚拟机状态，是处于关闭状态<br><br>删除虚拟机快照操作：--需要先关闭虚拟机<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh shutdown vm3</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh snapshot-list vm3</span><br> 名称               生成时间              状态<br>------------------------------------------------------------<br> vm3-snap1            2019-10-30 15:27:15 +0800 running<br> vm3-snap2            2019-10-30 15:29:37 +0800 shutoff<br><br><span class="hljs-comment"># 删除快照</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh snapshot-delete --snapshotname vm3-snap2 vm3</span><br>已删除域快照 vm2-snap3<br><br><span class="hljs-comment"># 查看验证</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># virsh snapshot-list vm3</span><br> 名称               生成时间              状态<br>------------------------------------------------------------<br> vm3-snap1            2019-10-30 15:27:15 +0800 running<br></code></pre></td></tr></table></figure>
+
+<h2 id="自动化脚本管理kvm"><a href="#自动化脚本管理kvm" class="headerlink" title="自动化脚本管理kvm"></a>自动化脚本管理kvm</h2><p><code>运行脚本需要先更改好配置文件内容</code></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-comment">#!/bin/bash</span><br><span class="hljs-comment">#kvm batch create vm tool</span><br><span class="hljs-comment">#version:0.1</span><br><span class="hljs-comment">#time:2024-1-7</span><br><span class="hljs-comment">#author:清风</span><br><span class="hljs-comment">#需要事先准备模板镜像和配置文件模板</span><br><br>batch_self_define() &#123;<br><br>        <span class="hljs-attr">kvmname</span>=`openssl rand -hex <span class="hljs-number">5</span>`<br><br>        <span class="hljs-attr">sourceimage</span>=/var/lib/libvirt/images/vmmodel.img<br>        <span class="hljs-attr">sourcexml</span>=/etc/libvirt/qemu/vmmodel.xml<br><br>        <span class="hljs-attr">newimg</span>=/var/lib/libvirt/images/<span class="hljs-variable">$&#123;kvmname&#125;</span>.img<br>        <span class="hljs-attr">newxml</span>=/etc/libvirt/qemu/<span class="hljs-variable">$&#123;kvmname&#125;</span>.xml<br><br>        cp $sourceimage  $newimg<br>        cp $sourcexml $newxml<br><br>        <span class="hljs-attr">kvmuuid</span>=`uuidgen`<br>        <span class="hljs-attr">kvmmem</span>=<span class="hljs-variable">$&#123;1&#125;</span><span class="hljs-number">000000</span><br>        <span class="hljs-attr">kvmcpu</span>=<span class="hljs-variable">$2</span><br>        <br>        <br>        <span class="hljs-attr">kvmimg</span>=<span class="hljs-variable">$newimg</span><br>        <span class="hljs-attr">kvmmac</span>=`openssl rand -hex <span class="hljs-number">3</span> | sed -r <span class="hljs-string">&#x27;s/..\B/&amp;:/g&#x27;</span>`<br><br>        sed -i &quot;s@kvmname@$kvmname@<span class="hljs-comment">;s@kvmuuid@$kvmuuid@;s@kvmmem@$kvmmem@;s@kvmcpu@$kvmcpu@;s@kvmimg@$kvmimg@;s@kvmmac@$kvmmac@&quot; $newxml</span><br>        virsh define $newxml<br>        virsh list --all<br>&#125;<br><br>self_define() &#123;<br>        read -p &quot;请输入新虚机名称:&quot; newname<br>        read -p &quot;请输入新虚机内存大小(G):&quot; newmem<br>        read -p &quot;请输入新虚机cpu个数:&quot; newcpu<br><br>        <span class="hljs-attr">sourceimage</span>=/var/lib/libvirt/images/vmmodel.img<br>        <span class="hljs-attr">sourcexml</span>=/etc/libvirt/qemu/vmmodel.xml<br><br>        <span class="hljs-attr">newimg</span>=/var/lib/libvirt/images/<span class="hljs-variable">$&#123;newname&#125;</span>.img<br>        <span class="hljs-attr">newxml</span>=/etc/libvirt/qemu/<span class="hljs-variable">$&#123;newname&#125;</span>.xml<br><br>        cp $sourceimage  $newimg<br>        cp $sourcexml $newxml<br><br>        <span class="hljs-attr">kvmname</span>=<span class="hljs-variable">$newname</span><br>        <span class="hljs-attr">kvmuuid</span>=`uuidgen`<br>        <span class="hljs-attr">kvmmem</span>=<span class="hljs-variable">$&#123;newmem&#125;</span><span class="hljs-number">000000</span><br>        <span class="hljs-attr">kvmcpu</span>=<span class="hljs-variable">$newcpu</span><br>        <span class="hljs-attr">kvmimg</span>=<span class="hljs-variable">$newimg</span><br>        <span class="hljs-attr">kvmmac</span>=`openssl rand -hex <span class="hljs-number">3</span> | sed -r <span class="hljs-string">&#x27;s/..\B/&amp;:/g&#x27;</span>`<br><br>        sed -i &quot;s@kvmname@$kvmname@<span class="hljs-comment">;s@kvmuuid@$kvmuuid@;s@kvmmem@$kvmmem@;s@kvmcpu@$kvmcpu@;s@kvmimg@$kvmimg@;s@kvmmac@$kvmmac@&quot; $newxml</span><br>        virsh define $newxml<br>        virsh list --all<br>&#125;<br><br>delete_kvm()&#123;<br>        virsh list<br>        while true<span class="hljs-comment">;do</span><br>        read -p &quot;是否需要关闭lvm或退出（Y/N/T）&quot; ynt<br>        if <span class="hljs-section">[ $ynt = y ]</span><span class="hljs-comment">;then</span><br>                read -p &quot;请输入你要关闭的kvm：&quot; numb<br>                virsh shutdown $numb<br>        elif <span class="hljs-section">[ $ynt = n ]</span><span class="hljs-comment">;then</span><br>                virsh list --all<br>                read -p &quot;请输入你要删除的kvm：&quot; num<br>                virsh undefine $num<br>                <span class="hljs-comment">#rm -rf /etc/libvirt/qemu/$num.xml</span><br>                rm -rf /var/lib/libvirt/images/$num*<br>                echo &quot;$num 虚拟机已被删除！&quot;<br>        else<br>                echo &quot;再见！&quot;<br>                break<br>        fi<br>        done<br>&#125;  <br><br>exit_menu()&#123;<br>    green &quot;再见！！！&quot;<br>    break<br>&#125;     <br><br>red()&#123;<br>    echo -e &quot;\033<span class="hljs-section">[31m\033[01m$1\033[0m&quot;</span><br><span class="hljs-section">&#125;</span><br><span class="hljs-section">green()&#123;</span><br><span class="hljs-section">    echo -e &quot;\033[32m\033[01m$1\033[0m&quot;</span><br><span class="hljs-section">&#125;</span><br><span class="hljs-section">yellow()&#123;</span><br><span class="hljs-section">    echo -e &quot;\033[33m\033[01m$1\033[0m&quot;</span><br><span class="hljs-section">&#125;</span><br><span class="hljs-section">blue()&#123;</span><br><span class="hljs-section">    echo -e &quot;\033[34m\033[01m$1\033[0m&quot;</span><br><span class="hljs-section">&#125;</span><br><span class="hljs-section"></span><br><span class="hljs-section"># 主菜单选择</span><br><span class="hljs-section">main_menu() &#123;</span><br><span class="hljs-section">    while true; do</span><br><span class="hljs-section">red      &quot;===============================================&quot;</span><br><span class="hljs-section">green   &quot;||  ____    _____  _______  _________  _______||&quot;</span><br><span class="hljs-section">yellow  &quot;|| / __ \  /  _/ |/ / ___/ / __/ __/ |/ / ___/||&quot;</span><br><span class="hljs-section">blue    &quot;||/ /_/ / _/ //    / (_ / / _// _//    / (_ / ||&quot;</span><br><span class="hljs-section">yellow  &quot;||\___\_\/___/_/|_/\___/ /_/ /___/_/|_/\___/  ||&quot;</span><br><span class="hljs-section">green   &quot;||                                            ||&quot;</span><br><span class="hljs-section">red     &quot;===============================================&quot;</span><br><span class="hljs-section">blue    &quot;||            &gt;&gt;&gt;&gt;&gt; 清风徐来 &lt;&lt;&lt;&lt;&lt;            ||&quot;</span><br><span class="hljs-section">red     &quot;===============================================&quot;</span><br><span class="hljs-section">echo &quot;1.创建自定义配置单个虚拟机&quot;</span><br><span class="hljs-section">echo &quot;2.批量创建自定义配置虚拟机&quot;</span><br><span class="hljs-section">echo &quot;3.批量创建默认配置虚拟机&quot;</span><br><span class="hljs-section">echo &quot;4.删除虚拟机&quot;</span><br><span class="hljs-section">echo &quot;5.退出&quot;</span><br><span class="hljs-section">red &quot;===============================================&quot;</span><br><span class="hljs-section"></span><br><span class="hljs-section">read -p &quot;选取你的操作(1/2/3/4/5):&quot; op</span><br><span class="hljs-section"></span><br><span class="hljs-section">case $op in</span><br><span class="hljs-section">1)self_define;;</span><br><span class="hljs-section">2)</span><br><span class="hljs-section">        read -p &quot;请输入要创建的虚拟机的个数:&quot; num</span><br><span class="hljs-section">        read -p &quot;请输入新虚机内存大小(G):&quot; newmem</span><br><span class="hljs-section">        read -p &quot;请输入新虚机cpu个数:&quot; newcpu</span><br><span class="hljs-section"></span><br><span class="hljs-section">        for((i=1;i&lt;=$num;i++))</span><br><span class="hljs-section">        do</span><br><span class="hljs-section">                batch_self_define $newmem $newcpu</span><br><span class="hljs-section">        done;;</span><br><span class="hljs-section"></span><br><span class="hljs-section">3)</span><br><span class="hljs-section">        read -p &quot;请输入要创建的虚拟机的个数:&quot; num</span><br><span class="hljs-section"></span><br><span class="hljs-section">        for((i=1;i&lt;=$num;i++))</span><br><span class="hljs-section">        do</span><br><span class="hljs-section">                batch_self_define 1 1</span><br><span class="hljs-section">        done;;</span><br><span class="hljs-section">4)</span><br><span class="hljs-section">        delete_kvm</span><br><span class="hljs-section">        ;;</span><br><span class="hljs-section">5)      </span><br><span class="hljs-section">        exit_menu</span><br><span class="hljs-section">        ;;</span><br><span class="hljs-section">*)</span><br><span class="hljs-section">        echo &quot;输入错误，请重新执行脚本&quot;</span><br><span class="hljs-section">        exit</span><br><span class="hljs-section">        ;;</span><br><span class="hljs-section">esac</span><br><span class="hljs-section"></span><br><span class="hljs-section">red &quot;===============================================&quot;</span><br><span class="hljs-section">read -p &quot;按任意键返回主菜单&quot; any_key</span><br><span class="hljs-section">clear</span><br><span class="hljs-section">done</span><br><span class="hljs-section"></span><br><span class="hljs-section">&#125;</span><br><span class="hljs-section"></span><br><span class="hljs-section">#运行</span><br><span class="hljs-section">main_menu</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="配置文件模板"><a href="#配置文件模板" class="headerlink" title="配置文件模板"></a>配置文件模板</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-comment"># vim /etc/libvirt/qemu/vmmodel.xml</span><br>&lt;domain <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;kvm&#x27;</span>&gt;<br>  &lt;name&gt;kvmname&lt;/name&gt;<br>  &lt;uuid&gt;kvmuuid&lt;/uuid&gt;<br>  &lt;memory <span class="hljs-attr">unit</span>=<span class="hljs-string">&#x27;KiB&#x27;</span>&gt;kvmmem&lt;/memory&gt;<br>  &lt;currentMemory <span class="hljs-attr">unit</span>=<span class="hljs-string">&#x27;KiB&#x27;</span>&gt;kvmmem&lt;/currentMemory&gt;<br>  &lt;vcpu <span class="hljs-attr">placement</span>=<span class="hljs-string">&#x27;static&#x27;</span>&gt;kvmcpu&lt;/vcpu&gt;<br>  &lt;os&gt;<br>    &lt;type <span class="hljs-attr">arch</span>=<span class="hljs-string">&#x27;x86_64&#x27;</span> machine=<span class="hljs-string">&#x27;pc-i440fx-rhel7.0.0&#x27;</span>&gt;hvm&lt;/type&gt;<br>    &lt;boot <span class="hljs-attr">dev</span>=<span class="hljs-string">&#x27;hd&#x27;</span>/&gt;<br>  &lt;/os&gt;<br>  &lt;features&gt;<br>    &lt;acpi/&gt;<br>    &lt;apic/&gt;<br>  &lt;/features&gt;<br>  &lt;cpu <span class="hljs-attr">mode</span>=<span class="hljs-string">&#x27;custom&#x27;</span> match=<span class="hljs-string">&#x27;exact&#x27;</span> check=<span class="hljs-string">&#x27;partial&#x27;</span>&gt;<br>    &lt;model <span class="hljs-attr">fallback</span>=<span class="hljs-string">&#x27;allow&#x27;</span>&gt;Haswell-noTSX&lt;/model&gt;<br>  &lt;/cpu&gt;<br>  &lt;clock <span class="hljs-attr">offset</span>=<span class="hljs-string">&#x27;utc&#x27;</span>&gt;<br>    &lt;timer <span class="hljs-attr">name</span>=<span class="hljs-string">&#x27;rtc&#x27;</span> tickpolicy=<span class="hljs-string">&#x27;catchup&#x27;</span>/&gt;<br>    &lt;timer <span class="hljs-attr">name</span>=<span class="hljs-string">&#x27;pit&#x27;</span> tickpolicy=<span class="hljs-string">&#x27;delay&#x27;</span>/&gt;<br>    &lt;timer <span class="hljs-attr">name</span>=<span class="hljs-string">&#x27;hpet&#x27;</span> present=<span class="hljs-string">&#x27;no&#x27;</span>/&gt;<br>  &lt;/clock&gt;<br>  &lt;on_poweroff&gt;destroy&lt;/on_poweroff&gt;<br>  &lt;on_reboot&gt;restart&lt;/on_reboot&gt;<br>  &lt;on_crash&gt;destroy&lt;/on_crash&gt;<br>  &lt;pm&gt;<br>    &lt;suspend-to-mem <span class="hljs-attr">enabled</span>=<span class="hljs-string">&#x27;no&#x27;</span>/&gt;<br>    &lt;suspend-to-disk <span class="hljs-attr">enabled</span>=<span class="hljs-string">&#x27;no&#x27;</span>/&gt;<br>  &lt;/pm&gt;<br>  &lt;devices&gt;<br>    &lt;emulator&gt;/usr/libexec/qemu-kvm&lt;/emulator&gt;<br>    &lt;disk <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;file&#x27;</span> device=<span class="hljs-string">&#x27;disk&#x27;</span>&gt;<br>      &lt;driver <span class="hljs-attr">name</span>=<span class="hljs-string">&#x27;qemu&#x27;</span> type=<span class="hljs-string">&#x27;qcow2&#x27;</span>/&gt;<br>      &lt;source <span class="hljs-attr">file</span>=<span class="hljs-string">&#x27;kvmimg&#x27;</span>/&gt;<br>      &lt;target <span class="hljs-attr">dev</span>=<span class="hljs-string">&#x27;vda&#x27;</span> bus=<span class="hljs-string">&#x27;virtio&#x27;</span>/&gt;<br>      &lt;address <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;pci&#x27;</span> domain=<span class="hljs-string">&#x27;0x0000&#x27;</span> bus=<span class="hljs-string">&#x27;0x00&#x27;</span> slot=<span class="hljs-string">&#x27;0x06&#x27;</span> function=<span class="hljs-string">&#x27;0x0&#x27;</span>/&gt;<br>    &lt;/disk&gt;<br>    &lt;controller <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;usb&#x27;</span> index=<span class="hljs-string">&#x27;0&#x27;</span> model=<span class="hljs-string">&#x27;ich9-ehci1&#x27;</span>&gt;<br>      &lt;address <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;pci&#x27;</span> domain=<span class="hljs-string">&#x27;0x0000&#x27;</span> bus=<span class="hljs-string">&#x27;0x00&#x27;</span> slot=<span class="hljs-string">&#x27;0x04&#x27;</span> function=<span class="hljs-string">&#x27;0x7&#x27;</span>/&gt;<br>    &lt;/controller&gt;<br>    &lt;controller <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;usb&#x27;</span> index=<span class="hljs-string">&#x27;0&#x27;</span> model=<span class="hljs-string">&#x27;ich9-uhci1&#x27;</span>&gt;<br>      &lt;master <span class="hljs-attr">startport</span>=<span class="hljs-string">&#x27;0&#x27;</span>/&gt;<br>      &lt;address <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;pci&#x27;</span> domain=<span class="hljs-string">&#x27;0x0000&#x27;</span> bus=<span class="hljs-string">&#x27;0x00&#x27;</span> slot=<span class="hljs-string">&#x27;0x04&#x27;</span> function=<span class="hljs-string">&#x27;0x0&#x27;</span> multifunction=<span class="hljs-string">&#x27;on&#x27;</span>/&gt;<br>    &lt;/controller&gt;<br>    &lt;controller <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;usb&#x27;</span> index=<span class="hljs-string">&#x27;0&#x27;</span> model=<span class="hljs-string">&#x27;ich9-uhci2&#x27;</span>&gt;<br>      &lt;master <span class="hljs-attr">startport</span>=<span class="hljs-string">&#x27;2&#x27;</span>/&gt;<br>      &lt;address <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;pci&#x27;</span> domain=<span class="hljs-string">&#x27;0x0000&#x27;</span> bus=<span class="hljs-string">&#x27;0x00&#x27;</span> slot=<span class="hljs-string">&#x27;0x04&#x27;</span> function=<span class="hljs-string">&#x27;0x1&#x27;</span>/&gt;<br>    &lt;/controller&gt;<br>    &lt;controller <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;usb&#x27;</span> index=<span class="hljs-string">&#x27;0&#x27;</span> model=<span class="hljs-string">&#x27;ich9-uhci3&#x27;</span>&gt;<br>      &lt;master <span class="hljs-attr">startport</span>=<span class="hljs-string">&#x27;4&#x27;</span>/&gt;<br>      &lt;address <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;pci&#x27;</span> domain=<span class="hljs-string">&#x27;0x0000&#x27;</span> bus=<span class="hljs-string">&#x27;0x00&#x27;</span> slot=<span class="hljs-string">&#x27;0x04&#x27;</span> function=<span class="hljs-string">&#x27;0x2&#x27;</span>/&gt;<br>    &lt;/controller&gt;<br>    &lt;controller <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;pci&#x27;</span> index=<span class="hljs-string">&#x27;0&#x27;</span> model=<span class="hljs-string">&#x27;pci-root&#x27;</span>/&gt;<br>    &lt;controller <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;virtio-serial&#x27;</span> index=<span class="hljs-string">&#x27;0&#x27;</span>&gt;<br>      &lt;address <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;pci&#x27;</span> domain=<span class="hljs-string">&#x27;0x0000&#x27;</span> bus=<span class="hljs-string">&#x27;0x00&#x27;</span> slot=<span class="hljs-string">&#x27;0x05&#x27;</span> function=<span class="hljs-string">&#x27;0x0&#x27;</span>/&gt;<br>    &lt;/controller&gt;<br>    &lt;interface <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;network&#x27;</span>&gt;<br>      &lt;mac <span class="hljs-attr">address</span>=<span class="hljs-string">&#x27;52:54:00:kvmmac&#x27;</span>/&gt;<br>      &lt;source <span class="hljs-attr">network</span>=<span class="hljs-string">&#x27;default&#x27;</span>/&gt;<br>      &lt;model <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;virtio&#x27;</span>/&gt;<br>      &lt;address <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;pci&#x27;</span> domain=<span class="hljs-string">&#x27;0x0000&#x27;</span> bus=<span class="hljs-string">&#x27;0x00&#x27;</span> slot=<span class="hljs-string">&#x27;0x03&#x27;</span> function=<span class="hljs-string">&#x27;0x0&#x27;</span>/&gt;<br>    &lt;/interface&gt;<br>    &lt;serial <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;pty&#x27;</span>&gt;<br>      &lt;target <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;isa-serial&#x27;</span> port=<span class="hljs-string">&#x27;0&#x27;</span>&gt;<br>        &lt;model <span class="hljs-attr">name</span>=<span class="hljs-string">&#x27;isa-serial&#x27;</span>/&gt;<br>      &lt;/target&gt;<br>    &lt;/serial&gt;<br>    &lt;console <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;pty&#x27;</span>&gt;<br>      &lt;target <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;serial&#x27;</span> port=<span class="hljs-string">&#x27;0&#x27;</span>/&gt;<br>    &lt;/console&gt;<br>    &lt;channel <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;unix&#x27;</span>&gt;<br>      &lt;target <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;virtio&#x27;</span> name=<span class="hljs-string">&#x27;org.qemu.guest_agent.0&#x27;</span>/&gt;<br>      &lt;address <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;virtio-serial&#x27;</span> controller=<span class="hljs-string">&#x27;0&#x27;</span> bus=<span class="hljs-string">&#x27;0&#x27;</span> port=<span class="hljs-string">&#x27;1&#x27;</span>/&gt;<br>    &lt;/channel&gt;<br>    &lt;input <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;mouse&#x27;</span> bus=<span class="hljs-string">&#x27;ps2&#x27;</span>/&gt;<br>    &lt;input <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;keyboard&#x27;</span> bus=<span class="hljs-string">&#x27;ps2&#x27;</span>/&gt;<br>    &lt;memballoon <span class="hljs-attr">model</span>=<span class="hljs-string">&#x27;virtio&#x27;</span>&gt;<br>      &lt;address <span class="hljs-attr">type</span>=<span class="hljs-string">&#x27;pci&#x27;</span> domain=<span class="hljs-string">&#x27;0x0000&#x27;</span> bus=<span class="hljs-string">&#x27;0x00&#x27;</span> slot=<span class="hljs-string">&#x27;0x07&#x27;</span> function=<span class="hljs-string">&#x27;0x0&#x27;</span>/&gt;<br>    &lt;/memballoon&gt;<br>  &lt;/devices&gt;<br>&lt;/domain&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="随机生成mac地址"><a href="#随机生成mac地址" class="headerlink" title="随机生成mac地址"></a>随机生成mac地址</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs ini">B:字母数字与字母数字分割，非字母数字与非字母数字分割<br>&amp;:表示原来的内容<br><br>其中方式如下：<br><span class="hljs-comment"># echo `openssl rand -hex 1`:`openssl rand -hex 1`:`openssl rand -hex 1`</span><br>99:6e:67<br><br><span class="hljs-comment"># openssl rand -hex 3 | sed -r &#x27;s/(..)(..)(..)/\1:\2:\3/g&#x27;</span><br>94:89:e3<br><br><span class="hljs-comment"># openssl rand -hex 3 | sed -r &#x27;s/..\B/&amp;:/g&#x27;</span><br>c5:66:90<br><br>参数解释：<br>openssl rand -hex 5<br>openssl rand  <span class="hljs-comment">#用来生成随机数的</span><br>-hex <span class="hljs-comment">#表示为16进制的数</span><br>5  <span class="hljs-comment">#表示长度</span><br></code></pre></td></tr></table></figure>
+<h2 id="KVM网络配置"><a href="#KVM网络配置" class="headerlink" title="KVM网络配置"></a>KVM网络配置</h2><h2 id="四种网络"><a href="#四种网络" class="headerlink" title="四种网络"></a>四种网络</h2><p><code>1.NAT default方式：</code>支持主机与虚拟机互访，虚拟机访问外界网络，但不支持外界访问虚拟机。<br><code>2.isolated隔离，vmware--host-only：仅主机模式。</code>外网不能访问虚拟机，虚拟机也不能访问外网<br><code>3.bridge </code> —-桥接模式属于桥接口<br><code>4.路由模式</code></p>
+<p><strong>nat网络</strong></p>
+<p><img src="https://xbd666.cn/upload/kvm18.webp" srcset="/img/loading.gif" lazyload alt="kvm2.png"></p>
+<p><strong>桥接网络</strong></p>
+<p><img src="https://xbd666.cn/upload/kvm19.webp" srcset="/img/loading.gif" lazyload alt="kvm2.png"></p>
+<p><strong>隔离网络</strong></p>
+<p><img src="https://xbd666.cn/upload/kvm20.webp" srcset="/img/loading.gif" lazyload alt="kvm2.png"></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-comment">#查看管理接口对应的网卡</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># brctl show </span><br>bridge name	bridge id		STP enabled	interfaces<br>virbr0		8000.525400831963	yes		virbr0-nic<br>							           vnet0<br>							           vnet1<br><br>注意：这里vnet网卡，是每台启动的虚拟机正在使用的网卡设备，每台虚拟机使用的不同			     <br><span class="hljs-comment"># 从交换机上把vnet网卡删除：</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># brctl delif virbr0 vnet0</span><br><br>来到vm2的虚拟机，ping不通百度<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># ping baidu.com</span><br>ping:baidu.com:Name or service not known<br><br><span class="hljs-comment"># 添加vnet网卡添加到交换机上：</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># brctl addif virbr0 vnet0</span><br>	<br>来到vm2的虚拟机，恢复正常<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># ping baidu.com</span><br>PING www.a.shifen.com (61.135.169.125)56(84) bytes of data.<br>64  bytes from 61.135.169.125(61.135.169.125): <span class="hljs-attr">icmp_seq</span>=<span class="hljs-number">1</span> ttl=<span class="hljs-number">55</span> time=<span class="hljs-number">2.24</span> ms<br></code></pre></td></tr></table></figure>
+
+<h2 id="配置文件方式配置桥接：在宿主机上"><a href="#配置文件方式配置桥接：在宿主机上" class="headerlink" title="配置文件方式配置桥接：在宿主机上"></a>配置文件方式配置<code>桥接</code>：在宿主机上</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs ini">配置文件方式配置桥接：在宿主机上<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># ip a   #先找出宿主机用的哪个网卡设备，我的是enp0s25</span><br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># cd /etc/sysconfig/network-scripts/</span><br>1.定义网卡配置文件<br><span class="hljs-section">[root@kvm-server network-scripts]</span><span class="hljs-comment"># vim ifcfg-br0    #创建该桥接网卡，默认没有此文件需要新建</span><br><span class="hljs-section">[root@kvm-server network-scripts]</span><span class="hljs-comment"># cat ifcfg-br0</span><br><span class="hljs-attr">TYPE</span>=Bridge  <span class="hljs-comment">#定义类型</span><br><span class="hljs-attr">NAME</span>=br0  <span class="hljs-comment">#设备的名字</span><br><span class="hljs-attr">DEVICE</span>=br0<br><span class="hljs-attr">ONBOOT</span>=<span class="hljs-string">&quot;yes&quot;</span><br><span class="hljs-attr">BOOTPROTO</span>=static<br><span class="hljs-attr">IPADDR</span>=<span class="hljs-number">10.31</span>.<span class="hljs-number">162.90</span>   <span class="hljs-comment">#要和宿主机在一个网络，这里我用的是宿主机的ip</span><br><span class="hljs-attr">GATEWAY</span>=<span class="hljs-number">10.31</span>.<span class="hljs-number">162.1</span>   <span class="hljs-comment">#宿主的网关，nat的是.2,桥接是.1</span><br><span class="hljs-attr">NETMASK</span>=<span class="hljs-number">255.255</span>.<span class="hljs-number">255.0</span><br><span class="hljs-attr">DNS1</span>=<span class="hljs-number">114.144</span>.<span class="hljs-number">144.144</span><br><span class="hljs-attr">DNS2</span>=<span class="hljs-number">8.8</span>.<span class="hljs-number">8.8</span><br><br>然后看清楚宿主机正在使用的网卡，修改配置文件,(将物理机网卡桥到桥接网卡)<br><span class="hljs-section">[root@kvm-server network-scripts]</span><span class="hljs-comment"># cp ifcfg-enp0s25 ifcfg-enp0s25.back</span><br><span class="hljs-section">[root@kvm-server network-scripts]</span><span class="hljs-comment"># vim ifcfg-enp0s25</span><br><span class="hljs-attr">NAME</span>=enp0s25   <span class="hljs-comment">#定义网卡设备名称</span><br><span class="hljs-attr">DEVICE</span>=enp0s25   <span class="hljs-comment">#宿主机正在使用的网卡设备</span><br><span class="hljs-attr">ONBOOT</span>=<span class="hljs-literal">yes</span><br><span class="hljs-attr">BRIDGE</span>=br0     <span class="hljs-comment">#和ifcfg-br0文件里面的设备对应，新添加</span><br>  <br>2.重启libvirtd服务<br><span class="hljs-section">[root@kvm-server network-scripts]</span><span class="hljs-comment"># systemctl restart libvirtd </span><br>3.重启network服务 <br><span class="hljs-section">[root@kvm-server network-scripts]</span><span class="hljs-comment"># systemctl restart network     </span><br></code></pre></td></tr></table></figure>
+
+<p><strong>然后去查看有没有新设备生成</strong></p>
+<p><img src="https://xbd666.cn/upload/kvm21.webp" srcset="/img/loading.gif" lazyload alt="kvm2.png"></p>
+<p><strong>可以看到，我们先添加的网卡设备</strong></p>
+<p><img src="https://xbd666.cn/upload/kvm22.webp" srcset="/img/loading.gif" lazyload alt="kvm2.png"><br><code>添加完成后，运行虚拟机查看IP地址，就可以看到添加的桥接网卡了</code></p>
+<h2 id="移除桥接网卡操作"><a href="#移除桥接网卡操作" class="headerlink" title="移除桥接网卡操作"></a>移除<code>桥接网卡</code>操作</h2><p><img src="https://xbd666.cn/upload/kvm23.webp" srcset="/img/loading.gif" lazyload alt="kvm2.png"></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs ini">删除桥接网卡步骤：<br>1.删除br0的配置文件<br><span class="hljs-section">[root@localhost ~]</span><span class="hljs-comment"># cd /etc/sysconfig/network-scripts/</span><br><span class="hljs-section">[root@localhost network-scripts]</span><span class="hljs-comment"># rm -rf ifcfg-br0 </span><br><span class="hljs-section">[root@localhost network-scripts]</span><span class="hljs-comment"># rm -rf ifcfg-ens33</span><br><br>2.修改正常网卡的配置文件<br><span class="hljs-comment"># 将之前备份的恢复</span><br><span class="hljs-section">[root@localhost network-scripts]</span><span class="hljs-comment"># cp ifcfg-ens33.bak ifcfg-ens33</span><br>3.重启系统<br><span class="hljs-section">[root@localhost network-scripts]</span><span class="hljs-comment"># systemctl restart network</span><br><span class="hljs-section">[root@localhost network-scripts]</span><span class="hljs-comment"># systemctl restart libvirtd</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="通过配置文件方式创建nat网络："><a href="#通过配置文件方式创建nat网络：" class="headerlink" title="通过配置文件方式创建nat网络："></a>通过配置文件方式创建nat网络：</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs ini">配置文件方式创建nat网络：<br>1.首先需要一个模板文件，通过这个模板文件创建自定义的nat网络。<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># cd /etc/libvirt/qemu/networks</span><br><span class="hljs-section">[root@kvm-server networks]</span><span class="hljs-comment"># ls</span><br>autostar default.xml<br><span class="hljs-section">[root@kvm-server networks]</span><span class="hljs-comment"># cp default.xml nat1.xml</span><br><span class="hljs-section">[root@kvm-server networks]</span> <span class="hljs-comment"># vim nat1.xml  </span><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://xbd666.cn/upload/kvm24.webp" srcset="/img/loading.gif" lazyload alt="kvm2.png"></p>
+<p><strong>重启服务</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@kvm-server netwoeks]</span><span class="hljs-comment"># systemctl  restart libvirtd</span><br><br><span class="hljs-comment">#然后选择一个虚拟机进行添加</span><br>在某个（比如vm3）虚拟机去添加此设备测试<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://xbd666.cn/upload/kvm25.webp" srcset="/img/loading.gif" lazyload alt="kvm2.png"></p>
+<p><img src="https://xbd666.cn/upload/kvm26.webp" srcset="/img/loading.gif" lazyload alt="kvm2.png"></p>
+<p><img src="https://xbd666.cn/upload/kvm27.webp" srcset="/img/loading.gif" lazyload alt="kvm2.png"></p>
+<p><img src="https://xbd666.cn/upload/kvm28.webp" srcset="/img/loading.gif" lazyload alt="kvm2.png"></p>
+<h2 id="创建isolated网络，隔离网络"><a href="#创建isolated网络，隔离网络" class="headerlink" title="创建isolated网络，隔离网络"></a>创建isolated网络，隔离网络</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs ini">配置文件方式创建isolated网络隔离网络：<br><span class="hljs-section">[root@kvm-server ~]</span><span class="hljs-comment"># cd /etc/libvirt/qemu/networks</span><br><span class="hljs-section">[root@kvm-server networks]</span><span class="hljs-comment"># cp default.xml isolated200.xml</span><br><span class="hljs-section">[root@kvm-server networks]</span><span class="hljs-comment"># vim isolated200.xml</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://xbd666.cn/upload/kvm29.webp" srcset="/img/loading.gif" lazyload alt="kvm2.png"></p>
+<p><strong>启动：</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@kvm-server networks]</span><span class="hljs-comment"># systemctl restart libvirtd</span><br>开机自启动:<br><span class="hljs-section">[root@kvm-server networks]</span><span class="hljs-comment"># virsh net-autostart  isolated200</span><br><br>查看所有的网络：<br><span class="hljs-section">[root@kvm-server networks]</span><span class="hljs-comment"># virsh net-list</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://xbd666.cn/upload/kvm30.webp" srcset="/img/loading.gif" lazyload alt="kvm2.png"></p>
+<h2 id="图文方式创建nat网络"><a href="#图文方式创建nat网络" class="headerlink" title="图文方式创建nat网络"></a>图文方式创建nat网络</h2><p><img src="https://xbd666.cn/upload/kvm31.webp" srcset="/img/loading.gif" lazyload alt="kvm2.png"></p>
+<p><img src="https://xbd666.cn/upload/kvm32.webp" srcset="/img/loading.gif" lazyload alt="kvm2.png"></p>
+<p><img src="https://xbd666.cn/upload/kvm33.webp" srcset="/img/loading.gif" lazyload alt="kvm2.png"></p>
+<p><img src="https://xbd666.cn/upload/kvm34.webp" srcset="/img/loading.gif" lazyload alt="kvm2.png"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>KVM 虚拟机部署</div>
+      <div>http://example.com/2025/11/06/KVM-虚拟机部署/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Mr.xu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/11/06/Grafana%E5%92%8CPrometheus%E7%9A%84%E9%83%A8%E7%BD%B2%E5%AE%89%E8%A3%85/" title="Grafana和Prometheus的部署安装">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Grafana和Prometheus的部署安装</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/11/06/%E5%B8%B8%E7%94%A8%E7%9A%84linux%E5%91%BD%E4%BB%A4/" title="常用的linux命令">
+                        <span class="hidden-mobile">常用的linux命令</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

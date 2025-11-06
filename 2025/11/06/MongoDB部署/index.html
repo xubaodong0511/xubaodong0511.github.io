@@ -1,0 +1,727 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Mr.xu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="MongoDB作用MongoDB 是一种开源的文档型 NoSQL 数据库，采用 BSON（二进制 JSON）格式存储数据。以下是 MongoDB 的主要作用和用途：  灵活的数据模型:  MongoDB 使用文档存储数据，文档之间可以有不同的结构。这种灵活性使得 MongoDB 非常适合处理不规则和变化频繁的数据。   大数据和实时分析:  MongoDB 的高性能和扩展性使其适合处理大数据和实时">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MongoDB部署">
+<meta property="og:url" content="http://example.com/2025/11/06/MongoDB%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="MongoDB作用MongoDB 是一种开源的文档型 NoSQL 数据库，采用 BSON（二进制 JSON）格式存储数据。以下是 MongoDB 的主要作用和用途：  灵活的数据模型:  MongoDB 使用文档存储数据，文档之间可以有不同的结构。这种灵活性使得 MongoDB 非常适合处理不规则和变化频繁的数据。   大数据和实时分析:  MongoDB 的高性能和扩展性使其适合处理大数据和实时">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-11-06T08:11:37.000Z">
+<meta property="article:modified_time" content="2025-11-06T08:11:53.596Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>MongoDB部署 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="MongoDB部署"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-06 16:11" pubdate>
+          2025年11月6日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          11 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">MongoDB部署</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="MongoDB"><a href="#MongoDB" class="headerlink" title="MongoDB"></a>MongoDB</h3><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>MongoDB 是一种开源的文档型 NoSQL 数据库，采用 BSON（二进制 JSON）格式存储数据。以下是 MongoDB 的主要作用和用途：</p>
+<ol>
+<li><p><strong>灵活的数据模型</strong>:</p>
+<ul>
+<li>MongoDB 使用文档存储数据，文档之间可以有不同的结构。这种灵活性使得 MongoDB 非常适合处理不规则和变化频繁的数据。</li>
+</ul>
+</li>
+<li><p><strong>大数据和实时分析</strong>:</p>
+<ul>
+<li>MongoDB 的高性能和扩展性使其适合处理大数据和实时分析应用。它能够快速存储和查询大量数据，并支持实时数据处理。</li>
+</ul>
+</li>
+<li><p><strong>内容管理和目录服务</strong>:</p>
+<ul>
+<li>MongoDB 常用于内容管理系统（CMS）和目录服务，适合存储和管理大量的文档、图像、视频等非结构化数据。</li>
+</ul>
+</li>
+<li><p><strong>物联网（IoT）和传感器数据</strong>:</p>
+<ul>
+<li>由于 MongoDB 可以高效地存储和处理大量的时间序列数据，它非常适合物联网应用中的传感器数据存储和分析。</li>
+</ul>
+</li>
+<li><p><strong>移动应用和社交网络</strong>:</p>
+<ul>
+<li>MongoDB 的灵活性和高性能使其成为移动应用和社交网络的理想选择，能够处理用户生成的内容、用户个人资料、消息和活动流等数据。</li>
+</ul>
+</li>
+<li><p><strong>电子商务</strong>:</p>
+<ul>
+<li>在电子商务平台中，MongoDB 可以用于存储产品目录、用户数据、订单信息等，并支持复杂的查询和数据分析。</li>
+</ul>
+</li>
+<li><p><strong>日志和事件存储</strong>:</p>
+<ul>
+<li>MongoDB 可以用于存储和分析日志数据和事件数据，适用于日志管理、监控和审计等场景。</li>
+</ul>
+</li>
+<li><p><strong>地理空间数据</strong>:</p>
+<ul>
+<li>MongoDB 提供了强大的地理空间查询功能，可以存储和查询地理位置数据，适用于地图服务、定位服务等应用。</li>
+</ul>
+</li>
+<li><p><strong>分布式文件存储</strong>:</p>
+<ul>
+<li>MongoDB 的 GridFS 功能允许存储和检索大文件，如图像、视频和音频文件，适合作为分布式文件存储系统。</li>
+</ul>
+</li>
+<li><p><strong>高可用性和扩展性</strong>:</p>
+<ul>
+<li>MongoDB 支持复制集和分片机制，能够实现数据的高可用性和水平扩展，适合大规模分布式系统。</li>
+</ul>
+</li>
+<li><p><strong>快速开发和迭代</strong>:</p>
+<ul>
+<li>由于 MongoDB 的模式灵活性，开发人员可以快速进行数据模型的修改和应用程序的迭代，适合敏捷开发和快速原型设计。</li>
+</ul>
+</li>
+</ol>
+<p>MongoDB 的文档存储模型、灵活性、高性能和扩展性使其成为现代应用程序中处理多样化和大规模数据的理想选择。</p>
+<h4 id="资源需求"><a href="#资源需求" class="headerlink" title="资源需求"></a>资源需求</h4><ul>
+<li><strong>CPU</strong>:  4 核 </li>
+<li><strong>内存</strong>: 32GB </li>
+<li><strong>存储</strong>: 500G</li>
+<li><strong>节点</strong>：1</li>
+</ul>
+<h4 id="网络端口"><a href="#网络端口" class="headerlink" title="网络端口"></a>网络端口</h4><ul>
+<li><p><strong>默认端口</strong></p>
+<ul>
+<li><p><strong>端口号</strong>: 27017</p>
+</li>
+<li><p><strong>用途</strong>: MongoDB 默认的客户端连接端口，用于应用程序和用户连接到 MongoDB 数据库进行数据操作。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>副本集成员之间的通信端口</strong></p>
+<ul>
+<li><strong>端口号</strong>: 27017（默认）</li>
+<li><strong>用途</strong>: 副本集成员之间通过该端口进行数据同步和心跳检测。</li>
+</ul>
+</li>
+<li><p><strong>分片集群配置服务器端口</strong></p>
+<ul>
+<li><strong>端口号</strong>: 27019</li>
+<li><strong>用途</strong>: 分片集群中的配置服务器使用的默认端口。</li>
+</ul>
+</li>
+<li><p><strong>分片服务器端口</strong></p>
+<ul>
+<li><strong>端口号</strong>: 27018</li>
+</ul>
+</li>
+</ul>
+<h4 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h4><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><code class="hljs perl"><span class="hljs-comment"># 下载安装包</span><br>wget https:<span class="hljs-regexp">//</span>fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-<span class="hljs-number">4.0</span>.<span class="hljs-number">6</span>.tgz<br>curl -O https:<span class="hljs-regexp">//</span>fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-<span class="hljs-number">3.4</span><span class="hljs-number">.24</span>.tgz<br><br>[root<span class="hljs-variable">@localhost</span> ~]<span class="hljs-comment"># ls</span><br>anaconda-ks.cfg  mongodb-linux-x86_64-rhel70-<span class="hljs-number">4.0</span>.<span class="hljs-number">6</span>.tgz<br>[root<span class="hljs-variable">@localhost</span> ~]<span class="hljs-comment"># systemctl stop friewalld</span><br>Failed to stop friewalld.service: Unit friewalld.service <span class="hljs-keyword">not</span> loaded.<br>[root<span class="hljs-variable">@localhost</span> ~]<span class="hljs-comment"># setenforce 0</span><br>[root<span class="hljs-variable">@localhost</span> ~]<span class="hljs-comment"># systemctl disable firewalld</span><br>Removed <span class="hljs-keyword">symlink</span> /etc/systemd/<span class="hljs-keyword">system</span>/multi-user.target.wants/firewalld.service.<br>Removed <span class="hljs-keyword">symlink</span> /etc/systemd/<span class="hljs-keyword">system</span>/dbus-org.fedoraproject.FirewallD1.service.<br><br>[root<span class="hljs-variable">@localhost</span> ~]<span class="hljs-comment"># ulimit -n</span><br><span class="hljs-number">1024</span><br>[root<span class="hljs-variable">@localhost</span> ~]<span class="hljs-comment"># ulimit -n 65535</span><br>[root<span class="hljs-variable">@localhost</span> ~]<span class="hljs-comment"># ulimit -n</span><br><span class="hljs-number">65535</span><br>[root<span class="hljs-variable">@localhost</span> ~]<span class="hljs-comment"># ulimit -u</span><br><span class="hljs-number">63447</span><br>[root<span class="hljs-variable">@localhost</span> ~]<span class="hljs-comment"># ulimit -u 65535</span><br>[root<span class="hljs-variable">@localhost</span> ~]<span class="hljs-comment"># ulimit -u</span><br><span class="hljs-number">65535</span><br>[root<span class="hljs-variable">@localhost</span> ~]<span class="hljs-comment"># vim  /etc/rc.local </span><br>[root<span class="hljs-variable">@localhost</span> ~]<span class="hljs-comment"># ls</span><br>anaconda-ks.cfg  mongodb-linux-x86_64-rhel70-<span class="hljs-number">4.0</span>.<span class="hljs-number">6</span>.tgz<br><br>[root<span class="hljs-variable">@worker02</span> ~]<span class="hljs-comment"># mkdir /data/mongodb</span><br>[root<span class="hljs-variable">@worker02</span> ~]<span class="hljs-comment"># tar xzf mongodb-linux-x86_64-rhel70-4.0.6.tgz -C /data/mongodb/</span><br>[root<span class="hljs-variable">@worker02</span> mongodb]<span class="hljs-comment"># mv mongodb-linux-x86_64-rhel70-4.0.6/ mongodb</span><br><br>[root<span class="hljs-variable">@worker02</span> mongodb]<span class="hljs-comment"># ln -s /data/mongodb/mongodb/bin/* /bin/</span><br><br>[root<span class="hljs-variable">@worker02</span> mongodb]<span class="hljs-comment"># mkdir  data</span><br>[root<span class="hljs-variable">@worker02</span> mongodb]<span class="hljs-comment"># mkdir logs</span><br>[root<span class="hljs-variable">@worker02</span> mongodb]<span class="hljs-comment"># touch logs/mongodb.log</span><br><br>[root<span class="hljs-variable">@worker02</span> mongodb]<span class="hljs-comment"># ls</span><br>data  logs  mongodb<br>[root<span class="hljs-variable">@worker02</span> mongodb]<span class="hljs-comment"># mkdir conf</span><br>[root<span class="hljs-variable">@worker02</span> mongodb]<span class="hljs-comment"># vim conf/mongodb.conf</span><br><span class="hljs-comment"># 添加以下内容</span><br>port=<span class="hljs-number">27017</span><br>dbpath=<span class="hljs-regexp">/data/m</span>ongodb/data<br>logpath=<span class="hljs-regexp">/data/m</span>ongodb/logs/mongodb.log<br>logappend=true<br><span class="hljs-keyword">fork</span>=true<br>maxConns=<span class="hljs-number">5000</span><br><span class="hljs-comment"># 将存储引擎切换为 WiredTiger</span><br>storageEngine=wiredTiger  <br><span class="hljs-comment"># 绑定到所有 IP 地址</span><br>bind_ip=<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>  <br><span class="hljs-comment"># 启用访问控制</span><br>auth=true<br><br><span class="hljs-comment"># 启动</span><br>[root<span class="hljs-variable">@worker02</span> mongodb]<span class="hljs-comment"># /data/mongodb/mongodb/bin/mongod -f /data/mongodb/conf/mongodb.conf </span><br>about to <span class="hljs-keyword">fork</span> child process, waiting <span class="hljs-keyword">until</span> server is ready <span class="hljs-keyword">for</span> connections.<br>forked process: <span class="hljs-number">1834</span><br>[root<span class="hljs-variable">@localhost</span> mongodb]<span class="hljs-comment">#  netstat -lnpt | grep mongod</span><br>tcp        <span class="hljs-number">0</span>      <span class="hljs-number">0</span> <span class="hljs-number">127.0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">27017</span>         <span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>:*               LISTEN      <span class="hljs-number">1834</span>/mongod<br>[root<span class="hljs-variable">@localhost</span> mongodb]<span class="hljs-comment"># ps aux | grep mongod | grep -v grep</span><br>root      <span class="hljs-number">1834</span> <span class="hljs-number">24.7</span>  <span class="hljs-number">0</span>.<span class="hljs-number">5</span> <span class="hljs-number">1502384</span> <span class="hljs-number">96948</span> ?       Sl   <span class="hljs-number">5</span>月<span class="hljs-number">27</span>   <span class="hljs-number">1</span>:<span class="hljs-number">41</span> /usr/<span class="hljs-keyword">local</span>/mongodb/bin/mongod -f /usr/<span class="hljs-keyword">local</span>/mongodb/conf/mongodb1.conf<br>设置开机自动启动<br>[root<span class="hljs-variable">@mongodb</span> mongodb]<span class="hljs-comment"># vim /etc/rc.local</span><br>rm -f /data/mongodb1/mongod.lock<br>mongod -f /usr/<span class="hljs-keyword">local</span>/mongodb/conf/mongodb1.conf<br>[root<span class="hljs-variable">@localhost</span> mongodb]<span class="hljs-comment"># mongo</span><br>MongoDB shell version <span class="hljs-number">v4.0</span>.<span class="hljs-number">6</span><br>connecting to: mongodb:<span class="hljs-regexp">//</span><span class="hljs-number">127.0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">27017</span>/?gssapiServiceName=mongodb<br>Implicit session: session &#123; <span class="hljs-string">&quot;id&quot;</span> : UUID(<span class="hljs-string">&quot;be032cef-e2b3-4856-927c-0a560a40d1fd&quot;</span>) &#125;<br>MongoDB server version: <span class="hljs-number">4.0</span>.<span class="hljs-number">6</span><br>Welcome to the MongoDB shell.<br><br><br>&gt; show dbs<br>admin   <span class="hljs-number">0</span>.078GB<br>config  <span class="hljs-number">0</span>.078GB<br><span class="hljs-keyword">local</span>   <span class="hljs-number">0</span>.078GB<br>&gt; <span class="hljs-keyword">exit</span><br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">报错处理：
+dmesg | grep -i watchdog
+journalctl -k | grep -i watchdog
+vim /etc/sysctl.conf
+添加以下内容
+kernel.watchdog_thresh = 60
+#使其生效
+ sysctl -p
+#启动
+/data/mongodb/mongodb/bin/mongod -f /data/mongodb/conf/mongodb.conf 
+
+# 可做可不做--作用是禁用透明大页
+vim /etc/default/grub
+添加以下内容
+GRUB_CMDLINE_LINUX=&quot;... transparent_hugepage=never&quot;
+</code></pre>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>MongoDB部署</div>
+      <div>http://example.com/2025/11/06/MongoDB部署/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Mr.xu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/11/06/zipkin%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86%E9%83%A8%E7%BD%B2/" title="zipkin日志收集部署">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">zipkin日志收集部署</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/11/06/TDEngine%E6%97%B6%E5%BA%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/" title="TDEngine时序数据库部署">
+                        <span class="hidden-mobile">TDEngine时序数据库部署</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

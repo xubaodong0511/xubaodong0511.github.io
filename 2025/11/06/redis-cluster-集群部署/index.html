@@ -1,0 +1,657 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Mr.xu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="redis-cluster集群 准备环境 准备3台机器，关闭防火墙和selinux 12345678910111213# 注:规划架构两种方案，一种是单机多实例，这里我们采用多机器部署:三台机器，每台机器上面两个redis实例，一个master一个slave，第一列做主库，第二列做备库#记得选出控制节点[root@localhost ~]# vim &#x2F;etc&#x2F;hostsredis-cluster1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis-cluster 集群部署">
+<meta property="og:url" content="http://example.com/2025/11/06/redis-cluster-%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="redis-cluster集群 准备环境 准备3台机器，关闭防火墙和selinux 12345678910111213# 注:规划架构两种方案，一种是单机多实例，这里我们采用多机器部署:三台机器，每台机器上面两个redis实例，一个master一个slave，第一列做主库，第二列做备库#记得选出控制节点[root@localhost ~]# vim &#x2F;etc&#x2F;hostsredis-cluster1">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xbd666.cn/upload/redis-cluster1.png">
+<meta property="og:image" content="https://xbd666.cn/upload/redis-cluster2.png">
+<meta property="article:published_time" content="2025-11-06T13:00:56.000Z">
+<meta property="article:modified_time" content="2025-11-06T13:01:10.869Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://xbd666.cn/upload/redis-cluster1.png">
+  
+  
+  
+  <title>redis-cluster 集群部署 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="redis-cluster 集群部署"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-06 21:00" pubdate>
+          2025年11月6日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          19 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">redis-cluster 集群部署</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p><strong>redis-cluster集群</strong></p>
+<p>准备环境</p>
+<p><strong>准备3台机器，关闭防火墙和selinux</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">注:规划架构两种方案，一种是单机多实例，这里我们采用多机器部署:</span><br>三台机器，每台机器上面两个redis实例，一个master一个slave，第一列做主库，第二列做备库<br><span class="hljs-meta prompt_">#</span><span class="language-bash">记得选出控制节点</span><br><br>[root@localhost ~]# vim /etc/hosts<br>redis-cluster1 192.168.116.111 7000 7001<br>redis-cluster2 192.168.116.131 7002 7003<br>redis-cluster3 192.168.116.132 7004 7005<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">修改主机名</span><br>[root@localhost ~]# hostnamectl set-hostname redis-cluster1<br>[root@localhost ~]# hostnamectl set-hostname redis-cluster2<br>[root@localhost ~]# hostnamectl set-hostname redis-cluster3<br></code></pre></td></tr></table></figure>
+
+<p><strong>三台机器相同的操作</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">安装redis依赖环境</span><br>[root@redis-cluster1 ~]# yum -y install gcc automake autoconf libtool make<br><span class="hljs-meta prompt_"># </span><span class="language-bash">官方下载redis，这里用的是6.2的版本</span><br>[root@redis-cluster1 ~]# wget https://download.redis.io/releases/redis-6.2.0.tar.gz<br><span class="hljs-meta prompt_"># </span><span class="language-bash">创建目录、并指定路径解压软件包</span><br>[root@redis-cluster1 ~]# mkdir /data<br>[root@redis-cluster1 ~]# tar xzvf redis-6.2.0.tar.gz -C /data/<br><span class="hljs-meta prompt_"># </span><span class="language-bash">切换目录</span><br>[root@redis-cluster1 ~]# cd /data/<br><span class="hljs-meta prompt_"># </span><span class="language-bash">修改目录名</span><br>[root@redis-cluster1 data]# mv redis-6.2.0/ redis<br><span class="hljs-meta prompt_"># </span><span class="language-bash">进入redis目录</span><br>[root@redis-cluster1 data]# cd redis/<br><span class="hljs-meta prompt_"># </span><span class="language-bash">编译</span><br>[root@redis-cluster1 redis]# make<br><span class="hljs-meta prompt_"># </span><span class="language-bash">创建存放数据的目录</span><br>[root@redis-cluster1 redis]# mkdir /data/redis/data <br></code></pre></td></tr></table></figure>
+
+<p><strong>创建节点目录</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">创建节点目录:按照规划在每台redis节点的安装目录中创建对应的目录（以端口号命名）</span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">redis-cluster1</span><br>[root@redis-cluster1 redis]# pwd<br>/data/redis<br>[root@redis-cluster1 redis]# mkdir cluster #创建集群目录<br>[root@redis-cluster1 redis]# cd cluster/<br>[root@redis-cluster1 cluster]# mkdir 7000 7001 #创建节点目录<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">redis-cluster2</span><br>[root@redis-cluster2 redis]# mkdir cluster<br>[root@redis-cluster2 redis]# cd cluster/<br>[root@redis-cluster2 cluster]# mkdir 7002 7003<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">redis-cluster3</span><br>[root@redis-cluster3 redis]# mkdir cluster<br>[root@redis-cluster3 redis]# cd cluster/<br>[root@redis-cluster3 cluster]# mkdir 7004 7005<br></code></pre></td></tr></table></figure>
+
+<p><strong>修改集群每个redis配置文件</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">redis-cluster1</span><br>[root@redis-cluster1 cluster]# cp /data/reids/redis.conf ./7000<br>[root@redis-cluster1 cluster]# ls<br>7000  7001<br>[root@redis-cluster1 cluster]# vim ./7000/redis.conf<br>[root@redis-cluster1 cluster]# cp ./7000/redis.conf ./7001/<br>[root@redis-cluster1 cluster]# vim ./7001/redis.conf<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">修改内容如下</span><br>bind 192.168.116.172  #每个实例的配置文件修改为对应节点的ip地址<br>protected-mode no	#关闭密码服务<br>port 7000   #监听端口，运行多个实例时，需要指定规划的每个实例不同的端口号<br>daemonize yes #redis后台运行<br>pidfile /var/run/redis_7000.pid #pid文件，运行多个实例时，需要指定不同的pid文件<br>logfile /var/log/redis_7000.log #日志文件位置，运行多实例时，需要将文件修改的不同。<br>dir /data/redis/data #存放数据的目录<br>appendonly yes #开启AOF持久化，redis会把所接收到的每一次写操作请求都追加到appendonly.aof文件中，当redis重新启动时，会从该文件恢复出之前的状态。<br>appendfilename &quot;appendonly.aof&quot;  #AOF文件名称<br>appendfsync everysec #表示对写操作进行累积，每秒同步一次<br>以下为打开注释并修改<br>cluster-enabled yes #启用集群<br>cluster-config-file nodes-7000.conf #集群配置文件，由redis自动更新，不需要手动配置，运行多实例时请注修改为对应端口<br>cluster-node-timeout 5000 #单位毫秒。集群节点超时时间，即集群中主从节点断开连接时间阈值，超过该值则认为主节点不可以，从节点将有可能转为master<br>cluster-replica-validity-factor 10 #在进行故障转移的时候全部slave都会请求申请为master，但是有些slave可能与master断开连接一段时间了导致数据过于陈旧，不应该被提升为master。该参数就是用来判断slave节点与master断线的时间是否过长。<br>cluster-migration-barrier 1 #一个主机将保持连接的最小数量的从机，以便另一个从机迁移到不再被任何从机覆盖的主机<br>cluster-require-full-coverage yes #集群中的所有slot（16384个）全部覆盖，才能提供服务<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">注：</span><br>所有节点配置文件全部修改切记需要修改的ip、端口、pid文件...避免冲突。确保所有机器都修改。<br></code></pre></td></tr></table></figure>
+
+<p><strong>redis-cluster2—-redis-cluster3</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-cluster2----redis-cluster3<br>重复redis-cluster1步骤操作<br></code></pre></td></tr></table></figure>
+
+<p><strong>启动三台机器上面的每个节点(三台机器相同操作)</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@redis-cluster1 ~]# cd /data/redis/src/<br>[root@redis-cluster1 src]# ./redis-server ../cluster/7000/redis.conf <br>[root@redis-cluster1 src]# ./redis-server ../cluster/7001/redis.conf<br><br>[root@redis-cluster2 7003]# cd /data/redis/src/<br>[root@redis-cluster2 src]# ./redis-server ../cluster/7002/redis.conf <br>[root@redis-cluster2 src]# ./redis-server ../cluster/7003/redis.conf<br><br>[root@redis-cluster3 7005]# cd /data/redis/src/<br>[root@redis-cluster3 src]# ./redis-server ../cluster/7004/redis.conf <br>[root@redis-cluster3 src]# ./redis-server ../cluster/7005/redis.conf<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">注意 如果没有报错，但是就是启动不了，看不到端口，把配置文件里的<span class="hljs-built_in">dir</span>路径写相对路径</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>查看端口</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">每个机器上都可以看下端口有没有起来</span><br>[root@redis-cluster1 reids]# netstat -lnpt<br>Active Internet connections (only servers)<br>Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name<br>tcp        0      0 192.168.116.111:7000    0.0.0.0:*               LISTEN      16191/src/redis-ser<br>tcp        0      0 192.168.116.111:7001    0.0.0.0:*               LISTEN      16197/src/redis-ser<br>tcp        0      0 127.0.0.1:25            0.0.0.0:*               LISTEN      1137/master<br>tcp        0      0 192.168.116.111:17000   0.0.0.0:*               LISTEN      16191/src/redis-ser<br>tcp        0      0 192.168.116.111:17001   0.0.0.0:*               LISTEN      16197/src/redis-ser<br></code></pre></td></tr></table></figure>
+
+<p><strong>创建集群：在其中一个节点操作就可以</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis节点搭建起来后，需要完成redis cluster集群搭建，搭建集群过程中，需要保证6个redis实例都是运行状态。<br>Redis是根据IP和Port的顺序，确定master和slave的，所以要排好序，再执行。<br><br>参数:<br>--cluster-replicas 1:表示为集群中的每个主节点创建一个从节点.书写流程:主节点ip+port 对应一个从节点ip+port（正常是前面三个节点为主节点，后面的为从节点）<br><br>[root@redis-cluster1 src]# cd /data/redis/src/<br>[root@redis-cluster1 src]# ./redis-cli --cluster create --cluster-replicas 1 192.168.116.111:7000 192.168.116.111:7001 192.168.116.131:7002 192.168.116.131:7003 192.168.116.132:7004 192.168.116.132:7005<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">Can I <span class="hljs-built_in">set</span> the above configuration? (<span class="hljs-built_in">type</span> <span class="hljs-string">&#x27;yes&#x27;</span> to accept): <span class="hljs-built_in">yes</span>  <span class="hljs-comment">#写yes同意</span></span><br></code></pre></td></tr></table></figure>
+
+<p><strong>查看集群状态可连接集群中的任一节点</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">此处连接了集群中的节点--192.168.116.111</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">登录集群客户端，-c标识以集群方式登录</span><br>[root@redis-cluster1 src]# ./redis-cli -h 192.168.116.172 -c -p 7000<br>192.168.116.172:7000&gt; ping<br>PONG<br>192.168.116.173:7002&gt; cluster info  #查看集群信息<br>cluster_state:ok  #集群状态<br>cluster_slots_assigned:16384 #分配的槽<br>cluster_slots_ok:16384<br>cluster_slots_pfail:0<br>cluster_slots_fail:0<br>cluster_known_nodes:6 #集群实例数<br>......<br><br>192.168.116.172:7000&gt; cluster nodes  #查看集群实例<br><br>参数解释：<br>runid: 该行描述的节点的id。<br>ip:prot: 该行描述的节点的ip和port<br>flags: 分隔的标记位，可能的值有：<br>1.master: 该行描述的节点是master<br>2.slave: 该行描述的节点是slave<br>3.fail?:该行描述的节点可能不可用<br>4.fail:该行描述的节点不可用（故障）<br>master_runid: 该行描述的节点的master的id,如果本身是master则显示-<br>ping-sent: 最近一次发送ping的Unix时间戳，0表示未发送过<br>pong-recv：最近一次收到pong的Unix时间戳，0表示未收到过<br>config-epoch: 主从切换的次数<br>link-state: 连接状态，connnected 和 disconnected<br>hash slot: 该行描述的master中存储的key的hash的范围<br></code></pre></td></tr></table></figure>
+
+<p><strong>查看redis-cluster1，和连通性</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@redis-cluster1 src]# ./redis-cli -h 192.168.116.132 -c -p 7004<br>192.168.116.132:7004&gt; ping<br>PONG<br>192.168.116.132:7004&gt; cluster info<br>cluster_state:ok<br>cluster_slots_assigned:16384<br>cluster_slots_ok:16384<br>cluster_slots_pfail:0<br>cluster_slots_fail:0<br>cluster_known_nodes:6<br>cluster_size:3<br>cluster_current_epoch:6<br>cluster_my_epoch:5<br>cluster_stats_messages_ping_sent:837<br>cluster_stats_messages_pong_sent:962<br>cluster_stats_messages_meet_sent:1<br>cluster_stats_messages_sent:1800<br>cluster_stats_messages_ping_received:962<br>cluster_stats_messages_pong_received:838<br>cluster_stats_messages_received:1800<br>192.168.116.132:7004&gt; cluster nodes<br>e1784e05bc7220db5155e80787b4cc6af12ab0c5 192.168.116.131:7003@17003 slave 462577d2fbc035e6584f9ce7177d9e0df72e3c16 0 1702369829000 1 connected<br>bcbfcc14d0cad0d5d00738cd403a4aee52b446f9 192.168.116.132:7004@17004 myself,master - 0 1702369827000 5 connected 10923-16383<br>c81d083a6b36882c955e76ed026b3d90c5ac61eb 192.168.116.131:7002@17002 master - 0 1702369830266 3 connected 5461-10922<br>462577d2fbc035e6584f9ce7177d9e0df72e3c16 192.168.116.111:7000@17000 master - 0 1702369829262 1 connected 0-5460<br>4cbe431c64d21483dd004b18207f647145e0c6fb 192.168.116.132:7005@17005 slave c81d083a6b36882c955e76ed026b3d90c5ac61eb 0 1702369830000 3 connected<br>9c5e3e52773043d74a01b8ebbe7f2b63f56dd8b0 192.168.116.111:7001@17001 slave bcbfcc14d0cad0d5d00738cd403a4aee52b446f9 0 1702369829000 5 connected<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">验证--查看</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">可以数据联通--属于集群操作</span><br>redis-cluster1<br>192.168.116.132:7004&gt; set name qingfeng<br><span class="hljs-meta prompt_">-&gt; </span><span class="language-bash">Redirected to slot [5798] located at 192.168.116.131:7002</span><br>OK<br>192.168.116.131:7002&gt;<br><br>redis-cluster3<br>192.168.116.111:7000&gt; get name<br><span class="hljs-meta prompt_">-&gt; </span><span class="language-bash">Redirected to slot [5798] located at 192.168.116.131:7002</span><br>&quot;qingfeng&quot;<br>192.168.116.131:7002&gt;<br></code></pre></td></tr></table></figure>
+
+<p><strong>主从切换</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><code class="hljs shell">测试：<br><span class="hljs-meta prompt_"># </span><span class="language-bash">1.将节点cluster1的主节点7000端口的redis关掉</span><br>[root@redis-cluster1 src]# ./redis-cli -h 192.168.116.132 -c -p 7004<br>192.168.116.132:7004&gt; cluster nodes		#此时查看7000在线<br>e1784e05bc7220db5155e80787b4cc6af12ab0c5 192.168.116.131:7003@17003 slave 462577d2fb<br>bcbfcc14d0cad0d5d00738cd403a4aee52b446f9 192.168.116.132:7004@17004 myself,master -<br>c81d083a6b36882c955e76ed026b3d90c5ac61eb 192.168.116.131:7002@17002 master - 0 17023<br>462577d2fbc035e6584f9ce7177d9e0df72e3c16 192.168.116.111:7000@17000 master - 0 17023<br>4cbe431c64d21483dd004b18207f647145e0c6fb 192.168.116.132:7005@17005 slave c81d083a6b<br>9c5e3e52773043d74a01b8ebbe7f2b63f56dd8b0 192.168.116.111:7001@17001 slave bcbfcc14d0<br>192.168.116.132:7004&gt; exit<br>[root@redis-cluster1 src]# ps -ef |grep redis<br>root      16191      1  0 15:50 ?        00:00:07 src/redis-server 192.168.116.111:7<br>root      16197      1  0 15:50 ?        00:00:07 src/redis-server 192.168.116.111:7<br>root      16246   1538  0 16:39 pts/0    00:00:00 grep --color=auto redis<br>[root@redis-cluster1 src]# kill -9 16191<br>[root@redis-cluster1 src]# ps -ef |grep redis<br>root      16197      1  0 15:50 ?        00:00:07 src/redis-server 192.168.116.111:7<br>root      16248   1538  0 16:39 pts/0    00:00:00 grep --color=auto redis<br>[root@redis-cluster1 src]# netstat -lnpt		#7000的端口关闭了，看不到<br>Active Internet connections (only servers)<br>Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name<br>tcp        0      0 192.168.116.111:7001    0.0.0.0:*               LISTEN      16197/src/redis-ser<br>tcp        0      0 127.0.0.1:25            0.0.0.0:*               LISTEN      1137/master<br>tcp        0      0 192.168.116.111:17001   0.0.0.0:*               LISTEN      16197/src/redis-ser<br>tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      938/sshd<br>tcp6       0      0 ::1:25                  :::*                    LISTEN      1137/master<br>tcp6       0      0 :::22                   :::*                    LISTEN      938/sshd<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">查看集群信息：--在132的机器上输入命令查看</span><br>192.168.116.131:7002&gt; cluster nodes  #此时查看7000显示fail，下线了<br>c81d083a6b36882c955e76ed026b3d90c5ac61eb 192.168.116.131:7002@17002 myself,master - 0 1702370394000 3 connected 5461-10922<br>462577d2fbc035e6584f9ce7177d9e0df72e3c16 192.168.116.111:7000@17000 master,fail - 1702370373573 1702370371564 1 disconnected		#显示fail，下线了<br>e1784e05bc7220db5155e80787b4cc6af12ab0c5 192.168.116.131:7003@17003 master - 0 1702370394653 7 connected 0-5460<br>4cbe431c64d21483dd004b18207f647145e0c6fb 192.168.116.132:7005@17005 slave c81d083a6b36882c955e76ed026b3d90c5ac61eb 0 1702370395055 3 connected<br>bcbfcc14d0cad0d5d00738cd403a4aee52b446f9 192.168.116.132:7004@17004 master - 0 1702370395657 5 connected 10923-16383<br>9c5e3e52773043d74a01b8ebbe7f2b63f56dd8b0 192.168.116.111:7001@17001 slave bcbfcc14d0cad0d5d00738cd403a4aee52b446f9 0 1702370395156 5 connected<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">2.将该节点的7000端口redis启动在查看</span><br>[root@redis-cluster1 src]# cd ..<br>[root@redis-cluster1 reids]# src/redis-server cluster/7000/redis.conf<br>[root@redis-cluster1 reids]# netstat -lnpt		#此时7000的端口正常运行<br>Active Internet connections (only servers)<br>Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name<br>tcp        0      0 192.168.116.111:7000    0.0.0.0:*               LISTEN      16257/src/redis-ser<br>tcp        0      0 192.168.116.111:7001    0.0.0.0:*               LISTEN      16197/src/redis-ser<br>tcp        0      0 127.0.0.1:25            0.0.0.0:*               LISTEN      1137/master<br>tcp        0      0 192.168.116.111:17000   0.0.0.0:*               LISTEN      16257/src/redis-ser<br>tcp        0      0 192.168.116.111:17001   0.0.0.0:*               LISTEN      16197/src/redis-ser<br>tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      938/sshd<br>tcp6       0      0 ::1:25                  :::*                    LISTEN      1137/master<br>tcp6       0      0 :::22                   :::*                    LISTEN      938/sshd<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">查看节点信息：-- 用132的机器查看，此时7000的状态恢复正常，但是变成了从节点</span><br>192.168.116.131:7002&gt; cluster nodes<br>c81d083a6b36882c955e76ed026b3d90c5ac61eb 192.168.116.131:7002@17002 myself,master - 0 1702370727000 3 connected 5461-10922<br>462577d2fbc035e6584f9ce7177d9e0df72e3c16 192.168.116.111:7000@17000 slave e1784e05bc7220db5155e80787b4cc6af12ab0c5 0 1702370728000 7 connected<br>e1784e05bc7220db5155e80787b4cc6af12ab0c5 192.168.116.131:7003@17003 master - 0 1702370728580 7 connected 0-5460<br>4cbe431c64d21483dd004b18207f647145e0c6fb 192.168.116.132:7005@17005 slave c81d083a6b36882c955e76ed026b3d90c5ac61eb 0 1702370728000 3 connected<br>bcbfcc14d0cad0d5d00738cd403a4aee52b446f9 192.168.116.132:7004@17004 master - 0 1702370727000 5 connected 10923-16383<br>9c5e3e52773043d74a01b8ebbe7f2b63f56dd8b0 192.168.116.111:7001@17001 slave bcbfcc14d0cad0d5d00738cd403a4aee52b446f9 0 1702370728581 5 connected<br></code></pre></td></tr></table></figure>
+
+<p>到此–主从切换完成<br><img src="https://xbd666.cn/upload/redis-cluster1.png" srcset="/img/loading.gif" lazyload alt="image-20231212171231961"><br><img src="https://xbd666.cn/upload/redis-cluster2.png" srcset="/img/loading.gif" lazyload alt="image-20231212171504750"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>redis-cluster 集群部署</div>
+      <div>http://example.com/2025/11/06/redis-cluster-集群部署/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Mr.xu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/11/06/Redis-%E9%83%A8%E7%BD%B2%E5%8D%95%E6%9C%BA-%E4%B8%BB%E4%BB%8E-%E5%93%A8%E5%85%B5/" title="Redis 部署单机-主从-哨兵模式">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Redis 部署单机-主从-哨兵模式</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/11/06/gitee-%E4%BB%93%E5%BA%93%E5%88%9B%E5%BB%BA%E5%8F%8A%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6/" title="gitee 仓库创建及上传文件">
+                        <span class="hidden-mobile">gitee 仓库创建及上传文件</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

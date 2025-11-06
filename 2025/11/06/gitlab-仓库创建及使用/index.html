@@ -1,0 +1,696 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Mr.xu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="git的工作环境 123456工作区暂存区	git add *版本库	git commit -m “版本描述信息” HEAD版本号版本日志 1234git clone git@IP地址:&#x2F;自建的目录&#x2F;自建的库&#x2F;     #克隆到本地git add .    #存储到暂存区git commit -m &quot;描述信息&quot;    #更新版本git push origin master">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gitlab 仓库创建及使用">
+<meta property="og:url" content="http://example.com/2025/11/06/gitlab-%E4%BB%93%E5%BA%93%E5%88%9B%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="git的工作环境 123456工作区暂存区	git add *版本库	git commit -m “版本描述信息” HEAD版本号版本日志 1234git clone git@IP地址:&#x2F;自建的目录&#x2F;自建的库&#x2F;     #克隆到本地git add .    #存储到暂存区git commit -m &quot;描述信息&quot;    #更新版本git push origin master">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-11-06T12:56:49.000Z">
+<meta property="article:modified_time" content="2025-11-06T12:57:04.517Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>gitlab 仓库创建及使用 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="gitlab 仓库创建及使用"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-06 20:56" pubdate>
+          2025年11月6日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          22 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">gitlab 仓库创建及使用</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p><strong>git的工作环境</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs ini">工作区<br>暂存区	git add *<br>版本库	git commit -m “版本描述信息” <br>HEAD<br>版本号<br>版本日志<br></code></pre></td></tr></table></figure>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs ini">git clone git@IP地址:/自建的目录/自建的库/     <span class="hljs-comment">#克隆到本地</span><br>git add .    <span class="hljs-comment">#存储到暂存区</span><br>git commit -m &quot;描述信息&quot;    <span class="hljs-comment">#更新版本</span><br>git push origin master    <span class="hljs-comment">#上传到gitlab</span><br></code></pre></td></tr></table></figure>
+
+<p><code>每个版本都会有一个id号，也就是commit id</code></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@vm20 ~]</span><span class="hljs-comment"># git log</span><br><br>commit fbecfa3d04ae5038aa11bf55942e46c840077ace  <span class="hljs-comment">#id号</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>部署git</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs ini">环境：<br>    git-server    192.168.246.214  充当服务器<br>    client        192.168.246.213<br><br>安装：所有机器都安装<br>   <span class="hljs-section">[root@git-server ~]</span><span class="hljs-comment"># yum install -y git</span><br>   <span class="hljs-section">[root@git-server ~]</span><span class="hljs-comment"># git --version </span><br>   git version 1.8.3.1<br>   <br>`所有的机器都添加，只要邮箱和用户不一样就可以`   <br>    <span class="hljs-comment"># git config --global user.email &quot;soho@163.com&quot;     ----设置邮箱</span><br>    <span class="hljs-comment"># git config --global user.name &quot;soho&quot;              ----加添用户</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>1、git使用</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs ini">1.创建一个空目录：在中心服务器上创建<br><span class="hljs-section">[root@git-server ~]</span><span class="hljs-comment"># mkdir /git-test</span><br><span class="hljs-section">[root@git-server ~]</span><span class="hljs-comment"># useradd git   #创建一个git用户用来运行git</span><br><span class="hljs-section">[root@git-server ~]</span><span class="hljs-comment"># passwd git  #给用户设置密码</span><br><span class="hljs-section">[root@git-server ~]</span><span class="hljs-comment"># cd /git-test/</span><br><br>2.通过git init命令把这个目录变成Git可以管理的仓库：<br> 第1种情况：可以改代码，还能上传到别人的机器，别人也能从你这里下载但是别人不能上传代码到你的机器上。<br> 第2种情况：只是为了上传代码用，别人从这台机器上下载代码也可以上传代码到这台机器上，经常用于核心代码库。<br></code></pre></td></tr></table></figure>
+
+<p><strong>创建—-裸库：</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs ini">`语法：git init --bare  库名字<br><br><span class="hljs-comment">#在server服务端</span><br><span class="hljs-section">[root@git-server git-test]</span><span class="hljs-comment"># git init --bare testgit</span><br>Initialized empty Git repository in /git-test/testgit/<br><span class="hljs-section">[root@git-server ~]</span><span class="hljs-comment"># chown git.git /git-test -R  #修改权限</span><br>2.仓库创建完成后查看库目录：<br><span class="hljs-section">[root@git-server git-test]</span><span class="hljs-comment"># cd testgit/</span><br><span class="hljs-section">[root@git-server testgit]</span><span class="hljs-comment"># ls</span><br>branches  config  description  HEAD  hooks  info  objects  refs<br></code></pre></td></tr></table></figure>
+
+<p><strong>客户端</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs ini">1.配置免密登录<br><span class="hljs-section">[root@client ~]</span><span class="hljs-comment"># ssh-keygen    #生成秘钥</span><br><span class="hljs-section">[root@client ~]</span><span class="hljs-comment"># ssh-copy-id -i git@192.168.246.214   #将秘钥传输到git服务器中的git用户</span><br>2.克隆git仓库<br><span class="hljs-section">[root@client ~]</span><span class="hljs-comment"># git clone git@192.168.246.214:/git-test/testgit/</span><br>Cloning into &#x27;testgit&#x27;...<br>warning: You appear to have cloned an empty repository.<br><span class="hljs-section">[root@client ~]</span><span class="hljs-comment"># ls  #查看仓库已经克隆下来了</span><br>anaconda-ks.cfg    testgit <br></code></pre></td></tr></table></figure>
+
+<p><strong>创建文件模拟代码提交到仓库</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs ini">1.在testgit目录下创建一个测试文件test.txt<br><span class="hljs-section">[root@client ~]</span><span class="hljs-comment"># cd testgit/</span><br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># vi test.txt   #随便写点东西</span><br>2.把文件添加到暂存区：使用 &quot;git add&quot; 建立跟踪<br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git add test.txt</span><br>注: 这里可以使用 git add * 或者 git add -A<br>3.提交文件到本地仓库分支：<br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git commit -m &quot;test1&quot;</span><br><span class="hljs-section">[master (root-commit) 2b51ff9]</span> test1<br> 1 file changed, 2 insertions(+)<br> create mode 100644 test.txt<br> -m:描述<br> 4.查看git状态：<br> <span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git status </span><br><span class="hljs-comment"># On branch master   #分支位于master</span><br>5.修改文件后再此查看状态：<br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># echo &#x27;1122334&#x27; &gt;&gt; test.txt</span><br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git status</span><br><span class="hljs-comment"># 位于分支 master</span><br><span class="hljs-comment"># 尚未暂存以备提交的变更：</span><br><span class="hljs-comment">#   （使用 &quot;git add &lt;file&gt;...&quot; 更新要提交的内容）</span><br><span class="hljs-comment">#   （使用 &quot;git checkout -- &lt;file&gt;...&quot; 丢弃工作区的改动）</span><br><span class="hljs-comment">#</span><br><span class="hljs-comment">#	修改：      readme.txt</span><br><span class="hljs-comment">#</span><br>修改尚未加入提交（使用 &quot;git add&quot; 和/或 &quot;git commit &quot;<br>6.先add<br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git add -A</span><br>8.再次提交commit：<br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git commit  -m &quot;add2&quot; test.txt </span><br><span class="hljs-section">[master 73bf688]</span> add2<br> 1 file changed, 1 insertion(+)<br> <span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git status </span><br><span class="hljs-comment"># On branch master</span><br>nothing to commit, working directory clean<br></code></pre></td></tr></table></figure>
+
+<p><strong>版本回退</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs ini">查看现在的版本<br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git log</span><br><br>回到上一个版本<br><span class="hljs-comment">#一个^代表回退一次，2个^代表回退2此，依此类推……</span><br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git reset --hard HEAD^ </span><br>HEAD is now at 0126755 test1<br>2.回到指定的版本(根据版本号): <br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git reset --hard dd66ff</span><br>HEAD is now at dd66ff9 <span class="hljs-attr">add2</span><br><br>==========================================================<br>注：消失的ID号：可以查看之前的所有的版本<br><span class="hljs-section">[root@vm20 gittest]</span><span class="hljs-comment"># git reflog</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>删除文件</strong></p>
+<p>从工作区删除test.txt，并且从版本库一起删除</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs ini">从工作区删除<br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># rm -rf test.txt </span><br>从版本库删除：<br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git rm test.txt </span><br>rm &#x27;test.txt&#x27;<br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git commit -m &quot;删除文件test.txt&quot;</span><br><span class="hljs-section">[master cebc081]</span> 删除文件test.txt<br> 1 file changed, 3 deletions(-)<br> delete mode 100644 test.txt<br></code></pre></td></tr></table></figure>
+
+<p><strong>将代码上传到仓库的master分支</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># vi a.txt   #创建一个新文件</span><br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git add a.txt </span><br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git commit -m &quot;add&quot;</span><br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git push origin master   #上传到远程仓库master分支</span><br>Counting objects: 11, done.<br>Compressing objects: 100% (4/4), done.<br>Writing objects: 100% (11/11), 828 bytes | 0 bytes/s, done.<br>Total 11 (delta 0), reused 0 (delta 0)<br>To git@192.168.246.214:/git-test/testgit/<br> * <span class="hljs-section">[new branch]</span>      master -&gt; master<br></code></pre></td></tr></table></figure>
+
+<p><strong>测试:</strong></p>
+<p>在客户端将仓库删除掉然后在克隆下来查看仓库中是否有文件</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@git-client ~]</span><span class="hljs-comment"># rm -rf testgit/</span><br><span class="hljs-section">[root@client ~]</span><span class="hljs-comment"># git clone git@192.168.246.214:/git-test/testgit/</span><br>Cloning into &#x27;testgit&#x27;...<br>remote: Counting objects: 11, done.<br>remote: Compressing objects: 100% (4/4), done.<br>remote: Total 11 (delta 0), reused 0 (delta 0)<br>Receiving objects: 100% (11/11), done.<br><span class="hljs-section">[root@client ~]</span><span class="hljs-comment"># cd testgit/</span><br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># ls</span><br>a.txt<br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># cat a.txt </span><br>hello world<br></code></pre></td></tr></table></figure>
+
+<p><strong>创建分支并合并分支</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># ls在客户端操作：</span><br><span class="hljs-section">[root@client ~]</span><span class="hljs-comment"># git clone git@192.168.246.214:/git-test/testgit/</span><br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git status </span><br><span class="hljs-comment"># On branch master   #当前所在为master分支</span><br><span class="hljs-comment">#</span><br><span class="hljs-comment"># Initial commit</span><br><span class="hljs-comment">#</span><br>nothing to commit (create/copy files and use &quot;git add&quot; to track)<br><br>创建分支:<br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git branch dev   #创建分支。</span><br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git branch    #查看分支。*在哪里就表示当前是哪个分支</span><br>  dev<br>* master<br>切换分支:<br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git checkout dev</span><br>Switched to branch &#x27;dev&#x27;<br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git branch </span><br>* dev<br>  master<br>在dev分支创建一个文件；<br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># vi test.txt</span><br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git add test.txt </span><br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git commit -m &quot;add dev&quot;</span><br><span class="hljs-section">[dev f855bdf]</span> add dev<br> 1 file changed, 1 insertion(+)<br> create mode 100644 test.txt<br>现在，dev分支的工作完成，我们就可以切换回master分支：<br> <span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git checkout master</span><br>Switched to branch &#x27;master&#x27;<br><br>切换回`master`分支后，再查看一个`test.txt`文件，刚才添加的内容不见了！因为那个提交是在`dev`分支上，而`master`分支此刻的提交点并没有变：<br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># ls</span><br>a.txt<br><br>现在，我们把`dev`分支的工作成果合并到`master`分支上：<br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git merge dev</span><br>Updating 40833e0..f855bdf<br>Fast-forward<br> test.txt | 1 +<br> 1 file changed, 1 insertion(+)<br> create mode 100644 test.txt<br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># ls</span><br>a.txt  test.txt<br>现在已经将dev分支的内容合并到master上。确认没有问题上传到远程仓库:<br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git push origin master</span><br><br>合并完成后，就可以放心地删除`dev`分支了：<br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git branch -d dev</span><br>Deleted branch dev (was f855bdf).<br><br>删除后，查看`branch`，就只剩下`master`分支了：<br><span class="hljs-section">[root@client testgit]</span><span class="hljs-comment"># git branch </span><br>* master<br></code></pre></td></tr></table></figure>
+
+<p><strong>2、部署gitlab服务</strong></p>
+<p><strong>官网下载gitlab地址</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ini">百度搜索gitlab--点击https://gitlab.com/users/sign_in<br>拉到最下面--点击 关于 GitLab<br>再拉到最下面--有个Resources--点击Install--往下拉点击有个cenos 7版本的下载--安装命令步骤操作即可<br></code></pre></td></tr></table></figure>
+
+<p><strong>配置yum源</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@git-server ~]</span><span class="hljs-comment"># cd /etc/yum.repos.d/</span><br><span class="hljs-comment">#配置yum源</span><br><span class="hljs-section">[root@git-server yum.repos.d]</span><span class="hljs-comment"># vi gitlab-ce.repo</span><br><span class="hljs-section">[gitlab-ce]</span><br><span class="hljs-attr">name</span>=Gitlab CE Repository<br><span class="hljs-attr">baseurl</span>=https://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/yum/el<span class="hljs-variable">$releasever</span><br><span class="hljs-attr">gpgcheck</span>=<span class="hljs-number">0</span><br><span class="hljs-attr">enabled</span>=<span class="hljs-number">1</span><br><br><span class="hljs-comment">#安装相关依赖</span><br><span class="hljs-section">[root@git-server yum.repos.d]</span><span class="hljs-comment"># yum install -y curl policycoreutils-python openssh-server</span><br><span class="hljs-section">[root@git-server yum.repos.d]</span><span class="hljs-comment"># systemctl enable sshd</span><br><span class="hljs-section">[root@git-server yum.repos.d]</span><span class="hljs-comment"># systemctl start sshd</span><br><br><span class="hljs-comment">#安装postfix</span><br><span class="hljs-section">[root@git-server yum.repos.d]</span><span class="hljs-comment"># yum install postfix  #安装邮箱</span><br><span class="hljs-section">[root@git-server yum.repos.d]</span><span class="hljs-comment"># systemctl enable postfix</span><br><span class="hljs-section">[root@git-server yum.repos.d]</span><span class="hljs-comment"># systemctl start postfix</span><br><br><span class="hljs-comment">#安装的版本，下面那条命令是安装最新版，可能存在不兼容的风险</span><br><span class="hljs-section">[root@git-server yum.repos.d]</span><span class="hljs-comment"># yum install -y gitlab-ce-13.1.1-ce.0.el7.x86_64  #安装的版本</span><br><span class="hljs-section">[root@git-server yum.repos.d]</span><span class="hljs-comment"># yum install -y gitlab-ce  #将会安装gitlab最新版本</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>配置gitlab</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@git-server ~]</span><span class="hljs-comment"># vim /etc/gitlab/gitlab.rb</span><br>1.<span class="hljs-comment"># 添加对外的域名（gitlab.papamk.com请添加A记录指向本服务器的公网IP）：将原来的修改为</span><br>external_url &#x27;http://192.168.246.214&#x27;<br>2.设置地区<br>gitlab_rails<span class="hljs-section">[&#x27;time_zone&#x27;]</span> = &#x27;Asia/Shanghai&#x27;<br><br>将数据路径的注释去掉，可以更改<br><span class="hljs-comment">#第501-505行，去除注释</span><br>git_data_dirs(&#123;<br>  <span class="hljs-attr">&quot;default&quot;</span> =&gt; &#123;<br>    <span class="hljs-attr">&quot;path&quot;</span> =&gt; <span class="hljs-string">&quot;/mnt/nfs-01/git-data&quot;</span><br>   &#125;<br>&#125;)<br><br>开启ssh服务:<br><span class="hljs-comment">#第519行，去除注释</span><br>gitlab_rails<span class="hljs-section">[&#x27;gitlab_shell_ssh_port&#x27;]</span> = 22<br><br>开启邮箱服务<br><span class="hljs-comment">#直接在637行开始添加以下内容</span><br>gitlab_rails<span class="hljs-section">[&#x27;smtp_enable&#x27;]</span> = true  <span class="hljs-comment">#开启smtp服务</span><br>gitlab_rails<span class="hljs-section">[&#x27;smtp_address&#x27;]</span> = &quot;smtp.163.com&quot; <span class="hljs-comment">#指定smtp地址</span><br>gitlab_rails<span class="hljs-section">[&#x27;smtp_port&#x27;]</span> = 465<br>gitlab_rails<span class="hljs-section">[&#x27;smtp_user_name&#x27;]</span> = &quot;xxxx@163.com&quot;  <span class="hljs-comment">#指定邮箱</span><br>gitlab_rails<span class="hljs-section">[&#x27;smtp_password&#x27;]</span> = &quot;邮箱授权密码&quot;<br>gitlab_rails<span class="hljs-section">[&#x27;smtp_domain&#x27;]</span> = &quot;163.com&quot;  <span class="hljs-comment">#邮箱地址的域</span><br>gitlab_rails<span class="hljs-section">[&#x27;smtp_authentication&#x27;]</span> = &quot;login&quot; <br>gitlab_rails<span class="hljs-section">[&#x27;smtp_enable_starttls_auto&#x27;]</span> = true<br>gitlab_rails<span class="hljs-section">[&#x27;smtp_tls&#x27;]</span> = true<br>gitlab_rails<span class="hljs-section">[&#x27;smtp_openssl_verify_mode&#x27;]</span> = &#x27;none&#x27;<br>gitlab_rails<span class="hljs-section">[&#x27;gitlab_email_from&#x27;]</span> = &#x27;xxxx@163.com&#x27; <span class="hljs-comment">#指定发件邮箱</span><br>gitlab_rails<span class="hljs-section">[&#x27;gitlab_email_display_name&#x27;]</span> = &#x27;Admin&#x27; <span class="hljs-comment">#指定发件人</span><br><span class="hljs-comment">#user[&quot;git_user_email&quot;] = &quot;xxxx@163.com&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>重置并启动GitLab执行:</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@git-server ~]</span><span class="hljs-comment"># gitlab-ctl reconfigure   #重新加载，需要等很长时间</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>启动</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@git-server ~]</span><span class="hljs-comment"># gitlab-ctl restart  #启动</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>邮箱测试</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@git-server ~]</span> <span class="hljs-comment"># gitlab-rails console	#进入终端</span><br><br><span class="hljs-comment">#开始测试</span><br>irb(main):001:0&gt; Notify.test_email(&#x27;xxxx@qq.com&#x27;, &#x27;Message Subject&#x27;, &#x27;Message Body&#x27;).deliver_now <span class="hljs-comment">#测试发送邮件是否成功</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>测试web页面访问</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini">输入IP地址，直接访问，会出来一个界面，它默认用户是root，直接输入密码就可以（设置密码）<br></code></pre></td></tr></table></figure>
+
+<p><strong>在服务器通过在git客户端</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@client ~]</span><span class="hljs-comment"># git clone git@192.168.246.214:root/testapp.git</span><br>Cloning into &#x27;testapp&#x27;...<br>remote: Enumerating objects: 6, done.<br>remote: Counting objects: 100% (6/6), done.<br>remote: Compressing objects: 100% (4/4), done.<br>remote: Total 6 (delta 0), reused 0 (delta 0)<br>Receiving objects: 100% (6/6), done.<br><span class="hljs-section">[root@client ~]</span><span class="hljs-comment"># ls</span><br>testapp<br><span class="hljs-section">[root@client ~]</span><span class="hljs-comment"># cd testapp/</span><br><span class="hljs-section">[root@client testapp]</span><span class="hljs-comment"># ls</span><br>test.txt  同步时间.txt<br><span class="hljs-section">[root@client testapp]</span><span class="hljs-comment">#</span><br><br>注意:如果克隆不下来可以重新使用命令生成私钥<br><span class="hljs-section">[root@client ~]</span><span class="hljs-comment"># ssh-keygen -t rsa #然后将公钥添加到gitlab中。</span><br><br>使用http的<br><span class="hljs-section">[root@client ~]</span><span class="hljs-comment"># rm -rf testgit/</span><br><span class="hljs-section">[root@client ~]</span><span class="hljs-comment"># git clone http://192.168.246.214/root/testapp.git</span><br>Cloning into &#x27;testapp&#x27;...<br>Username for &#x27;http://192.168.246.214&#x27;: root<br>Password for &#x27;http://root@192.168.246.214&#x27;:12345678  <span class="hljs-comment">#为自己设置的密码</span><br>remote: Enumerating objects: 6, done.<br>remote: Counting objects: 100% (6/6), done.<br>remote: Compressing objects: 100% (4/4), done.<br>remote: Total 6 (delta 0), reused 0 (delta 0)<br>Unpacking objects: 100% (6/6), done.<br><span class="hljs-section">[root@client ~]</span><span class="hljs-comment"># ls</span><br>testapp<br><br>提交到远程gitlab仓库<br><span class="hljs-section">[root@client ~]</span><span class="hljs-comment"># cd testapp/</span><br><span class="hljs-section">[root@client testapp]</span><span class="hljs-comment"># vi update.txt</span><br>1000phone<br><span class="hljs-section">[root@client testapp]</span><span class="hljs-comment"># git add .</span><br><span class="hljs-section">[root@client testapp]</span><span class="hljs-comment"># git commit -m &#x27;updata-test&#x27;</span><br><span class="hljs-section">[root@client testapp]</span><span class="hljs-comment"># git push origin master</span><br>Counting objects: 4, done.<br>Compressing objects: 100% (2/2), done.<br>Writing objects: 100% (3/3), 266 bytes | 0 bytes/s, done.<br>Total 3 (delta 1), reused 0 (delta 0)<br>To git@192.168.153.156:root/testapp.git<br>   4f35d4b..a0067ea  master -&gt; master<br></code></pre></td></tr></table></figure>
+
+<p><strong>Gitlab 备份与恢复</strong></p>
+<p><strong>1、查看系统版本和软件版本</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@git-server ~]</span><span class="hljs-comment"># cat /etc/redhat-release </span><br>CentOS Linux release 7.4.1708 (Core)<br><br><span class="hljs-section">[root@git-server ~]</span><span class="hljs-comment"># cat /opt/gitlab/embedded/service/gitlab-rails/VERSION</span><br>13.1.1<br></code></pre></td></tr></table></figure>
+
+<p><strong>2、数据备份</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs ini">打开/etc/gitlab/gitlab.rb配置文件，查看一个和备份相关的配置项：<br>vim /etc/gitlab/gitlab.rb<br>gitlab_rails<span class="hljs-section">[&#x27;backup_path&#x27;]</span> = &quot;/var/opt/gitlab/backups&quot;	<span class="hljs-comment">#备份的路径</span><br>gitlab_rails<span class="hljs-section">[&#x27;backup_archive_permissions&#x27;]</span> = 0644		<span class="hljs-comment">#备份文件的默认权限</span><br>gitlab_rails<span class="hljs-section">[&#x27;backup_keep_time&#x27;]</span> = 604800				<span class="hljs-comment">#保留时长，秒为单位</span><br><br><span class="hljs-comment"># 重启</span><br><span class="hljs-section">[root@git-server ~]</span><span class="hljs-comment"># gitlab-ctl reconfigure</span><br>或者<br><span class="hljs-section">[root@git-server ~]</span><span class="hljs-comment"># gitlab-ctl  restart</span><br><br><span class="hljs-comment"># 执行备份命令进行备份</span><br><span class="hljs-section">[root@git-server ~]</span><span class="hljs-comment"># /opt/gitlab/bin/gitlab-rake gitlab:backup:create</span><br><br>也可以添加到 crontab -e 中定时执行：<br>0 2 * * * /opt/gitlab/bin/gitlab-rake gitlab:backup:create <br><br>备份完成，会在备份目录中生成一个当天日期的tar包。<br><span class="hljs-section">[root@git-server ~]</span><span class="hljs-comment"># ls /var/opt/gitlab/backups/</span><br>1588774133_2020_05_06_12.10.3_gitlab_backup.tar<br></code></pre></td></tr></table></figure>
+
+<p><strong>数据恢复</strong></p>
+<p><strong>特别注意：</strong></p>
+<p><code>备份目录和gitlab.rb中定义的备份目录必须一致</code><br><code>GitLab的版本和备份文件中的版本必须一致，否则还原时会报错</code></p>
+<p><strong>在恢复之前，可以删除一个文件，以便查看效果</strong></p>
+<p><strong>执行恢复操作：</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@git-server ~]</span><span class="hljs-comment"># cd /var/opt/gitlab/backups/</span><br><span class="hljs-section">[root@git-server backups]</span><span class="hljs-comment"># gitlab-rake gitlab:backup:restore BACKUP=1588774133_2020_05_06_12.10.3</span><br>注意恢复文件的名称<br><br><span class="hljs-comment"># 中途会输入2次yes</span><br><br>恢复完成后，或者重启服务，再打开浏览器进行访问，发现数据和之前的一致：<br><span class="hljs-section">[root@git-server backups]</span><span class="hljs-comment"># gitlab-ctl  restart</span><br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>gitlab 仓库创建及使用</div>
+      <div>http://example.com/2025/11/06/gitlab-仓库创建及使用/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Mr.xu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/11/06/ansible-%E9%85%8D%E7%BD%AEjspgou%E5%95%86%E5%9F%8E%E4%B8%8A%E7%BA%BF%EF%BC%88MySQL%E7%89%88%EF%BC%89/" title="ansible 配置jspgou商城上线（MySQL版）">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">ansible 配置jspgou商城上线（MySQL版）</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/11/06/gitee-%E9%83%A8%E7%BD%B2%E5%8F%8A%E6%93%8D%E4%BD%9C%E6%AD%A5%E9%AA%A4/" title="gitee 部署及操作步骤">
+                        <span class="hidden-mobile">gitee 部署及操作步骤</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

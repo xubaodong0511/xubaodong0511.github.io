@@ -1,0 +1,790 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Mr.xu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="k8s公网部署翻新之前的文章写的很乱的，多种安装方式  本次实验使用三台机器在不同地区进行部署，实验环境使用到香港服务器和杭州阿里云服务器，公网环境部署网络稳定性不能得到保证，本文部署方式仅供参考。  环境准备环境    软件 软件版本    Docker 20.0.1   Kubernetes 1.23.6   服务器规划    服务器主机名 服务器公网IP    master 149.104.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="K8s 公网部署（错误修改）">
+<meta property="og:url" content="http://example.com/2025/11/06/K8s-%E5%85%AC%E7%BD%91%E9%83%A8%E7%BD%B2%EF%BC%88%E9%94%99%E8%AF%AF%E4%BF%AE%E6%94%B9%EF%BC%89/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="k8s公网部署翻新之前的文章写的很乱的，多种安装方式  本次实验使用三台机器在不同地区进行部署，实验环境使用到香港服务器和杭州阿里云服务器，公网环境部署网络稳定性不能得到保证，本文部署方式仅供参考。  环境准备环境    软件 软件版本    Docker 20.0.1   Kubernetes 1.23.6   服务器规划    服务器主机名 服务器公网IP    master 149.104.">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-11-06T12:45:47.000Z">
+<meta property="article:modified_time" content="2025-11-06T12:46:07.189Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>K8s 公网部署（错误修改） - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="K8s 公网部署（错误修改）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-06 20:45" pubdate>
+          2025年11月6日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          13 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">K8s 公网部署（错误修改）</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="k8s公网部署"><a href="#k8s公网部署" class="headerlink" title="k8s公网部署"></a>k8s公网部署</h1><p><strong>翻新之前的文章</strong><br><a target="_blank" rel="noopener" href="https://7boe.top/archives/187">写的很乱的，多种安装方式</a></p>
+<blockquote>
+<p>本次实验使用三台机器在不同地区进行部署，实验环境使用到香港服务器和杭州阿里云服务器，公网环境部署网络稳定性不能得到保证，本文部署方式仅供参考。</p>
+</blockquote>
+<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p><strong>环境</strong></p>
+<table>
+<thead>
+<tr>
+<th>软件</th>
+<th>软件版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Docker</td>
+<td>20.0.1</td>
+</tr>
+<tr>
+<td>Kubernetes</td>
+<td>1.23.6</td>
+</tr>
+</tbody></table>
+<p><strong>服务器规划</strong></p>
+<table>
+<thead>
+<tr>
+<th>服务器主机名</th>
+<th>服务器公网IP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>master</td>
+<td>149.104.23.134</td>
+</tr>
+<tr>
+<td>node1</td>
+<td>121.41.53.83</td>
+</tr>
+<tr>
+<td>node2</td>
+<td>116.62.32.149</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>解析hosts</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> &gt;&gt; /etc/hosts &lt;&lt; <span class="hljs-string">EOF</span><br><span class="hljs-string">149.104.23.134 master</span><br><span class="hljs-string">121.41.53.83 node1</span><br><span class="hljs-string">116.62.32.149 node2</span><br><span class="hljs-string">EOF</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>执行初始化脚本</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">bash &lt;(curl -sSl https://git.7boe.top/root/Shell/-/raw/af8fc85f5d15181942fc791305dc64e94c32c36e/k8s.sh?inline=<span class="hljs-literal">false</span>)<br></code></pre></td></tr></table></figure>
+
+<h3 id="Docker安装"><a href="#Docker安装" class="headerlink" title="Docker安装"></a>Docker安装</h3><p><strong>安装软件导入docker官方源</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs csharp">yum install -y yum-utils <br>yum-config-manager --<span class="hljs-keyword">add</span>-repo http:<span class="hljs-comment">//mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>使用docker20版本</strong></p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs lua">sudo yum install docker-ce<span class="hljs-number">-20.10</span><span class="hljs-number">.14</span><span class="hljs-number">-3.</span>el7 docker-ce-cli<span class="hljs-number">-20.10</span><span class="hljs-number">.14</span><span class="hljs-number">-3.</span>el7 containerd.<span class="hljs-built_in">io</span> docker-compose-plugin<br></code></pre></td></tr></table></figure>
+
+<p><strong>其他版本有部分差异，可能会出奇怪问题。</strong><br><strong>换docker镜像源</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs javascript">cat &lt;&lt;<span class="hljs-variable constant_">EOF</span> &gt; <span class="hljs-regexp">/etc/</span>docker/daemon.<span class="hljs-property">json</span><br>&#123;<br>    <span class="hljs-string">&quot;registry-mirrors&quot;</span>: [<br>        <span class="hljs-string">&quot;http://hub-mirror.c.163.com&quot;</span>,<br>        <span class="hljs-string">&quot;https://docker.mirrors.ustc.edu.cn&quot;</span>,<br>        <span class="hljs-string">&quot;https://registry.docker-cn.com&quot;</span><br>    ],<br>    <span class="hljs-string">&quot;exec-opts&quot;</span>: [<span class="hljs-string">&quot;native.cgroupdriver=systemd&quot;</span>]<br>&#125;<br><span class="hljs-variable constant_">EOF</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>设置开机自启</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">systemctl daemon-reload &amp;&amp; systemctl restart docker &amp;&amp; systemctl <span class="hljs-built_in">enable</span> docker &amp;&amp; systemctl status docker <br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这里没有安装cri,因为k8s1.23版本还在提供docker作为容器运行</p>
+</blockquote>
+<p><strong>确认这里一定是systemd</strong></p>
+<blockquote>
+<p>因为k8s是默认systemd作为cgroup driver，如果Docker使用另外的驱动，则可能出现不稳定的情况。</p>
+</blockquote>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs perl">docker info | <span class="hljs-keyword">grep</span> <span class="hljs-string">&quot;Cgroup Driver&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="安装k8s"><a href="#安装k8s" class="headerlink" title="安装k8s"></a>安装k8s</h3><p><strong>k8s导入源使用阿里云的源</strong></p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs makefile">cat &gt; /etc/yum.repos.d/kubernetes.repo &lt;&lt; EOF<br>[kubernetes]<br>name=Kubernetes<br>baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64<br>enabled=1<br>gpgcheck=0<br>repo_gpgcheck=0<br>gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg<br>EOF<br></code></pre></td></tr></table></figure>
+
+<p><strong>安装k8s</strong></p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs lua">sudo yum install -y kubelet<span class="hljs-number">-1.23</span><span class="hljs-number">.6</span> kubeadm<span class="hljs-number">-1.23</span><span class="hljs-number">.6</span> kubectl<span class="hljs-number">-1.23</span><span class="hljs-number">.6</span> <span class="hljs-comment">--disableexcludes=kubernetes</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>开机自启</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">systemctl <span class="hljs-built_in">enable</span> kubelet &amp;&amp; systemctl start kubelet &amp;&amp; systemctl status kubelet<br></code></pre></td></tr></table></figure>
+
+<p><strong>拉取镜像</strong></p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs lua">kubeadm <span class="hljs-built_in">config</span> images pull <span class="hljs-comment">--kubernetes-version=v1.23.6 --image-repository registry.aliyuncs.com/google_containers</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>也可以使用配置文件拉取</strong></p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs lua">vim kubeadm-<span class="hljs-built_in">config</span>-image.yaml<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-section">apiVersion: kubeadm.k8s.io/v1beta2</span><br><span class="hljs-section">kind: ClusterConfiguration</span><br><span class="hljs-section">imageRepository: registry.aliyuncs.com/google_containers </span><br></code></pre></td></tr></table></figure>
+
+<p><strong>拉取</strong></p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs lua">kubeadm <span class="hljs-built_in">config</span> images pull <span class="hljs-comment">--config kubeadm-config-image.yaml</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><blockquote>
+<p>之前这里是最头疼的地方，如果是一个内网里面直接就好了，但是公网的话直接写公网ip他就一直报错，提示找不到这个ip，应为阿里云服务器网卡没有绑定公网ip，eth0写的是内网vpc专业网络内网ip，采用的自动对外映射公网方式。</p>
+</blockquote>
+<p><strong>这样初始化要变通一下</strong><br>先生成一个配置文件</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs lua">kubeadm <span class="hljs-built_in">config</span> <span class="hljs-built_in">print</span> init-defaults &gt; kubeadm-<span class="hljs-built_in">config</span>.yaml<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>pod-network-cidr：pod资源的网段，需与pod网络插件的值设置一致。通常，Flannel网络插件的默认为10.244.0.0&#x2F;16，Calico插件的默认值为192.168.0.0&#x2F;16；</li>
+<li>api-server：使用Master作为api-server，所以就是master机器的IP地址。</li>
+<li>image-repository：拉取镜像的镜像仓库，默认是k8s.gcr.io。</li>
+<li>nodeRegistration.name：改成master</li>
+</ul>
+<p>更改配置文件</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">kubeadm.k8s.io/v1beta3</span><br><span class="hljs-attr">bootstrapTokens:</span><br><span class="hljs-bullet">-</span> <span class="hljs-attr">groups:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-string">system:bootstrappers:kubeadm:default-node-token</span><br>  <span class="hljs-attr">token:</span> <span class="hljs-string">abcdef.0123456789abcdef</span><br>  <span class="hljs-attr">ttl:</span> <span class="hljs-string">24h0m0s</span><br>  <span class="hljs-attr">usages:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-string">signing</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-string">authentication</span><br><span class="hljs-attr">kind:</span> <span class="hljs-string">InitConfiguration</span><br><span class="hljs-attr">localAPIEndpoint:</span><br>  <span class="hljs-attr">advertiseAddress:</span> <span class="hljs-number">149.104</span><span class="hljs-number">.23</span><span class="hljs-number">.134</span> <span class="hljs-comment">#这样改成master的公网ip</span><br>  <span class="hljs-attr">bindPort:</span> <span class="hljs-number">6443</span><br><span class="hljs-attr">nodeRegistration:</span><br>  <span class="hljs-attr">criSocket:</span> <span class="hljs-string">/var/run/dockershim.sock</span><br>  <span class="hljs-attr">imagePullPolicy:</span> <span class="hljs-string">IfNotPresent</span><br>  <span class="hljs-attr">name:</span> <span class="hljs-string">master</span>  <span class="hljs-comment">#这样要改成解析的主机名</span><br>  <span class="hljs-attr">taints:</span> <span class="hljs-literal">null</span><br><span class="hljs-meta">---</span><br><span class="hljs-attr">apiServer:</span><br>  <span class="hljs-attr">timeoutForControlPlane:</span> <span class="hljs-string">4m0s</span><br><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">kubeadm.k8s.io/v1beta3</span><br><span class="hljs-attr">certificatesDir:</span> <span class="hljs-string">/etc/kubernetes/pki</span><br><span class="hljs-attr">clusterName:</span> <span class="hljs-string">kubernetes</span><br><span class="hljs-attr">controllerManager:</span> &#123;&#125;<br><span class="hljs-attr">dns:</span> &#123;&#125;<br><span class="hljs-attr">etcd:</span><br>  <span class="hljs-attr">local:</span><br>    <span class="hljs-attr">dataDir:</span> <span class="hljs-string">/var/lib/etcd</span><br><span class="hljs-attr">imageRepository:</span> <span class="hljs-string">registry.aliyuncs.com/google_containers</span> <span class="hljs-comment">#一定要改</span><br><span class="hljs-attr">kind:</span> <span class="hljs-string">ClusterConfiguration</span><br><span class="hljs-attr">kubernetesVersion:</span> <span class="hljs-number">1.23</span><span class="hljs-number">.6</span> <span class="hljs-comment">#确认版本号</span><br><span class="hljs-attr">networking:</span><br>  <span class="hljs-attr">dnsDomain:</span> <span class="hljs-string">cluster.local</span><br>  <span class="hljs-attr">serviceSubnet:</span> <span class="hljs-number">10.96</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span><span class="hljs-string">/12</span><br>  <span class="hljs-attr">podSubnet:</span> <span class="hljs-number">192.168</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span><span class="hljs-string">/16</span>  <span class="hljs-comment">#方便安装网络插件</span><br><span class="hljs-attr">scheduler:</span> &#123;&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>检查环境是否支持</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs csharp">kubeadm <span class="hljs-keyword">init</span> phase preflight --config=kubeadm-config.yaml <br>kubeadm <span class="hljs-keyword">init</span> --config=kubeadm-config.yaml<br></code></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>这里基本是初始化必失败的<br>到这里，会有2种结果：<br>如果是内网，上面的docker版本，kubeadm版本没错的话，会成功.<br>如果在云服务器（腾讯云，阿里云）上，一定会失败（原因和办法在这里）：</p>
+</blockquote>
+<h3 id="云服务器初始化失败"><a href="#云服务器初始化失败" class="headerlink" title="云服务器初始化失败"></a>云服务器初始化失败</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql">[kubelet<span class="hljs-operator">-</span><span class="hljs-keyword">check</span>] <span class="hljs-keyword">Initial</span> timeout <span class="hljs-keyword">of</span> <span class="hljs-number">40</span>s passed.<br></code></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>卡在这里应为他找不到你设定的apiserver IP地址<br>但是你必须要初始化，目的是为了生成k8s的配置文件，否则下面的步骤中你会找不到etcd.yaml），失败后再执行下面的步骤！！</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim /etc/kubernetes/manifests/etcd.yaml<br></code></pre></td></tr></table></figure>
+
+
+
+<p>更改以下配置，<a target="_blank" rel="noopener" href="https://blog.51cto.com/u_15152259/2690063">来源文章</a>。</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs perl">- --<span class="hljs-keyword">listen</span>-client-urls=https:<span class="hljs-regexp">//</span><span class="hljs-number">127.0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">2379</span>,https:<span class="hljs-regexp">//</span><span class="hljs-number">101.34</span><span class="hljs-number">.112</span><span class="hljs-number">.190</span>:<span class="hljs-number">2379</span><br>- --<span class="hljs-keyword">listen</span>-peer-urls=https:<span class="hljs-regexp">//</span><span class="hljs-number">101.34</span><span class="hljs-number">.112</span><span class="hljs-number">.190</span>:<span class="hljs-number">2380</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>改成</strong></p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs perl">- --<span class="hljs-keyword">listen</span>-client-urls=https:<span class="hljs-regexp">//</span><span class="hljs-number">127.0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">2379</span><br>- --<span class="hljs-keyword">listen</span>-peer-urls=https:<span class="hljs-regexp">//</span><span class="hljs-number">127.0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">2380</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>因为上方的地址他监听不到，要改成本地</strong></p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs perl">systemctl stop kubelet <br>netstat -anp |<span class="hljs-keyword">grep</span> kube<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>请注意，不要执行 kubeadm reset，先 systemctl stop kubelet ，然后手动通过 netstat -anp |grep kube 来找pid，再通过 kill -9 pid 强杀。否则又会生成错误的etcd配置文件，这里非常关键！！！</p>
+</blockquote>
+<p><strong>重新初始化，但是跳过etcd文件已经存在的检查：</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-meta"># 重新启动kubelet</span><br>systemctl start kubelet<br>重新初始化，跳过配置文件生成环节，不要etcd的修改要被覆盖掉<br>kubeadm <span class="hljs-keyword">init</span> --config=kubeadm-config.yaml --skip-phases=preflight,certs,kubeconfig,kubelet-start,control-plane,etcd<br></code></pre></td></tr></table></figure>
+
+<h3 id="成功初始化"><a href="#成功初始化" class="headerlink" title="成功初始化"></a>成功初始化</h3><p>如果所有配置都正常，很快会输出下面的信息（秒级别）代表了成功，否则大概率是失败（由于网络超时等）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs bash">Your Kubernetes control-plane has initialized successfully!<br><br>To start using your cluster, you need to run the following as a regular user:<br><br>  <span class="hljs-built_in">mkdir</span> -p <span class="hljs-variable">$HOME</span>/.kube<br>  <span class="hljs-built_in">sudo</span> <span class="hljs-built_in">cp</span> -i /etc/kubernetes/admin.conf <span class="hljs-variable">$HOME</span>/.kube/config<br>  <span class="hljs-built_in">sudo</span> <span class="hljs-built_in">chown</span> $(<span class="hljs-built_in">id</span> -u):$(<span class="hljs-built_in">id</span> -g) <span class="hljs-variable">$HOME</span>/.kube/config<br><br>Alternatively, <span class="hljs-keyword">if</span> you are the root user, you can run:<br><br>  <span class="hljs-built_in">export</span> KUBECONFIG=/etc/kubernetes/admin.conf<br><br>You should now deploy a pod network to the cluster.<br>Run <span class="hljs-string">&quot;kubectl apply -f [podnetwork].yaml&quot;</span> with one of the options listed at:<br>  https://kubernetes.io/docs/concepts/cluster-administration/addons/<br><br>Then you can <span class="hljs-built_in">join</span> any number of worker nodes by running the following on each as root:<br>加入k8s 命令<br></code></pre></td></tr></table></figure>
+
+<p><strong>后面命令要是没了用这个，生成一个新的</strong></p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs lua">kubeadm token <span class="hljs-built_in">create</span> <span class="hljs-comment">--print-join-command</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>token忘记</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs undefined">kubeadm token list<br></code></pre></td></tr></table></figure>
+
+<p><strong>每一个节点都执行的话都可以操作kubectl,文件要scp过去</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> -p <span class="hljs-variable">$HOME</span>/.kube<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">cp</span> -i /etc/kubernetes/admin.conf <span class="hljs-variable">$HOME</span>/.kube/config<br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">chown</span> $(<span class="hljs-built_in">id</span> -u):$(<span class="hljs-built_in">id</span> -g) <span class="hljs-variable">$HOME</span>/.kube/config<br></code></pre></td></tr></table></figure>
+
+<h2 id="安装网络插件"><a href="#安装网络插件" class="headerlink" title="安装网络插件"></a>安装网络插件</h2><h3 id="calico"><a href="#calico" class="headerlink" title="calico"></a>calico</h3><p><strong>查看官网文档，看对应版本</strong></p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ruby"><span class="hljs-symbol">https:</span>/<span class="hljs-regexp">/docs.tigera.io/calico</span><span class="hljs-regexp">/3.25/getting</span>-started/kubernetes/<span class="hljs-variable language_">self</span>-managed-onprem/onpremises<br></code></pre></td></tr></table></figure>
+
+<p><strong>3.25目前支持1.23的k8s</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">https://docs.tigera.io/calico/3.25/getting-started/kubernetes/requirements<br></code></pre></td></tr></table></figure>
+
+<p><strong>安装</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/calico.yaml <br></code></pre></td></tr></table></figure>
+
+<h3 id="flannel"><a href="#flannel" class="headerlink" title="flannel"></a>flannel</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">如果您使用自定义podCIDR（不是<span class="hljs-number">10.244</span>.<span class="hljs-number">0.0</span>/<span class="hljs-number">16</span>），您首先需要下载上述清单并修改网络以匹配您的网络。<br>kubectl apply -f https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/flannel-io/</span>flannel<span class="hljs-regexp">/releases/</span>latest<span class="hljs-regexp">/download/</span>kube-flannel.yml<br></code></pre></td></tr></table></figure>
+
+<h2 id="允许master节点部署pod"><a href="#允许master节点部署pod" class="headerlink" title="允许master节点部署pod"></a>允许master节点部署pod</h2><p><strong>调度策略</strong></p>
+<ul>
+<li>NoSchedule: 一定不能被调度</li>
+<li>PreferNoSchedule: 尽量不要调度</li>
+<li>NoExecute: 不仅不会调度, 还会驱逐Node上已有的Pod</li>
+</ul>
+<p><strong>查看当前调度策略</strong></p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs perl">kubectl describe node|<span class="hljs-keyword">grep</span> -E <span class="hljs-string">&quot;Name:|Taints:&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>更改master节点可被部署pod</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">kubectl taint nodes --all node-role.kubernetes.io/master-<br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>K8s 公网部署（错误修改）</div>
+      <div>http://example.com/2025/11/06/K8s-公网部署（错误修改）/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Mr.xu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/11/06/k8s-web%E5%B9%B3%E5%8F%B0%E9%83%A8%E7%BD%B2/" title="k8s--web平台部署">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">k8s--web平台部署</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/11/06/jenkins%E6%B5%81%E6%B0%B4%E7%BA%BF%E5%8F%91%E5%B8%83%E9%A1%B9%E7%9B%AE%E5%88%B0K8S%E9%9B%86%E7%BE%A4%E5%AE%9E%E7%8E%B0CI-CD/" title="jenkins流水线发布项目到K8S集群实现CI/CD">
+                        <span class="hidden-mobile">jenkins流水线发布项目到K8S集群实现CI/CD</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

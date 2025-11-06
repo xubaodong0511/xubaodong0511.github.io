@@ -1,0 +1,647 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Mr.xu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="清风 关闭防火墙123systemctl stop firewalldsystemctl disable firewalldsetenforce 0 配置环境1234567[root@localhost ~]# vim &#x2F;etc&#x2F;hosts192.168.116.121	 tomcat  安装tomcat192.168.116.122	 php     安装php-fpm、nginx192.168">
+<meta property="og:type" content="article">
+<meta property="og:title" content="负载高可用实验">
+<meta property="og:url" content="http://example.com/2025/11/06/%E8%B4%9F%E8%BD%BD%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E9%AA%8C/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="清风 关闭防火墙123systemctl stop firewalldsystemctl disable firewalldsetenforce 0 配置环境1234567[root@localhost ~]# vim &#x2F;etc&#x2F;hosts192.168.116.121	 tomcat  安装tomcat192.168.116.122	 php     安装php-fpm、nginx192.168">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xbd666.cn/upload/%E9%AB%98%E5%8F%AF%E7%94%A801.png">
+<meta property="article:published_time" content="2025-11-06T13:04:02.000Z">
+<meta property="article:modified_time" content="2025-11-06T13:04:19.818Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://xbd666.cn/upload/%E9%AB%98%E5%8F%AF%E7%94%A801.png">
+  
+  
+  
+  <title>负载高可用实验 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="负载高可用实验"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-06 21:04" pubdate>
+          2025年11月6日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          12 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">负载高可用实验</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p><a target="_blank" rel="noopener" href="http://xbd666.cn/">清风</a><br><img src="https://xbd666.cn/upload/%E9%AB%98%E5%8F%AF%E7%94%A801.png" srcset="/img/loading.gif" lazyload alt="高可用01.png"></p>
+<h1 id="关闭防火墙"><a href="#关闭防火墙" class="headerlink" title="关闭防火墙"></a>关闭防火墙</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">systemctl stop firewalld<br>systemctl disable firewalld<br>setenforce 0<br></code></pre></td></tr></table></figure>
+<h1 id="配置环境"><a href="#配置环境" class="headerlink" title="配置环境"></a>配置环境</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@localhost ~]# vim /etc/hosts<br>192.168.116.121	 tomcat  安装tomcat<br>192.168.116.122	 php     安装php-fpm、nginx<br>192.168.116.131	 nginx1  安装nginx<br>192.168.116.132	 nginx2  安装nginx<br>192.168.116.111	 master  安装lvs、keepalived<br>192.168.116.156	 backup  安装lvs、keepalived``<br></code></pre></td></tr></table></figure>
+<h1 id="1、安装tomcat步骤–192-168-116-121"><a href="#1、安装tomcat步骤–192-168-116-121" class="headerlink" title="1、安装tomcat步骤–192.168.116.121"></a>1、安装tomcat步骤–192.168.116.121</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs shell">1、安装 JDK（java）<br>1.上传jdk到服务器中，安装jdk<br>[root@localhost ~]# mkdir /application   #创建工作目录<br>[root@localhost ~]# tar xzf jdk-8u60-linux-x64.tar.gz -C /application/<br>[root@localhost ~]# mv /application/jdk1.8.0_60 /application/jdk<br><span class="hljs-meta prompt_"># </span><span class="language-bash">设置环境变量</span><br>[root@localhost ~]# vim /etc/profile<br>JAVA_HOME=/usr/local/java #指定java安装目录<br>PATH=$JAVA_HOME/bin:$PATH #用于指定java系统查找命令的路径<br>export JAVA_HOME PATH #类的路径，在编译运行java程序时，如果有调用到其他类的时候，在classpath中寻找需要的类。<br>[root@localhost ~]# source /etc/profile  #让环境变量生效<br><span class="hljs-meta prompt_">#</span><span class="language-bash">测试jdk是否安装成功</span><br>[root@localhost ~]# java -version<br>java version &quot;1.8.0_60&quot;<br>Java(TM) SE Runtime Environment (build 1.8.0_60-b27)<br>Java HotSpot(TM) 64-Bit Server VM (build 25.60-b23, mixed mode)<br><br>2、安装Tomcat<br>将tomcat安装包上传到服务器中：<br>[root@localhost ~]# tar xzf apache-tomcat-8.0.27.tar.gz -C /application/<br>[root@localhost ~]# mv /application/apache-tomcat-8.0.27 /application/tomcat<br><span class="hljs-meta prompt_"># </span><span class="language-bash">设置环境变量</span><br>[root@localhost ~]# echo &#x27;export TOMCAT_HOME=/application/tomcat&#x27;&gt;&gt;/etc/profile<br>[root@localhost ~]# source /etc/profile<br>启动tomcat<br>[root@localhost ~]# /application/tomcat/bin/startup.sh<br></code></pre></td></tr></table></figure>
+
+<h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">网址输入192.168.116.121：8080，会出来tomcat测试页面192.168.116.121的tomcat的测试页面<br></code></pre></td></tr></table></figure>
+
+<h1 id="2、安装php-fpm-nginx–步骤–192-168-116-122"><a href="#2、安装php-fpm-nginx–步骤–192-168-116-122" class="headerlink" title="2、安装php-fpm&#x2F;nginx–步骤–192.168.116.122"></a>2、安装php-fpm&#x2F;nginx–步骤–192.168.116.122</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">下载nginx</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">yum安装nginx</span><br>[root@localhost ~]#  vim /etc/yum.repo.d/nginx.repo<br>[nginx-stable]<br>name=nginx stable repo<br>baseurl=http://nginx.org/packages/centos/$releasever/$basearch/<br>gpgcheck=0<br>enabled=1<br>[root@localhost ~]#  yum install nginx -y<br>[root@localhost ~]#  systemctl start nginx<br>[root@localhost ~]#  systemctl enable nginx<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">下载PHP</span><br>[root@localhost ~]# rpm -Uvh https://mirror.webtatic.com/yum/el7/epel-release.rpm<br>[root@localhost ~]# rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm<br>[root@localhost ~]#  yum install php71w-xsl php71w <br>[root@localhost ~]#  yum -y install php71w-xsl php71w php71w-ldap php71w-cli php71w-common php71w-devel php71w-gd php71w-pdo php71w-mysql php71w-mbstring php71w-bcmath php71w-mcrypt		//php依赖包<br>[root@localhost ~]#  yum install -y php71w-fpm	//php主包<br>[root@localhost ~]#  systemctl start php-fpm<br>[root@localhost ~]#  systemctl enable php-fpm<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">验证nginx/php-fpm有没有起来</span><br>[root@localhost ~]#  systemctl status nginx<br>[root@localhost ~]#  systemctl status php-fpm<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">编辑配置文件</span><br>vim /etc/nginx/conf.d/php.conf<br>server &#123;<br>        listen      80;<br>        server_name     localhost;<br>      location ~ \.php$ &#123;<br>            root       /usr/share/nginx/html;  #指定网站目录<br>            fastcgi_pass   127.0.0.1:9000;    #开启fastcgi连接php地址<br>            fastcgi_index  index.php;		#指定默认文件<br>            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name; #站点根目录，取决于root配置项<br>            include        fastcgi_params;  #包含fastcgi使用的常量<br>        		&#125;<br>        &#125;<br>        <br>[root@localhost ~]#  vim /usr/share/nginx/html/test.php<br>&lt;?php<br> phpinfo();<br>?&gt;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">重启nginx</span><br>[root@localhost ~]#  systemctl restart nginx<br></code></pre></td></tr></table></figure>
+
+<h1 id="测试-1"><a href="#测试-1" class="headerlink" title="测试"></a>测试</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini">输入网址192.168.116.122/test.php	//会出来php的测试页面<br></code></pre></td></tr></table></figure>
+
+<h1 id="3、安装nginx步骤–192-168-116-131"><a href="#3、安装nginx步骤–192-168-116-131" class="headerlink" title="3、安装nginx步骤–192.168.116.131"></a>3、安装nginx步骤–192.168.116.131</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">yum安装nginx--代理tomcat</span><br>[root@localhost ~]#  vim /etc/yum.repo.d/nginx.repo<br>[nginx-stable]<br>name=nginx stable repo<br>baseurl=http://nginx.org/packages/centos/$releasever/$basearch/<br>gpgcheck=0<br>enabled=1<br>[root@localhost ~]#  yum install nginx -y<br>[root@localhost ~]#  systemctl start nginx<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">配置负载均衡</span><br>[root@localhost ~]#  vim /etc/nginx/conf.d/upstream.conf<br>upstream tomcat01 &#123;<br>      server 192.168.116.121:8080;<br>      server 192.168.116.122;<br>    &#125;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">配置代理</span><br>[root@localhost ~]#  vim /etc/nginx/conf.d/tomcat_01.conf<br>server &#123;<br>        listen       80;<br>        server_name localhost;<br><br>        #access_log  logs/host.access.log  main;<br><br>        location / &#123;<br>            proxy_pass http://tomcat01;<br>            proxy_set_header Host $host:$server_port;<br>            proxy_set_header X-Real-IP $remote_addr;<br>            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;<br>        &#125;<br>&#125;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">重启nginx</span><br>systemctl restart nginx<br></code></pre></td></tr></table></figure>
+
+<h1 id="测试-2"><a href="#测试-2" class="headerlink" title="测试"></a>测试</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini">输入网址192.168.116.131  //会出来192.168.116.(121/122)的页面<br></code></pre></td></tr></table></figure>
+
+<h1 id="4、安装nginx步骤–192-168-116-132"><a href="#4、安装nginx步骤–192-168-116-132" class="headerlink" title="4、安装nginx步骤–192.168.116.132"></a>4、安装nginx步骤–192.168.116.132</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">yum安装nginx--代理php</span><br>[root@localhost ~]#  vim /etc/yum.repo.d/nginx.repo<br>[nginx-stable]<br>name=nginx stable repo<br>baseurl=http://nginx.org/packages/centos/$releasever/$basearch/<br>gpgcheck=0<br>enabled=1<br>[root@localhost ~]#  yum install nginx -y<br>[root@localhost ~]#  systemctl start nginx<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">负载均衡192.168.116.122</span><br>vim /etc/nginx/conf.d/upstream.conf<br>upstream php01 &#123;<br>      server 192.168.116.121:8080;<br>      server 192.168.116.122;<br>    &#125;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">代理配置</span><br>vim /etc/nginx/conf.d/php_01.conf<br>server &#123;<br>     listen      80;<br>     server_name     localhost;<br><br>     location / &#123;<br>            proxy_pass http://php01;<br>            proxy_set_header Host $host:$server_port;<br>            proxy_set_header X-Real-IP $remote_addr;<br>            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;<br>      &#125;<br>&#125;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">重启nginx</span><br>systemctl restart nginx<br></code></pre></td></tr></table></figure>
+
+<h1 id="测试-3"><a href="#测试-3" class="headerlink" title="测试"></a>测试</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini">输入网址192.168.116.132	//会出来192.168.116.(121/122)的页面<br></code></pre></td></tr></table></figure>
+
+<h1 id="5、配置（lvs–keepalived-–192-168-116-111-MASTER"><a href="#5、配置（lvs–keepalived-–192-168-116-111-MASTER" class="headerlink" title="5、配置（lvs–keepalived)–192.168.116.111(MASTER)"></a>5、配置（lvs–keepalived)–192.168.116.111(MASTER)</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><code class="hljs shell">1. 主/备调度器安装软件<br>[root@lvs-keepalived-master ~]# yum -y install ipvsadm keepalived <br><br>2、配置keepalived,conf配置文件<br>lvs-master<br>[root@ha-proxy-master ~]# vim /etc/keepalived/keepalived.conf<br>! Configuration File for keepalived<br><br>global_defs &#123;<br>   router_id lvs-keepalived-master    #辅助改为lvs-backup<br>&#125;<br><br>vrrp_instance VI_1 &#123;<br>    state MASTER	（修改的）<br>    interface ens33		（修改的）                #VIP绑定接口<br>    virtual_router_id 80         #VRID 同一组集群，主备一致          <br>    priority 100            #本节点优先级，辅助改为50<br>    advert_int 1            #检查间隔，默认为1s<br>    authentication &#123;<br>        auth_type PASS<br>        auth_pass 1111<br>    &#125;<br>    virtual_ipaddress &#123;<br>        192.168.246.11/32	（修改的）<br>    &#125;<br>&#125;<br><br>virtual_server 192.168.246.11 80 &#123;   	（修改的） #LVS配置<br>	delay_loop 6   #健康检查rs时间间隔<br>	lb_algo rr    	（修改的）	 #LVS调度算法<br>	lb_kind DR     	（修改的）	#LVS集群模式（路由模式）<br>	protocol TCP      #健康检查使用的协议<br>	real_server 192.168.116.131 80 &#123;		（修改的）<br>		weight 1<br>		inhibit_on_failure   #当该节点失败时，把权重设置为0，而不是从IPVS中删除<br>		TCP_CHECK &#123;          #健康检查<br>			connect_port 80   #检查的端口<br>			connect_timeout 3  #连接超时的时间<br>			&#125;<br>		&#125;<br>	real_server 192.168.116.132 80 &#123;		（修改的）<br>		weight 1<br>		inhibit_on_failure<br>		TCP_CHECK &#123;<br>			connect_timeout 3<br>			connect_port 80<br>			&#125;<br>		&#125;<br>&#125;<br><br>3. 启动KeepAlived（主备均启动）<br>[root@lvs-keepalived-master ~]# systemctl start keepalived<br>[root@lvs-keepalived-master ~]# systemctl enable keepalived<br><span class="hljs-meta prompt_"># </span><span class="language-bash">查看ip</span><br>[root@lvs-keepalived-master ~]# ipvsadm -Ln<br>IP Virtual Server version 1.2.1 (size=4096)<br>Prot LocalAddress:Port Scheduler Flags<br><span class="hljs-meta prompt_">  -&gt; </span><span class="language-bash">RemoteAddress:Port           Forward Weight ActiveConn InActConn</span><br>TCP  192.168.246.110:80 rr persistent 20<br><span class="hljs-meta prompt_">  -&gt; </span><span class="language-bash">192.168.246.162:80           Route   1      0          0</span>         <br><span class="hljs-meta prompt_">  -&gt; </span><span class="language-bash">192.168.246.163:80           Route   0      0          0</span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">配置rs后端机器配置</span><br>4. 所有RS配置(nginx1,nginx2)<br>配置好网站服务器，测试所有RS<br>[root@test-nginx1 ~]# ip addr add dev lo 192.168.246.11/32<br>[root@test-nginx1 ~]# sysctl -p<br>[root@test-nginx1 ~]# systemctl start nginx<br></code></pre></td></tr></table></figure>
+
+<h1 id="测试-4"><a href="#测试-4" class="headerlink" title="测试"></a>测试</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini">输入网址192.168.116.11	//会出来192.168.116.（131/132）的页面<br></code></pre></td></tr></table></figure>
+
+<h1 id="6、配置（lvs–keepalived-–192-168-116-156（BACKUP）"><a href="#6、配置（lvs–keepalived-–192-168-116-156（BACKUP）" class="headerlink" title="6、配置（lvs–keepalived)–192.168.116.156（BACKUP）"></a>6、配置（lvs–keepalived)–192.168.116.156（BACKUP）</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><code class="hljs shell">1. 主/备调度器安装软件<br>[root@lvs-keepalived-master ~]# yum -y install ipvsadm keepalived <br><br>2、配置keepalived,conf配置文件<br>[root@lvs-keepalived-slave ~]# vim /etc/keepalived/keepalived.conf<br>! Configuration File for keepalived<br><br>global_defs &#123;<br>   router_id lvs-keepalived-slave		（修改的）<br>&#125;<br><br>vrrp_instance VI_1 &#123;<br>    state BACKUP		（修改的）<br>    interface ens33		（修改的）<br>    virtual_router_id 80<br>    priority 50			（修改的）<br>    advert_int 1<br>    authentication &#123;<br>        auth_type PASS<br>        auth_pass 1111<br>    &#125;<br>    virtual_ipaddress &#123;<br>        192.168.116.11/32		（修改的）<br>    &#125;<br>&#125;<br>virtual_server 192.168.246.11 80 &#123;	（修改的）<br>	delay_loop 6<br>	lb_algo rr		（修改的）<br>	lb_kind DR		（修改的）<br>	protocol TCP<br>	real_server 192.168.116.131 80 &#123;		（修改的）<br>		weight 1<br>		inhibit_on_failure<br>		TCP_CHECK &#123;<br>			connect_port 80<br>			connect_timeout 3<br>			&#125;<br>		&#125;<br>	real_server 192.168.116.132 80 &#123;		（修改的）<br>		weight 1<br>		inhibit_on_failure<br>		TCP_CHECK &#123;<br>			connect_timeout 3<br>			connect_port 80<br>			&#125;<br>&#125;<br><br>3. 启动KeepAlived（主备均启动）<br>[root@lvs-keepalived-master ~]# systemctl start keepalived<br>[root@lvs-keepalived-master ~]# systemctl enable keepalived<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">查看ip</span><br>[root@lvs-keepalived-master ~]# ipvsadm -Ln<br>IP Virtual Server version 1.2.1 (size=4096)<br>Prot LocalAddress:Port Scheduler Flags<br><span class="hljs-meta prompt_">  -&gt; </span><span class="language-bash">RemoteAddress:Port           Forward Weight ActiveConn InActConn</span><br>TCP  192.168.246.110:80 rr persistent 20<br><span class="hljs-meta prompt_">  -&gt; </span><span class="language-bash">192.168.246.162:80           Route   1      0          0</span>         <br><span class="hljs-meta prompt_">  -&gt; </span><span class="language-bash">192.168.246.163:80           Route   0      0          0</span><br><span class="hljs-meta prompt_">  </span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">配置rs后端机器配置</span><br>4. 所有RS配置(nginx1,nginx2)<br>配置好网站服务器，测试所有RS<br>[root@test-nginx1 ~]# ip addr add dev lo 192.168.246.11/32<br>[root@test-nginx1 ~]# sysctl -p<br>[root@test-nginx1 ~]# systemctl start nginx<br></code></pre></td></tr></table></figure>
+
+<h1 id="测试-5"><a href="#测试-5" class="headerlink" title="测试"></a>测试</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini">输入网址192.168.116.11	//会出来192.168.116.（131/132）的页面<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>负载高可用实验</div>
+      <div>http://example.com/2025/11/06/负载高可用实验/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Mr.xu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/11/06/RabbiMQ%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" title="RabbiMQ集群部署">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">RabbiMQ集群部署</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/11/06/deban12%E5%88%9D%E5%A7%8B%E5%8C%96%E9%97%AE%E9%A2%98%E3%80%81%E7%94%A8%E6%B3%95/" title="deban12初始化问题、用法">
+                        <span class="hidden-mobile">deban12初始化问题、用法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

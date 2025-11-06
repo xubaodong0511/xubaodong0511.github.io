@@ -1,0 +1,645 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Mr.xu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一、下载配置server，agent端下载zabbix-server，server客户端1234567891011121314151617# 备注：zabbix源不能和epel源同时存在，要给epel源注释了# 更新下载zabbix源[root@zabbix-server ~]# rpm -Uvh https:&#x2F;&#x2F;repo.zabbix.com&#x2F;zabbix&#x2F;5.0&#x2F;rhel&#x2F;7&#x2F;x86_64&#x2F;z">
+<meta property="og:type" content="article">
+<meta property="og:title" content="zabbix-proxy配置及邮件配置">
+<meta property="og:url" content="http://example.com/2025/11/06/zabbix-proxy%E9%85%8D%E7%BD%AE%E5%8F%8A%E9%82%AE%E4%BB%B6%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一、下载配置server，agent端下载zabbix-server，server客户端1234567891011121314151617# 备注：zabbix源不能和epel源同时存在，要给epel源注释了# 更新下载zabbix源[root@zabbix-server ~]# rpm -Uvh https:&#x2F;&#x2F;repo.zabbix.com&#x2F;zabbix&#x2F;5.0&#x2F;rhel&#x2F;7&#x2F;x86_64&#x2F;z">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-11-06T12:59:39.000Z">
+<meta property="article:modified_time" content="2025-11-06T12:59:56.994Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>zabbix-proxy配置及邮件配置 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="zabbix-proxy配置及邮件配置"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-06 20:59" pubdate>
+          2025年11月6日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          28 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">zabbix-proxy配置及邮件配置</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="一、下载配置server，agent端"><a href="#一、下载配置server，agent端" class="headerlink" title="一、下载配置server，agent端"></a>一、下载配置server，agent端</h1><h1 id="下载zabbix-server，server客户端"><a href="#下载zabbix-server，server客户端" class="headerlink" title="下载zabbix-server，server客户端"></a>下载zabbix-server，server客户端</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">备注：zabbix源不能和epel源同时存在，要给epel源注释了</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">更新下载zabbix源</span><br>[root@zabbix-server ~]# rpm -Uvh https://repo.zabbix.com/zabbix/5.0/rhel/7/x86_64/zabbix-release-5.0-1.el7.noarch.rpm<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">更新yum仓库</span><br>[root@zabbix-server ~]# yum clean all<br>[root@zabbix-server ~]# yum repolist<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">安装</span><br>安装 zabbix rpm 源,鉴于国内网络情况，使用阿里云 zabbix 源<br><span class="hljs-meta prompt_"># </span><span class="language-bash">更换源</span><br>[root@zabbix-server ~]# sed -i &#x27;s#http://repo.zabbix.com#https://mirrors.aliyun.com/zabbix#&#x27; /etc/yum.repos.d/zabbix.repo<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">下载软件包--用的时5.0版本的</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">如果有冲突用  yum -y remove `rpm -qa zabbix6.0*`</span> <br>[root@zabbix-server ~]# yum install zabbix-server-mysql zabbix-web-mysql zabbix-agent -y<br>[root@zabbix-server ~]# yum install -y zabbix-get.x86_64  #安装zabbix命令工具<br></code></pre></td></tr></table></figure>
+
+<h1 id="安装数据库"><a href="#安装数据库" class="headerlink" title="安装数据库"></a>安装数据库</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">1、安装数据库</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">安装 mariadb.repo</span><br>[root@zabbix-server ~]# yum install -y mariadb mariadb-server<br><span class="hljs-meta prompt_"># </span><span class="language-bash">2、启动数据库</span><br>[root@zabbix-server ~]# systemctl restart mariadb<br>[root@zabbix-server ~]# systemctl enable mariadb<br>[root@zabbix-server ~]# mysqladmin -u root password &#x27;zabbix&#x27;    #设置root密码<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">3、创建数据库并授权账号</span><br>[root@zabbix-server ~]# mysql -uroot -p&#x27;zabbix&#x27;<br>MariaDB [(none)]&gt; create database zabbix character set utf8 collate utf8_bin;  # 创建zabbix数据库<br>MriaDB [(none)]&gt; grant all privileges on zabbix.* to &#x27;zabbix&#x27;@&#x27;localhost&#x27; identified by &#x27;zabbix&#x27;;										# 注意授权网段<br>MariaDB [(none)]&gt; flush privileges;           # 刷新授权<br>MariaDB [(none)]&gt; \q   #退出<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">4、导入数据</span><br>[root@zabbix-server ~]# zcat /usr/share/doc/zabbix-server-mysql*/create.sql.gz | mysql -uzabbix -p zabbix<br>Enter password:                   #输入密码<br></code></pre></td></tr></table></figure>
+
+<h1 id="配置-server-端"><a href="#配置-server-端" class="headerlink" title="配置 server 端"></a>配置 server 端</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@zabbix-server ~]# cd /etc/zabbix/<br>[root@zabbix-server zabbix]# ls<br>web  zabbix_agentd.conf  zabbix_agentd.d  zabbix_server.conf<br><span class="hljs-meta prompt_">#</span><span class="language-bash">为了方便我们以后恢复，我们把配置文件备份一下</span><br>[root@zabbix-server zabbix]# cp zabbix_server.conf zabbix_server.conf.bak<br>[root@zabbix-server zabbix]# vim zabbix_server.conf<br> DBHost=localhost            #数据库对外的主机<br> DBName=zabbix               #数据库名称<br> DBUser=zabbix               #数据库用户<br> DBPassword=zabbix           #数据库密码<br><span class="hljs-meta prompt_"> </span><br><span class="hljs-meta prompt_"> # </span><span class="language-bash">启动zabbix-server</span><br> [root@zabbix-server zabbix]# systemctl start zabbix-server<br>[root@zabbix-server zabbix]# systemctl enable zabbix-server<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">验证10051端口有没有起来</span><br>[root@zabbix-server zabbix]# netstat -lntp | grep 10051<br>tcp        0      0 0.0.0.0:10051           0.0.0.0:*               LISTEN      1574/zabbix_server  <br>tcp6       0      0 :::10051                :::*                    LISTEN      1574/zabbix_server<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">配置 web GUI</span><br>1.启用zabbix前端源，修改vim /etc/yum.repos.d/zabbix.repo，将[zabbix-frontend]下的 enabled 改为 1<br>[root@zabbix-server zabbix]# vim /etc/yum.repos.d/zabbix.repo<br>[zabbix-frontend]     #修改第二个【frontend】<br>...<br>enabled=1    #改为1<br>gpgcheck=0   #改为0<br>gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-ZABBIX-A14FE591<br>...<br>gpg--》都改成0<br><br>2.安装 Software Collections，便于后续安装高版本的 php，默认 yum 安装的 php 版本为 5.4 过低<br>[root@zabbix-server zabbix]# yum install centos-release-scl -y<br>3.安装 zabbix 前端和相关环境<br>[root@zabbix-server zabbix]# yum install zabbix-web-mysql-scl zabbix-apache-conf-scl -y<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">为Zabbix前端配置PHP</span><br>[root@zabbix-server ~]# vim /etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf   #设置时区<br><span class="hljs-meta prompt_">#</span><span class="language-bash">里面基本不用动。只需要添加一行时区即可</span><br>php_value[date.timezone] = Asia/Shanghai       ---添加如下<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">启动`httpd`服务</span><br>[root@zabbix-server ~]# systemctl restart zabbix-server zabbix-agent httpd rh-php72-php-fpm<br>[root@zabbix-server ~]# systemctl enable zabbix-server zabbix-agent httpd rh-php72-php-fpm<br></code></pre></td></tr></table></figure>
+
+<h1 id="验证：打开游览器访问"><a href="#验证：打开游览器访问" class="headerlink" title="验证：打开游览器访问"></a>验证：打开游览器访问</h1><p><code>192.168.246.228/zabbix</code>，第一次访问时需要进行一些初始化的设置</p>
+<h1 id="初始账户及密码"><a href="#初始账户及密码" class="headerlink" title="初始账户及密码"></a>初始账户及密码</h1><p><code>user=Admin</code><br><code>password=zabbix</code></p>
+<h1 id="配置agent端"><a href="#配置agent端" class="headerlink" title="配置agent端"></a>配置agent端</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">agent端可以是多台</span><br>[root@zabbix-node1 ~]# rpm -Uvh https://repo.zabbix.com/zabbix/5.0/rhel/7/x86_64/zabbix-release-5.0-1.el7.noarch.rpm<br>[root@zabbix-node1 ~]# yum install zabbix-agent zabbix-sender -y<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">备份配置文件</span><br>[root@zabbix-node1 ~]# cd /etc/zabbix/<br>[root@zabbix-node1 zabbix]# ls<br>zabbix_agentd.conf  zabbix_agentd.d<br>[root@zabbix-node1 zabbix]# cp zabbix_agentd.conf&#123;,.bak&#125;<br>[root@zabbix-node1 zabbix]# ls<br>zabbix_agentd.conf  zabbix_agentd.conf.bak  zabbix_agentd.d<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">修改配置文件</span><br>[root@zabbix-node1 zabbix]# vim zabbix_agentd.conf   ----修改如下<br>Server=192.168.246.228 zabbix服务器的地址 <br>ServerActive=192.168.246.228 主动模式 zabbix-server-ip <br>Hostname=zabbix-node1 <br>UnsafeUserParameters=1 是否限制用户自定义 keys 使用特殊字符 1是可以启用特殊字符 0是不可以启用特殊字符，是否允许别人执行远程操作命令，默认是禁用的，打开的话会有安全风险.<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">启动agent服务</span><br>[root@zabbix-node1 zabbix]# systemctl start zabbix-agent<br>[root@zabbix-node1 zabbix]# systemctl enable zabbix-agent<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">验证10050端口有没有起来</span><br>[root@zabbix-node1 zabbix]# netstat -lntp | grep 10050<br>tcp        0      0 0.0.0.0:10050           0.0.0.0:*               LISTEN      9000/zabbix_agentd  <br>tcp6       0      0 :::10050                :::*                    LISTEN      9000/zabbix_agentd<br></code></pre></td></tr></table></figure>
+
+<p><code>配置完成，此时可以在网址上做配置设置了</code></p>
+<h1 id="修改语言–中文版"><a href="#修改语言–中文版" class="headerlink" title="修改语言–中文版"></a>修改语言–中文版</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">点开Administration--&gt;Users--&gt;Admin--&gt;Language(选择chinese)<br><span class="hljs-meta prompt_"># </span><span class="language-bash">现在界面是中文版的了</span><br></code></pre></td></tr></table></figure>
+<h1 id="修改监控项字体"><a href="#修改监控项字体" class="headerlink" title="修改监控项字体"></a>修改监控项字体</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@zabbix-server ~]# cd /usr/share/zabbix/assets/fonts/<br>[root@zabbix-server fonts]# ls<br>graphfont.ttf<br>[root@zabbix-server fonts]# mv graphfont.ttf graphfont.ttf.bak<br>将本机上的simkai.ttf下载好，传到linunx<br>[root@zabbix-server fonts]# ls<br>graphfont.ttf.bak  simkai.ttf<br>[root@zabbix-server fonts]# mv simkai.ttf graphfont.ttf<br>[root@zabbix-server fonts]# ls<br>graphfont.ttf  graphfont.ttf.bak<br>这个时候监控项里面的字体就已经改好了<br></code></pre></td></tr></table></figure>
+<h1 id="界面创建流程"><a href="#界面创建流程" class="headerlink" title="界面创建流程"></a>界面创建流程</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">监控方面，先创建一个主机（host），在创建一个监控项(item)用于采集数据。告警方面，在监控项里创建触发器（trigger），通过触发器（trigger）来触发告警动作（action）<br></code></pre></td></tr></table></figure>
+
+<h1 id="二、自定义key"><a href="#二、自定义key" class="headerlink" title="二、自定义key"></a>二、自定义key</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">修改配置文件，把查找参数的命令设为用户参数</span><br>[root@zabbix-node1 ~]# cd /etc/zabbix/zabbix_agentd.d/<br>[root@zabbix-node1 zabbix_agentd.d]# vim memory_usage.conf<br>UserParameter=memory.used,free | awk &#x27;/^Mem/&#123;print $3&#125;&#x27;<br>UserParameter=定义的key，查看的命令语句<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">重启agent服务</span><br>[root@zabbix-node1 zabbix_agentd.d]# systemctl restart zabbix-agent.service<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">在zabbix-server 端，查询验证</span><br>[root@zabbix-server fonts]# zabbix_get -s 192.168.246.226 -p 10050 -k &quot;memory.used&quot;<br>如果可以验证到结果，就可以到web界面去设置参数，启动监控了<br></code></pre></td></tr></table></figure>
+<p><code>web界面先在设置里创建主机组--模板--创建主机----配置应用集--监控项--设置自定义监控项</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">也可以指定参数--传参</span><br>[root@zabbix-node1 ~]# cd /etc/zabbix/zabbix_agentd.d/<br>[root@zabbix-node1 zabbix_agentd.d]# vim memory_usage.conf<br>UserParameter=memory.stats[*],cat /proc/meminfo | awk &#x27;/^$1/&#123;print $$2&#125;&#x27;     --添加到文件中注意去掉反斜杠<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">重启agent服务</span><br>[root@zabbix-node1 zabbix_agentd.d]# systemctl restart zabbix-agent.service<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">在zabbix-server 端，查询使用这个用户参数的key</span><br>传参:<br>[root@zabbix-server fonts]# zabbix_get -s 192.168.246.226 -p 10050 -k &quot;memory.stats[MemTotal]&quot;<br>999696<br>[root@zabbix-server fonts]# zabbix_get -s 192.168.246.226 -p 10050 -k &quot;memory.stats[Cache]&quot;<br>243832<br>[root@zabbix-server fonts]# zabbix_get -s 192.168.246.226 -p 10050 -k &quot;memory.stats[Buffer]&quot;<br>2108<br></code></pre></td></tr></table></figure>
+
+<h1 id="三、网络发现-自动发现"><a href="#三、网络发现-自动发现" class="headerlink" title="三、网络发现(自动发现)"></a>三、网络发现(自动发现)</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">安装agent 段的包</span><br>[root@zabbix-node2 ~]# yum -y install zabbix-agent zabbix-sender<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">设置agent 配置，可以把之前设置好的node1的配置传过来</span><br>[root@zabbix-node2 ~]# vim /etc/zabbix/zabbix_agentd.conf<br>Hostname=zabbix-node2 #只需修改hostname<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">visudo赋予权限</span><br>[root@zabbix-node2 ~]# visudo       #修改sudo的配置,添加如下信息<br><span class="hljs-meta prompt_">#</span><span class="language-bash">Defaults !visiblepw</span><br><br>93 zabbix ALL=(ALL) NOPASSWD: ALL<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">启动服务</span><br>[root@zabbix-node2 ~]# systemctl start zabbix-agent<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">在server端验证</span><br>[root@zabbix-server ~]# zabbix_get -s 192.168.246.227 -p 10050 -k &quot;system.hostname&quot;<br>zabbix-agent-none2<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">到web网址界面操作</span><br>配置--自动发现--自动发现规则--。。。<br></code></pre></td></tr></table></figure>
+
+<h1 id="四、zabbix-proxy分布式监控"><a href="#四、zabbix-proxy分布式监控" class="headerlink" title="四、zabbix-proxy分布式监控"></a>四、zabbix-proxy分布式监控</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">需要对时，保证两台机器的时间一致</span><br>- ntpdate 192.168.198.156 制作时间服务器<br>[root@zabbix-server ~]# yum install -y ntp<br>[root@zabbix-server ~]# vim /etc/ntp.conf  #有4行server的位置，把那4行server行注释掉，填写以下两行<br>server 127.127.1.0 # local clock<br>fudge  127.127.1.0 stratum 10<br>[root@zabbix-server ~]#  systemctl start ntpd<br>[root@zabbix-server ~]#  systemctl enable ntpd<br>同步时间<br>[root@zabbix-proxy ~]# yum install -y ntpdate<br>[root@zabbix-proxy ~]# ntpdate 192.168.198.156<br><br>[root@zabbix-node2 ~]# yum install -y ntpdate<br>[root@zabbix-node2 ~]# ntpdate 192.168.198.156<br><br>- 关闭防火墙，selinux<br>- 设置主机名 hostnamectl set-hostname zabbix-proxy<br>[root@localhost ~]# hostnamectl set-hostname zabbix-proxy<br><br>- vim /etc/hosts 每个机器都设置hosts，以解析主机名；<br>监控端<br>[root@zabbix-server ~]# cat /etc/hosts<br>192.168.198.156 zabbix-server<br>192.168.198.158 zabbix-node2<br>192.168.198.159 zabbix-proxy<br><br>代理端<br>[root@zabbix-proxy ~]# cat /etc/hosts<br>192.168.198.156 zabbix-server<br>192.168.198.158 zabbix-node2<br>192.168.198.159 zabbix-proxy<br><br>被监控端<br>[root@zabbix-node2 ~]# cat /etc/hosts<br>192.168.198.156 zabbix-server<br>192.168.198.158 zabbix-node2<br>192.168.198.159 zabbix-proxy<br><br>| 机器名称      | IP配置          | 服务角色  |<br>| ------------- | --------------- | --------- |<br>| zabbix-server | 192.168.198.156 | 监控      |<br>| zabbix-node1  | 192.168.198.157 | 被监控端  |<br>| zabbix-node2  | 192.168.198.158 | 被监控端  |<br>| zabbix-proxy  | 192.168.198.159 | 代理proxy |<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">在 zabbix-proxy 上配置 mysql</span><br>[root@zabbix-proxy ~]# yum install -y mariadb mariadb-server<br>[root@zabbix-proxy ~]# systemctl start mariadb<br>[root@zabbix-proxy ~]# mysqladmin -uroot password &#x27;zabbix&#x27;<br>[root@zabbix-proxy ~]# mysql -uroot -p&#x27;zabbix&#x27;<br>MariaDB [(none)]&gt; create database proxydb character set &#x27;utf8&#x27;;<br>MariaDB [(none)]&gt; grant all on proxydb.* to &#x27;proxy&#x27;@&#x27;localhost&#x27; identified by &#x27;zabbix&#x27;;<br>MariaDB [(none)]&gt; flush privileges;<br>MariaDB [(none)]&gt; \q<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">在 zabbix-proxy上下载zabbix 相关的包，主要是代理proxy的包</span><br>[root@zabbix-server ~]# scp /etc/yum.repos.d/zabbix.repo 192.168.198.159:/etc/yum.repos.d/<br>编辑zabbix.repo源将里面的gpgcheck关闭<br>[root@zabbix-proxy ~]# yum -y install zabbix-proxy-mysql zabbix-get zabbix-agent zabbix-sender<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">将zabbix-proxy-mysql包里面的数据导入数据库中</span><br>[root@zabbix-proxy ~]# cp /usr/share/doc/zabbix-proxy-mysql-5.0.3（版本号）/schema.sql.gz ./<br>[root@zabbix-proxy ~]# ls<br>anaconda-ks.cfg  schema.sql.gz<br>[root@zabbix-proxy ~]# gzip -d schema.sql.gz <br>[root@zabbix-proxy ~]# ls<br>anaconda-ks.cfg  schema.sql<br>[root@zabbix-proxy ~]# mysql -uroot -p proxydb &lt; schema.sql <br>Enter password:<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">配置proxy端</span><br>[root@zabbix-proxy ~]# vim /etc/zabbix/zabbix_proxy.conf<br><span class="hljs-meta prompt_"># </span><span class="language-bash">proxyMode=0  <span class="hljs-comment">#默认是主动模式（0是主动模式，1是被动模式）</span></span><br>Server=192.168.198.156        # server端 的IP<br>ServerPort=10051             # server端 的端口<br><br>Hostname=zabbix-proxy        # 主机名<br>ListenPort=10051             # proxy自己的监听端口<br>EnableRemoteCommands=1       # 允许远程命令<br>LogRemoteCommands=1          # 记录远程命令的日志<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">数据的配置</span><br>DBHost=localhost<br>DBName=proxydb<br>DBUser=proxy<br>DBPassword=zabbix<br><br>ConfigFrequency=30      # 多长时间，去服务端拖一次有自己监控的操作配置；为了实验更快的生效，这里设置30秒，默认3600s<br>DataSenderFrequency=1   # 每一秒向server 端发一次数据，发送频度<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">启动proxy服务</span><br>[root@zabbix-proxy ~]# systemctl start zabbix-proxy<br><br>[root@zabbix-proxy ~]# netstat -lntp | grep 10051<br>tcp        0      0 0.0.0.0:10051           0.0.0.0:*               LISTEN      15798/zabbix_proxy  <br>tcp6       0      0 :::10051                :::*                    LISTEN      15798/zabbix_proxy<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">配置agent端允许proxy代理监控</span><br>[root@zabbix-agent ~]#  vim /etc/zabbix/zabbix_agentd.conf---添加proxy的ip地址<br>Server=192.168.198.156,192.168.198.159<br>ServerActive=192.168.198.156,192.168.198.159<br>Hostname=zabbix-node2<br>[root@zabbix-agent ~]#  systemctl restart zabbix-agent #启动服务<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">在web网址上配置</span><br>管理--agent代理程序--agent代理程序（要与配置文件中应以的一样）--添加--配置--主机--选好主机名称--已启用那里打开zabbix proxy<br></code></pre></td></tr></table></figure>
+
+<h1 id="五、配置发送邮件"><a href="#五、配置发送邮件" class="headerlink" title="五、配置发送邮件"></a>五、配置发送邮件</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash"><span class="hljs-comment">#server服务器端</span></span><br>安装MUA软件：mailx<br>[root@zabbix-server ~]#  yum install mailx -y<br>[root@zabbix-server ~]# mailx -V <br>12.5 7/5/10<br>注：使用新的方式--利用公网邮件服务器发送报警，需要关闭postfix服务<br>[root@zabbix-server ~]# systemctl stop postfix<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">配置公网邮箱信息：</span><br>[root@zabbix-server ~]# vim /etc/mail.rc  ---在最后添加如下：<br>set from=12345678@163.com（邮箱地址） <br> set smtp=smtp.163.com（smtp服务器） <br> set smtp-auth-user=12345678@163.com(用户名) <br> set smtp-auth-password=qf123456（这里是邮箱的授权密码） <br> set smtp-auth=login<br><span class="hljs-meta prompt_"> </span><br><span class="hljs-meta prompt_"> # </span><span class="language-bash">阿里云服务器--需要配置证书</span><br><span class="hljs-meta prompt_"> # </span><span class="language-bash">一、请求数字证书</span><br>mkdir -p /root/.certs/ ####创建目录，用来存放证书<br>echo -n | openssl s_client -connect smtp.163.com:465 | sed -ne &#x27;/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p&#x27; &gt; ~/.certs/163.crt ####向163请求证书<br>certutil -A -n &quot;GeoTrust SSL CA&quot; -t &quot;C,,&quot; -d ~/.certs -i ~/.certs/163.crt ####添加一个SSL证书到证书数据库中<br>certutil -A -n &quot;GeoTrust Global CA&quot; -t &quot;C,,&quot; -d ~/.certs -i ~/.certs/163.crt ####添加一个Global 证书到证书数据库中<br>certutil -L -d /root/.certs ####列出目录下证书<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">二、配置发件人</span><br>[root@zabbix-server ~]# vim /etc/mail.rc  ---在最后添加如下：<br>set bsdcompat<br>set from=xxxxxx@163.com<br>set smtp=smtps://smtp.163.com:465<br>set smtp-auth-user=xxxxxx@163.com<br>set smtp-auth-password=xxxxxxx #此密码为第三方登录密码<br>set smtp-auth=login<br>set ssl-verify=ignore<br>set nss-config-dir=/root/.certs<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">三、测试</span><br>echo “test” | mail -s “zabbix” xxxxxxx@qq.com<br>登陆收件人邮箱查看<br>看似成功但是linux中报错：证书不被信任<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">四、解决最后一个问题-----证书不被信任</span><br>cd /root/.certs/<br>certutil -A -n &quot;GeoTrust SSL CA - G3&quot; -t &quot;Pu,Pu,Pu&quot; -d ./ -i 163.crt<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">成功标志：</span><br>Notice: Trust flag u is set automatically if the private key is present.<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash"><span class="hljs-comment"># 发送邮箱方式</span></span><br>方式1：echo &quot;正文内容&quot; | mailx -s &quot;邮件标题&quot; 收件箱Email<br>方式2：mailx -s &quot;邮件标题&quot; 收件箱Email，回车按CTRL+D发送<br>参数：<br>-v ：显示发送的详细信息<br><br>手动发送邮件测试：<br>[root@zabbix-server ~]# mailx -v -s &#x27;hello&#x27; &#x27;zhangsan@163.com&#x27;<br>手写邮件内容 （回车，然后ctrl+D正常结束)<br>[root@zabbix-server ~]# mailx -v -s &#x27;hello&#x27; &#x27;zhangsan@163.com&#x27;<br>nihao<br>EOT<br>Resolving host smtp.163.com . . . done.<br>Connecting to 123.126.97.2:smtp . . . connected.<br>220 163.com Anti-spam GT for Coremail System (163com[20141201])<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; EHLO zabbix-server</span><br>250-mail<br>250-PIPELINING<br>250-AUTH LOGIN PLAIN <br>250-AUTH=LOGIN PLAIN<br>250-coremail 1Uxr2xKj7kG0xkI17xGrU7I0s8FY2U3Uj8Cz28x1UUUUU7Ic2I0Y2UFeF38eUCa0xDrUUUUj<br>250-STARTTLS<br>250 8BITMIME<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; AUTH LOGIN</span><br>334 dXNlcm5hbWU6<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; bHd4MTgzNjYwMTkzNTZAMTYzLmNvbQ==</span><br>334 UGFzc3dvcmQ6<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; bHd4MTgzNjYwMTkzNTY=</span><br>235 Authentication successful<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; MAIL FROM:&lt;lwx18366019356@163.com&gt;</span><br>250 Mail OK<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; RCPT TO:&lt;lwx18366019356@163.com&gt;</span><br>250 Mail OK<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; DATA</span><br>354 End data with &lt;CR&gt;&lt;LF&gt;.&lt;CR&gt;&lt;LF&gt;<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; .</span><br>250 Mail OK queued as smtp2,GtxpCgDXkqTEFERdskSAAA--.825S2 1564742867<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">&gt;&gt; QUIT</span><br>221 Bye<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">此时终端配置完成，在web网址上操作</span><br>配置 zabbix 的邮件报警功能需要以下三个角色的参与<br>注：脚本名称任意，存放于/usr/lib/zabbix/alertscripts ----路径可以改<br><br>名称：sendmail                   //名称任意<br>类型：脚本<br>脚本名称：sendmail.sh      <br>脚本参数：                          //一定要写，否则可能发送不成功<br>    &#123;ALERT.SENDTO&#125;              //照填，收件人变量<br>    &#123;ALERT.SUBJECT&#125;             //照填，邮件主题变量，变量值来源于‘动作’中的‘默认接收人’<br>    &#123;ALERT.MESSAGE&#125;           //照填，邮件正文变量，变量值来源于‘动作’中的‘默认信息’<br><br>配置完成后,不要忘记点击存档,保存你的配置。       <br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">步骤</span><br>管理--报警媒介类型--名称（邮件报警）--类型（脚本）--脚本名字（要和终端上脚本名称的一致）--脚本参数（3个，上面模板）--添加<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">修改zabbix服务端配置文件＆编写脚本：指定脚本的存储路径:</span><br>[root@zabbix-server ~]# vim /etc/zabbix/zabbix_server.conf<br>AlertScriptsPath=/usr/lib/zabbix/alertscripts  #打开注释，核对路径，也可以修改路径<br><br>`编写邮件脚本:`<br>[root@zabbix-server ~]# cd /usr/lib/zabbix/alertscripts/<br>[root@zabbix-server alertscripts]# vim sendmail.sh   <br><span class="hljs-meta prompt_">#</span><span class="language-bash">!/bin/sh</span> <br><span class="hljs-meta prompt_">#</span><span class="language-bash">export.UTF-8</span><br>echo &quot;$3&quot; | sed s/&#x27;\r&#x27;//g | mailx -s &quot;$2&quot; $1<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">$</span><span class="language-bash">1:接受者的邮箱地址：sendto</span><br><span class="hljs-meta prompt_">$</span><span class="language-bash">2:邮件的主题：subject</span><br><span class="hljs-meta prompt_">$</span><span class="language-bash">3:邮件内容：message</span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">修改权限 及更用户和组：</span><br>[root@zabbix-server alertscripts]# chmod u+x sendmail.sh &amp;&amp; chown zabbix.zabbix sendmail.sh<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">返回web界面操作</span><br>管理--用户--Admin--报警媒介--添加类型（邮件报警）--填写收件人--点击更新------触发器（填写名称，严重性，表达式）--点添加------动作--点触发动作--填写名称--触发条件（触发器）--点操作--选择时间--标题及内容（填写西面的模板）<br><br>默认信息：邮件的主题<br><br>Problem:&#123;TRIGGER.NAME&#125;<br><br>故障恢复: &#123;TRIGGER.NAME&#125;<br><br>主机: &#123;HOST.NAME1&#125;<br>时间: &#123;EVENT.DATE&#125; &#123;EVENT.TIME&#125;<br>级别: &#123;TRIGGER.SEVERITY&#125;<br>触发: &#123;TRIGGER.NAME&#125;<br>详情: &#123;ITEM.NAME1&#125;:&#123;ITEM.KEY1&#125;:&#123;ITEM.VALUE1&#125;<br>状态: &#123;TRIGGER.STATUS&#125;<br>项目：&#123;TRIGGER.KEY1&#125; <br>事件ID：&#123;EVENT.ID&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="六、配置钉钉报警"><a href="#六、配置钉钉报警" class="headerlink" title="六、配置钉钉报警"></a>六、配置钉钉报警</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">钉钉需要创建公司名称，建团队群</span><br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>zabbix-proxy配置及邮件配置</div>
+      <div>http://example.com/2025/11/06/zabbix-proxy配置及邮件配置/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Mr.xu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/11/06/gitee-%E4%BB%93%E5%BA%93%E5%88%9B%E5%BB%BA%E5%8F%8A%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6/" title="gitee 仓库创建及上传文件">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">gitee 仓库创建及上传文件</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/11/06/ELK-kafka-filebeat-%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" title="ELK+kafka+filebeat 集群部署">
+                        <span class="hidden-mobile">ELK+kafka+filebeat 集群部署</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

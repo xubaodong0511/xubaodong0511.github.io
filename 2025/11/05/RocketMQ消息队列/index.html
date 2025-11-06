@@ -1,0 +1,878 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Mr.xu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="RocketMQ–集群作用Apache RocketMQ 是一个分布式消息中间件，主要用于消息的发布与订阅（Pub&#x2F;Sub）和消息队列（Message Queue）模式。它在高性能、高可靠性和高可扩展性方面有着显著的优势。以下是 RocketMQ 的主要作用和应用场景：  消息发布与订阅（Pub&#x2F;Sub）： RocketMQ 支持发布&#x2F;订阅模式，允许消息生产者将消息发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RocketMQ消息队列">
+<meta property="og:url" content="http://example.com/2025/11/05/RocketMQ%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="RocketMQ–集群作用Apache RocketMQ 是一个分布式消息中间件，主要用于消息的发布与订阅（Pub&#x2F;Sub）和消息队列（Message Queue）模式。它在高性能、高可靠性和高可扩展性方面有着显著的优势。以下是 RocketMQ 的主要作用和应用场景：  消息发布与订阅（Pub&#x2F;Sub）： RocketMQ 支持发布&#x2F;订阅模式，允许消息生产者将消息发">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-11-05T14:13:50.000Z">
+<meta property="article:modified_time" content="2025-11-05T14:14:19.192Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>RocketMQ消息队列 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="RocketMQ消息队列"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-05 22:13" pubdate>
+          2025年11月5日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          14 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">RocketMQ消息队列</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="RocketMQ–集群"><a href="#RocketMQ–集群" class="headerlink" title="RocketMQ–集群"></a>RocketMQ–集群</h3><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>Apache RocketMQ 是一个分布式消息中间件，主要用于消息的发布与订阅（Pub&#x2F;Sub）和消息队列（Message Queue）模式。它在高性能、高可靠性和高可扩展性方面有着显著的优势。以下是 RocketMQ 的主要作用和应用场景：</p>
+<ol>
+<li><strong>消息发布与订阅（Pub&#x2F;Sub）</strong>：<ul>
+<li>RocketMQ 支持发布&#x2F;订阅模式，允许消息生产者将消息发布到一个主题（Topic），然后多个消费者可以订阅这个主题以接收消息。这种模式适用于广播消息和事件通知。</li>
+</ul>
+</li>
+<li><strong>消息队列（Message Queue）</strong>：<ul>
+<li>在消息队列模式下，消息生产者将消息发送到队列，消费者从队列中读取并处理消息。消息队列模式适用于任务分发和负载均衡。</li>
+</ul>
+</li>
+<li><strong>异步通信</strong>：<ul>
+<li>RocketMQ 支持异步消息传递，允许系统组件之间进行松耦合的通信，从而提高系统的响应速度和处理能力。</li>
+</ul>
+</li>
+<li><strong>削峰填谷</strong>：<ul>
+<li>在高并发场景下，RocketMQ 可以通过消息队列的缓冲作用来平滑流量，防止系统在短时间内被大量请求压垮。</li>
+</ul>
+</li>
+<li><strong>事件驱动架构</strong>：<ul>
+<li>RocketMQ 支持事件驱动架构，系统可以通过事件通知机制来触发后续操作，实现松耦合的系统设计。</li>
+</ul>
+</li>
+<li><strong>数据同步</strong>：<ul>
+<li>RocketMQ 可以用于分布式系统中的数据同步，确保不同系统或组件之间的数据一致性。</li>
+</ul>
+</li>
+</ol>
+<h4 id="资源需求"><a href="#资源需求" class="headerlink" title="资源需求"></a>资源需求</h4><ul>
+<li><strong>CPU</strong>: 4 核 </li>
+<li><strong>内存</strong>:  8 GB </li>
+<li><strong>存储</strong>: 100G</li>
+<li><strong>节点</strong>：2</li>
+</ul>
+<h4 id="网络端口"><a href="#网络端口" class="headerlink" title="网络端口"></a>网络端口</h4><ol>
+<li><strong>Nameserver 端口</strong>：<ul>
+<li>默认端口：9876</li>
+<li>用于 Nameserver 服务，负责管理和发现 Broker。</li>
+</ul>
+</li>
+<li><strong>Broker 端口</strong>：<ul>
+<li>默认端口：10911</li>
+<li>用于 Broker 服务，负责消息存储和转发。</li>
+</ul>
+</li>
+<li><strong>Broker HA 端口</strong>：<ul>
+<li>默认端口：10912</li>
+<li>用于 Broker 高可用（HA）复制。</li>
+</ul>
+</li>
+<li><strong>Console 端口</strong>（可选）：<ul>
+<li>默认端口：8080</li>
+<li>用于 RocketMQ 控制台管理界面。</li>
+</ul>
+</li>
+</ol>
+<h4 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h4><pre><code class="服务器">10.1.15.106
+10.1.11.103
+10.1.11.104
+
+3台机器都操作
+#下载安装包
+wget https://archive.apache.org/dist/rocketmq/4.8.0/rocketmq-all-4.8.0-bin-release.zip
+jdk 1.8
+
+
+mkdir -p /data/rocketmq
+chmod -R 755 /data/rocketmq
+
+#添加环境变量
+JAVA_HOME=/usr/local/java
+JRE_HOME=/usr/local/java/jre
+export CLASSPATH=.:\$JAVA_HOME/jre/lib:\$JAVA_HOME/lib:\$JAVA_HOME/lib/tools.jar
+ROCKETMQ_HOME=/data/rocketmq/rocketmq-4.8
+PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin:$ROCKETMQ_HOME/bin
+export JAVA_HOME JRE_HOME CLASS_PATH PATH ROCKETMQ_HOME
+
+
+#环境生效
+source /etc/porfile
+
+cd /data/rocketmq
+#解压
+upzip rocketmq-all-4.8.0-bin-release.zip
+#修改文件夹
+mv rocketmq-all-4.8.0-bin-release rocketmq-4.8
+#创建日志目录
+mkdir logs
+
+10.1.15.106--nameserver
+#编写脚本
+[root@minio rocketmq]# cat start.sh
+#!/bin/bash
+
+JAVA_HOME=/usr/local/java
+ROCKETMQ_HOME=/data/rocketmq/rocketmq-4.8
+JAVA_OPT=&quot;-server -Xms4g -Xmx4g -Xmn2g -XX:+UseConcMarkSweepGC&quot;
+
+# 将 lib 目录中的所有 JAR 文件添加到 CLASSPATH 中
+CLASSPATH=$(find $&#123;ROCKETMQ_HOME&#125;/lib -name &#39;*.jar&#39; | tr &#39;\n&#39; &#39;:&#39;)
+
+JAVA_OPT=&quot;$&#123;JAVA_OPT&#125; -classpath $&#123;CLASSPATH&#125;&quot;
+java $&#123;JAVA_OPT&#125; org.apache.rocketmq.namesrv.NamesrvStartup -n 10.1.15.106:9876
+
+
+#启动脚本
+chmod +x start.sh
+nohup ./start.sh &amp;
+
+
+
+10.1.11.103
+部署broker
+机器A配置
+#创建文件夹store,store-s（store-a：master数据存储文件夹，store-b-s:salve数据存储文件夹）
+mkdir /data/rocket/rocketmq-4.8/store-a
+
+#机器A上修改master的broker-a.properties配置文件
+cd /data/rocket/rocketmq-5.2/conf/2m-2s-async
+
+vim broker-a.properties
+配置内容如下面：
+# 集群名称,这里要master和slave保持一样
+brokerClusterName=cjsCluster
+# broker名字
+brokerName=broker-a
+#0 表示 Master，&gt;0 表示 Slave
+brokerId=0
+#删除文件时间点，默认凌晨 4点
+deleteWhen=04
+#文件保留时间，默认48小时，这里设置5天
+fileReservedTime=120
+#Broker 的角色 - ASYNC_MASTER 异步复制Master
+brokerRole=ASYNC_MASTER
+#刷盘方式 - ASYNC_FLUSH 异步刷盘
+flushDiskType=ASYNC_FLUSH
+#开启账号密码连接，需要配置plain_acl.yml文件里面的账号密码用于连接
+aclEnable=false
+ 
+# Broker 对外服务的监听端口
+listenPort=10911
+# nameserver地址，分号分割
+namesrvAddr=10.1.15.106:9876
+#在发送消息时，自动创建服务器不存在的topic，默认创建的队列数
+defaultTopicQueueNums=4
+#是否允许 Broker 自动创建Topic，建议线下开启，线上关闭
+autoCreateTopicEnable=true
+#是否允许 Broker 自动创建订阅组，建议线下开启，线上关闭
+autoCreateSubscriptionGroup=true
+#本机IP
+brokerIP1=10.1.11.103
+storePathRootDir=/data/rocketmq/rocketmq-4.8/store-a
+storePathCommitLog=/data/rocketmq/rocketmq-4.8/store-a/commitlog
+#消费队列存储路径存储路径
+storePathConsumerQueue=/data/rocketmq/rocketmq-4.8/store-a/consumequeue
+#消息索引存储路径
+storePathIndex=/data/rocketmq/rocketmq-4.8/store-a/index
+#checkpoint 文件存储路径
+storeCheckpoint=/data/rocketmq/rocketmq-4.8/store-a/checkpoint
+#abort文件存储路径
+abortFile=/data/rocketmq/rocketmq-4.8/store-a/abort
+# commitLog每个文件的大小默认1G
+mapedFileSizeCommitLog=1073741824
+#ConsumeQueue每个文件默认存30W条，根据业务情况调整
+mapedFileSizeConsumeQueue=300000
+
+
+
+10.1.11.104
+机器B上修改slave的broker-a-slave.properties配置文件
+mkdir -p /data/rocketmq/rocketmq-4.8/store-a-s
+
+cd /data/rocket/rocketmq-4.8/conf/2m-2s-async
+vim broker-a-s.properties
+配置内容如下：
+# 集群名称
+brokerClusterName=cjsCluster
+# broker名字
+brokerName=broker-a
+#0 表示 Master，&gt;0 表示 Slave
+brokerId=1
+#删除文件时间点，默认凌晨 4点
+deleteWhen=04
+#文件保留时间，默认 48 小时，这里设置5天
+fileReservedTime=120
+brokerRole=SLAVE
+flushDiskType=ASYNC_FLUSH
+#开启账号密码连接
+aclEnable=false
+ 
+# Broker 对外服务的监听端口
+listenPort=10922
+# nameserver地址，分号分割
+namesrvAddr=10.1.15.106:9876
+#在发送消息时，自动创建服务器不存在的topic，默认创建的队列数
+defaultTopicQueueNums=4
+#是否允许 Broker 自动创建Topic，建议线下开启，线上关闭
+autoCreateTopicEnable=true
+#是否允许 Broker 自动创建订阅组，建议线下开启，线上关闭
+autoCreateSubscriptionGroup=true
+#master的IP
+masterAddress=10.1.11.103
+storePathRootDir=/data/rocketmq/rocketmq-4.8/store-a-s
+storePathCommitLog=/data/rocketmq/rocketmq-4.8/store-a-s/commitlog
+#消费队列存储路径存储路径
+storePathConsumerQueue=/data/rocketmq/rocketmq-4.8/store-a-s/consumequeue
+#消息索引存储路径
+storePathIndex=/data/rocketmq/rocketmq-4.8/store-a-s/index
+#checkpoint 文件存储路径
+storeCheckpoint=/data/rocketmq/rocketmq-4.8/store-a-s/checkpoint
+#abort文件存储路径
+abortFile=/data/rocketmq/rocketmq-4.8/store-a-s/abort
+# commitLog每个文件的大小默认1G
+mapedFileSizeCommitLog=1073741824
+#ConsumeQueue每个文件默认存30W条，根据业务情况调整
+mapedFileSizeConsumeQueue=300000
+
+
+
+#机器A上编写启动文件  
+[root@rocketmq01 rocketmq]# cat mqbrokerStart-a.sh
+#!/bin/sh
+
+cd /data/rocketmq/rocketmq-4.8/bin
+
+nohup sh mqbroker -c /data/rocketmq/rocketmq-4.8/conf/2m-2s-async/broker-a.properties &gt; /data/rocketmq/logs/broker-a.log 2&gt;&amp;1 &amp;
+
+
+
+
+#slave启动文件mqbrokerStart-a-s.sh内容如下编写
+vim mqbrokerStart-a-s.sh
+#!/bin/sh
+ 
+cd /data/rocketmq/rocketmq-4.8/bin
+ 
+nohup sh mqbroker -c /data/rocketmq/rocketmq-4.8/conf/2m-2s-async/broker-a-s.properties &gt; /data/rocketmq/logs/broker-a-s.log 2&gt;&amp;1 &amp;
+ 
+exit
+
+
+#给与权限
+chmod +x mqbrokerStart-a.sh
+chmod +x mqbrokerStart-a-s.sh
+
+
+启动broker--按顺序启动
+机器A上启动master：broker-a
+cd /data/rocketmq
+./mqbrokerStart-a.sh
+
+
+机器B上启动slave：broker-a-s
+cd /data/rocketmq
+./mqbrokerStart-a-s.sh
+
+
+#验证机器信息
+cd /data/rocketmq/rocketmq-4.8/bin/
+./mqadmin clusterList -n 10.1.15.106:9876
+</code></pre>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>RocketMQ消息队列</div>
+      <div>http://example.com/2025/11/05/RocketMQ消息队列/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Mr.xu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月5日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/11/05/kkFileview%E6%96%87%E4%BB%B6%E9%A2%84%E8%A7%88/" title="kkFileview文件预览">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">kkFileview文件预览</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/11/05/ansible%E9%83%A8%E7%BD%B2mysql%E4%B8%BB%E4%BB%8E/" title="ansible部署mysql主从">
+                        <span class="hidden-mobile">ansible部署mysql主从</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

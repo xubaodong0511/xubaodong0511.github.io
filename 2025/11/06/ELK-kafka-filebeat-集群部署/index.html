@@ -1,0 +1,742 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Mr.xu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="版本说明123456Elasticsearch: 7.13.2 #wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;elasticsearch&#x2F;elasticsearch-7.13.2-linux-x86_64.tar.gzLogstash: 7.13.2 #wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;logstas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ELK+kafka+filebeat 集群部署">
+<meta property="og:url" content="http://example.com/2025/11/06/ELK-kafka-filebeat-%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="版本说明123456Elasticsearch: 7.13.2 #wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;elasticsearch&#x2F;elasticsearch-7.13.2-linux-x86_64.tar.gzLogstash: 7.13.2 #wget https:&#x2F;&#x2F;artifacts.elastic.co&#x2F;downloads&#x2F;logstas">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-11-06T12:59:05.000Z">
+<meta property="article:modified_time" content="2025-11-06T12:59:20.763Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>ELK+kafka+filebeat 集群部署 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="ELK+kafka+filebeat 集群部署"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-06 20:59" pubdate>
+          2025年11月6日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          38 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">ELK+kafka+filebeat 集群部署</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="版本说明"><a href="#版本说明" class="headerlink" title="版本说明"></a>版本说明</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell">Elasticsearch: 7.13.2 #wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.13.2-linux-x86_64.tar.gz<br>Logstash: 7.13.2 #wget https://artifacts.elastic.co/downloads/logstash/logstash-7.13.2-linux-x86_64.tar.gz<br>Kibana: 7.13.2 #wget https://artifacts.elastic.co/downloads/kibana/kibana-7.13.2-linux-x86_64.tar.gz<br>Kafka: 2.11-2.1  #wget https://archive.apache.org/dist/kafka/2.1.0/kafka_2.11-2.1.0.tgz<br>Filebeat: 7.13.2<br>相应的版本最好下载对应的插件<br></code></pre></td></tr></table></figure>
+
+<p><strong>相关地址：</strong></p>
+<p>官网地址：<a target="_blank" rel="noopener" href="https://www.elastic.co/">https://www.elastic.co</a></p>
+<p>官网搭建：<a target="_blank" rel="noopener" href="https://www.elastic.co/guide/index.html">https://www.elastic.co/guide/index.html</a></p>
+<h2 id="实施部署"><a href="#实施部署" class="headerlink" title="实施部署"></a>实施部署</h2><p>关闭防火墙，关闭setenforce</p>
+<h2 id="1、安装配置jdk8"><a href="#1、安装配置jdk8" class="headerlink" title="1、安装配置jdk8"></a>1、安装配置jdk8</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs shell">三台机器都操作，安装jdk（java）<br>[root@mes-1 ~]# tar xzf jdk-8u191-linux-x64.tar.gz -C /usr/local/<br>[root@mes-1 ~]# cd /usr/local/<br>[root@mes-1 local]# mv jdk1.8.0_191/ java<br>[root@mes-1 local]# echo &#x27;<br>JAVA_HOME=/usr/local/java<br>PATH=$JAVA_HOME/bin:$PATH<br>export JAVA_HOME PATH<br>&#x27; &gt;&gt;/etc/profile<br>[root@mes-1 ~]# source /etc/profile<br>[root@mes-1 ~]# java -version<br></code></pre></td></tr></table></figure>
+
+<h2 id="2、安装配置ES—-只在第一台操作操作下面的部分"><a href="#2、安装配置ES—-只在第一台操作操作下面的部分" class="headerlink" title="2、安装配置ES—-只在第一台操作操作下面的部分"></a>2、安装配置ES—-只在第一台操作操作下面的部分</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell">创建运行ES的普通用户<br>[root@mes-1 ~]# useradd elsearch<br>[root@mes-1 ~]# echo &quot;123456&quot; | passwd --stdin &quot;elsearch&quot;<br>================<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">如果是集群三台机器都操作</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="安装配置ES–如果是集群三台机器都操作"><a href="#安装配置ES–如果是集群三台机器都操作" class="headerlink" title="安装配置ES–如果是集群三台机器都操作"></a>安装配置ES–如果是集群三台机器都操作</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@mes-1 ~]# tar xzf elasticsearch-6.5.4.tar.gz -C /usr/local/<br>[root@mes-1 ~]# cd /usr/local/elasticsearch-6.5.4/config/<br>[root@mes-1 config]# ls<br>elasticsearch.yml  log4j2.properties  roles.yml  users_roles<br>jvm.options        role_mapping.yml   users<br>[root@mes-1 config]# cp elasticsearch.yml elasticsearch.yml.bak<br>[root@mes-1 config]# vim elasticsearch.yml    ----找个地方添加如下内容<br>cluster.name: elk<br>cluster.initial_master_nodes: [&quot;192.168.246.234&quot;,&quot;192.168.246.231&quot;,&quot;192.168.246.235&quot;]	#写所有的IP地址<br>node.name: elk01	#修改，自定义名字<br>node.master: true<br>node.data: true<br>path.data: /data/elasticsearch/data<br>path.logs: /data/elasticsearch/logs<br>bootstrap.memory_lock: false<br>bootstrap.system_call_filter: false<br>network.host: 0.0.0.0<br>http.port: 9200<br>transport.tcp.port: 9300<br>discovery.seed_hosts: [&quot;192.168.246.234&quot;, &quot;192.168.246.235&quot;]	#改自己的另外两台IP<br>discovery.zen.minimum_master_nodes: 2<br>discovery.zen.ping_timeout: 150s<br>discovery.zen.fd.ping_retries: 10<br>client.transport.ping_timeout: 60s<br>http.cors.enabled: true<br>http.cors.allow-origin: &quot;*&quot;<br><br><br>单节点配置<br>cluster.name: elk<br>cluster.initial_master_nodes: [&quot;10.36.153.131&quot;] 	#单机只写本机ip<br>node.name: elk01	#自定义名字<br>node.master: true<br>node.data: true<br>path.data: /data/elasticsearch/data<br>path.logs: /data/elasticsearch/logs<br>bootstrap.memory_lock: false<br>bootstrap.system_call_filter: false<br>network.host: 10.36.153.131 	#单机只写本机ip<br>http.port: 9200<br>transport.tcp.port: 9300<br>discovery.seed_hosts: [&quot;10.36.153.131&quot;] #单机只写本机ip<br><span class="hljs-meta prompt_">#</span><span class="language-bash">discovery.zen.minimum_master_nodes: 2</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">discovery.zen.ping_timeout: 150s</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">discovery.zen.fd.ping_retries: 10</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">client.transport.ping_timeout: 60s</span><br>http.cors.enabled: true<br>http.cors.allow-origin: &quot;*&quot;<br></code></pre></td></tr></table></figure>
+
+<h2 id="设置JVM堆大小—-如果是集群三台机器都操作"><a href="#设置JVM堆大小—-如果是集群三台机器都操作" class="headerlink" title="设置JVM堆大小—#如果是集群三台机器都操作"></a>设置JVM堆大小—#如果是集群三台机器都操作</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@mes-1 config]# vim jvm.options     ----配置文件里修改<br>-Xms1g    ----修改成 -Xms2g<br>-Xmx1g    ----修改成 -Xms2g<br><br>或者:<br>推荐设置为4G，请注意下面的说明：<br>sed -i &#x27;s/-Xms1g/-Xms4g/&#x27; /usr/local/elasticsearch-6.5.4/config/jvm.options<br>sed -i &#x27;s/-Xmx1g/-Xmx4g/&#x27; /usr/local/elasticsearch-6.5.4/config/jvm.options<br><br>堆内存大小不要超过系统内存的50%<br></code></pre></td></tr></table></figure>
+
+<h2 id="创建ES数据及日志存储目录"><a href="#创建ES数据及日志存储目录" class="headerlink" title="创建ES数据及日志存储目录"></a>创建ES数据及日志存储目录</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@mes-1 ~]# mkdir -p /data/elasticsearch/data       (/data/elasticsearch)<br>[root@mes-1 ~]# mkdir -p /data/elasticsearch/logs       (/log/elasticsearch)<br></code></pre></td></tr></table></figure>
+
+<h2 id="修改安装目录及存储目录权限"><a href="#修改安装目录及存储目录权限" class="headerlink" title="修改安装目录及存储目录权限"></a>修改安装目录及存储目录权限</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@mes-1 ~]# chown -R elsearch:elsearch /data/elasticsearch<br>[root@mes-1 ~]# chown -R elsearch:elsearch /usr/local/elasticsearch-7.13.2<br></code></pre></td></tr></table></figure>
+
+<h2 id="3、系统优化"><a href="#3、系统优化" class="headerlink" title="3、系统优化"></a>3、系统优化</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">增加最大文件打开数<br>永久生效方法：----`看情况做，可不做`<br>echo &quot;* - nofile 65536&quot; &gt;&gt; /etc/security/limits.conf<br></code></pre></td></tr></table></figure>
+<h2 id="增加最大进程数"><a href="#增加最大进程数" class="headerlink" title="增加最大进程数"></a>增加最大进程数</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@mes-1 ~]# vim /etc/security/limits.conf    ---在文件最后面添加如下内容<br>* soft nofile 65536<br>* hard nofile 131072<br>* soft nproc 2048<br>* hard nproc 4096<br>* hard nofile 65536<br>* hard nofile 65536<br>更多的参数调整可以直接用这个<br></code></pre></td></tr></table></figure>
+
+<h2 id="增加最大内存映射数"><a href="#增加最大内存映射数" class="headerlink" title="增加最大内存映射数"></a>增加最大内存映射数</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@mes-1 ~]# vim /etc/sysctl.conf   ---添加如下<br>vm.max_map_count=262144<br>vm.swappiness=0<br>[root@mes-1 ~]# sysctl -p	#看情况做，可不做<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">设置内存权限大小</span><br>[root@mes-1 ~]# sysctl -w vm.max_map_count=262144<br></code></pre></td></tr></table></figure>
+
+<h2 id="4、启动ES"><a href="#4、启动ES" class="headerlink" title="4、启动ES"></a>4、启动ES</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">如果是集群三台机器都启动</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">切换到不同用户启动</span> <br>`启动的时候一台机器一台机器的启动`<br>[root@mes-1 ~]# su - elsearch<br>Last login: Sat Aug  3 19:48:59 CST 2019 on pts/0<br><br>[root@mes-1 ~]$ cd /usr/local/elasticsearch-6.5.4/<br>[root@mes-1 elasticsearch-6.5.4]$ ./bin/elasticsearch  #先启动看看报错不，需要多等一会<br><br>`ctrl+c终止之后,启动后台运行`<br>[root@mes-1 elasticsearch-6.5.4]$ nohup ./bin/elasticsearch &amp;  #放后台启动<br>[1] 11462<br>nohup: ignoring input and appending output to ‘nohup.out’<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">查看9200、9300端口有没有起来</span><br>[root@mes-1 elasticsearch-6.5.4]$ netstat -lnpt<br><span class="hljs-meta prompt_"># </span><span class="language-bash">查看日志</span><br>[root@mes-1 elasticsearch-6.5.4]$ tail -f nohup.out   #看一下是否启动<br>或者:<br>su - elsearch -c &quot;cd /usr/local/elasticsearch-6.5.4 &amp;&amp; nohup bin/elasticsearch &amp;&quot;<br></code></pre></td></tr></table></figure>
+
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p><code>以上步骤三台机器都操作</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">浏览器访问http://172.16.246.234:9200<br><span class="hljs-meta prompt_"># </span><span class="language-bash">三台机器都可以访问，加端口9200</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="5-安装配置head监控插件（Web前端）—-只需要安装一台就可以了"><a href="#5-安装配置head监控插件（Web前端）—-只需要安装一台就可以了" class="headerlink" title="5.安装配置head监控插件（Web前端）—-只需要安装一台就可以了"></a>5.安装配置head监控插件（Web前端）—-只需要安装一台就可以了</h2><p>192.168.246.235</p>
+<p>安装node</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@es-3-head-kib ~]# wget https://npm.taobao.org/mirrors/node/v14.15.3/node-v14.15.3-linux-x64.tar.gz<br>[root@es-3-head-kib ~]# tar xzvf node-v14.15.3-linux-x64.tar.gz -C /usr/local/<br>[root@es-3-head-kib ~]# vim /etc/profile   #添加如下变量<br>NODE_HOME=/usr/local/node-v14.15.3-linux-x64<br>PATH=$NODE_HOME/bin:$PATH<br>export NODE_HOME PATH<br>[root@es-3-head-kib ~]# source /etc/profile<br>[root@es-3-head-kib ~]# node --version  #检查node版本号<br>v14.15.3<br></code></pre></td></tr></table></figure>
+
+<h2 id="下载head插件"><a href="#下载head插件" class="headerlink" title="下载head插件"></a>下载head插件</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@es-3-head-kib ~]# wget https://github.com/mobz/elasticsearch-head/archive/master.zip<br>[root@es-3-head-kib ~]# unzip -d /usr/local/ master.zip<br>[root@es-3-head-kib ~]# cd /usr/local<br>或者<br>unzip –d /usr/local elasticsearch-head-master.zip<br></code></pre></td></tr></table></figure>
+
+<h2 id="安装grunt"><a href="#安装grunt" class="headerlink" title="安装grunt"></a>安装grunt</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@es-3-head-kib ~]# cd elasticsearch-head-master/<br>[root@mes-3-head-kib elasticsearch-head-master]# npm config set registry https://registry.npm.taobao.org  #更换一个镜像，如果不更换下载会很慢<br>[root@mes-3-head-kib elasticsearch-head-master]# npm install -g grunt-cli  #时间会很长<br>[root@es-3-head-kib elasticsearch-head-master]# grunt --version  #检查grunt版本号<br></code></pre></td></tr></table></figure>
+
+<h2 id="修改head源码"><a href="#修改head源码" class="headerlink" title="修改head源码"></a>修改head源码</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@es-3-head-kib elasticsearch-head-master]# vim /usr/local/elasticsearch-head-master/Gruntfile.js    #（95左右）<br>添加--hostname: &#x27;*&#x27;<br><span class="hljs-meta prompt_"># </span><span class="language-bash">注意在上一行末尾添加逗号,hostname 不需要添加逗号</span><br><br>[root@es-3-head-kib elasticsearch-head-master]# vim /usr/local/elasticsearch-head-master/_site/app.js        	#(4359左右)<br>原本是http://localhost:9200--http://192.168.116.111:9200<br><span class="hljs-meta prompt_"># </span><span class="language-bash">如果<span class="hljs-built_in">head</span>和ES不在同一个节点，注意修改成ES的IP地址</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="下载head必要的文件"><a href="#下载head必要的文件" class="headerlink" title="下载head必要的文件"></a>下载head必要的文件</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@es-3-head-kib ~]# wget https://github.com/Medium/phantomjs/releases/download/v2.1.1/phantomjs-2.1.1-linux-x86_64.tar.bz2<br>[root@es-3-head-kib ~]# yum -y install bzip2<br>[root@es-3-head-kib ~]# tar -jxf phantomjs-2.1.1-linux-x86_64.tar.bz2 -C /tmp/  #解压<br></code></pre></td></tr></table></figure>
+
+<h2 id="运行head"><a href="#运行head" class="headerlink" title="运行head"></a>运行head</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@es-3-head-kib ~]# cd /usr/local/elasticsearch-head-master/<br>[root@es-3-head-kib elasticsearch-head-master]# npm config set registry https://registry.npm.taobao.org  #先执行这条命令更换一个镜像<br>[root@es-3-head-kib elasticsearch-head-master]# npm install<br>...<br>grunt-contrib-jasmine@1.0.3 node_modules/grunt-contrib-jasmine<br>├── sprintf-js@1.0.3<br>├── lodash@2.4.2<br>├── es5-shim@4.5.13<br>├── chalk@1.1.3 (escape-string-regexp@1.0.5, supports-color@2.0.0, ansi-styles@2.2.1, strip-ansi@3.0.1, has-ansi@2.0.0)<br>├── jasmine-core@2.99.1<br>├── rimraf@2.6.3 (glob@7.1.4)<br>└── grunt-lib-phantomjs@1.1.0 (eventemitter2@0.4.14, semver@5.7.0, temporary@0.0.8, phan<br><br>如果报错执行：npm install phantomjs-prebuilt@2.1.16 --ignore-scripts<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">后台运行</span><br>[root@es-3-head-kib elasticsearch-head-master]# nohup grunt server &amp;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">清理缓存</span><br>echo 3 &gt; /proc/sys/vm/drop_caches<br></code></pre></td></tr></table></figure>
+
+<h2 id="测试-1"><a href="#测试-1" class="headerlink" title="测试"></a>测试</h2><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs 1c"><span class="hljs-meta"># web访问安装node，head，grunt的机器IP地址</span><br>访问http<span class="hljs-punctuation">:</span><span class="hljs-comment">//172.16.246.235:9100</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="Kibana部署"><a href="#Kibana部署" class="headerlink" title="Kibana部署"></a>Kibana部署</h2><p>系统类型：Centos7.5<br>节点IP：192.168.246.235 D<br>软件版本：nginx-1.14.2、kibana-6.5.4-linux-x86_64.tar.gz</p>
+<h2 id="1-安装配置Kibana"><a href="#1-安装配置Kibana" class="headerlink" title="1. 安装配置Kibana"></a>1. 安装配置Kibana</h2><h2 id="（1）安装"><a href="#（1）安装" class="headerlink" title="（1）安装"></a>（1）安装</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@es-3-head-kib ~]# tar zvxf kibana-6.5.4-linux-x86_64.tar.gz -C /usr/local/<br></code></pre></td></tr></table></figure>
+
+<h2 id="（2）配置"><a href="#（2）配置" class="headerlink" title="（2）配置"></a>（2）配置</h2><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs avrasm">[root@es<span class="hljs-number">-3</span>-head-kib ~]<span class="hljs-meta"># cd /usr/local/kibana-7.13.2-linux-x86_64/config/</span><br>[root@es<span class="hljs-number">-3</span>-head-kib config]<span class="hljs-meta"># vim kibana.yml</span><br><span class="hljs-symbol">server.port:</span> <span class="hljs-number">5601</span><br><span class="hljs-symbol">server.host:</span> <span class="hljs-string">&quot;192.168.246.235&quot;</span>	<span class="hljs-meta">#本机的IP</span><br><span class="hljs-symbol">elasticsearch.hosts:</span> [<span class="hljs-string">&quot;http://192.168.246.234:9200&quot;</span>]	<span class="hljs-meta">#节点的IP（随便哪个都可以）</span><br><span class="hljs-symbol">kibana.index:</span> <span class="hljs-string">&quot;.kibana&quot;</span><br><span class="hljs-symbol">i18n.locale:</span> <span class="hljs-string">&quot;zh-CN&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@es-3-head-kib config]# cd ..<br><span class="hljs-meta prompt_"># </span><span class="language-bash">启动后台运行</span><br>[root@es-3-head-kib kibana-7.13.2-linux-x86_64]# nohup ./bin/kibana --allow-root &amp;<br>[1] 12054<br>[root@es-3-head-kib kibana-7.13.2-linux-x86_64]# nohup: ignoring input and appending output to ‘nohup.out’	#此为显示内容<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-安装配置Nginx反向代理"><a href="#2-安装配置Nginx反向代理" class="headerlink" title="2. 安装配置Nginx反向代理"></a>2. 安装配置Nginx反向代理</h2><h2 id="配置YUM源："><a href="#配置YUM源：" class="headerlink" title="配置YUM源："></a>配置YUM源：</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@es-3-head-kib ~]# rpm -ivh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm<br></code></pre></td></tr></table></figure>
+
+<h2 id="安装："><a href="#安装：" class="headerlink" title="安装："></a>安装：</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@es-3-head-kib ~]# yum install -y nginx <br></code></pre></td></tr></table></figure>
+
+<h2 id="配置反向代理"><a href="#配置反向代理" class="headerlink" title="配置反向代理"></a>配置反向代理</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@es-3-head-kib ~]# cd /etc/nginx/conf.d/<br>[root@es-3-head-kib conf.d]# cp default.conf nginx.conf<br>[root@es-3-head-kib conf.d]# mv default.conf default.conf.bak<br>[root@es-3-head-kib conf.d]# vim nginx.conf<br><span class="hljs-meta prompt_"># </span><span class="language-bash">配置文件内容</span><br>[root@es-3-head-kib conf.d]# cat nginx.conf<br>server &#123;<br>        listen       80;<br>        server_name  192.168.246.235;<br><br>        #charset koi8-r;<br><br>       # access_log  /var/log/nginx/host.access.log  main;<br>       # access_log off;<br><br>         location / &#123;  <br>             proxy_pass http://192.168.246.235:5601;<br>             proxy_set_header Host $host:5601;  <br>             proxy_set_header X-Real-IP $remote_addr;  <br>             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;  <br>             proxy_set_header Via &quot;nginx&quot;;  <br>                     &#125;<br><br>         location /head/&#123;<br>             proxy_pass http://192.168.246.235:9100;<br>             proxy_set_header Host $host:9100;<br>             proxy_set_header X-Real-IP $remote_addr;<br>             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;<br>             proxy_set_header Via &quot;nginx&quot;;<br>                         &#125;  <br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="配置nginx"><a href="#配置nginx" class="headerlink" title="配置nginx"></a>配置nginx</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs shell">1.将原来的log_format注释掉，添加json格式的配置信息，如下：<br>[root@es-3-head-kib conf.d]# vim /etc/nginx/nginx.conf<br>log_format  json &#x27;&#123;&quot;@timestamp&quot;:&quot;$time_iso8601&quot;,&#x27;<br>                           &#x27;&quot;@version&quot;:&quot;1&quot;,&#x27;<br>                           &#x27;&quot;client&quot;:&quot;$remote_addr&quot;,&#x27;<br>                           &#x27;&quot;url&quot;:&quot;$uri&quot;,&#x27;<br>                           &#x27;&quot;status&quot;:&quot;$status&quot;,&#x27;<br>                           &#x27;&quot;domain&quot;:&quot;$host&quot;,&#x27;<br>                           &#x27;&quot;host&quot;:&quot;$server_addr&quot;,&#x27;<br>                           &#x27;&quot;size&quot;:$body_bytes_sent,&#x27;<br>                           &#x27;&quot;responsetime&quot;:$request_time,&#x27;<br>                           &#x27;&quot;referer&quot;: &quot;$http_referer&quot;,&#x27;<br>                           &#x27;&quot;ua&quot;: &quot;$http_user_agent&quot;&#x27;<br>               &#x27;&#125;&#x27;;<br>2.引用定义的json格式的日志：<br>access_log  /var/log/nginx/access_json.log  json;	#在nginx.conf配置文件里<br></code></pre></td></tr></table></figure>
+
+<h2 id="启动nginx"><a href="#启动nginx" class="headerlink" title="启动nginx"></a>启动nginx</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">root@es-3-head-kib ~]# systemctl start nginx<br></code></pre></td></tr></table></figure>
+
+<h2 id="测试–访问当前机器IP"><a href="#测试–访问当前机器IP" class="headerlink" title="测试–访问当前机器IP"></a>测试–访问当前机器IP</h2><p><code>浏览器访问http://192.168.246.235 刚开始没有任何数据，会提示你创建新的索引</code></p>
+<h2 id="Logstash部署—-192-168-246-231"><a href="#Logstash部署—-192-168-246-231" class="headerlink" title="Logstash部署—-192.168.246.231"></a>Logstash部署—-192.168.246.231</h2><p>系统类型：Centos7.5<br>节点IP：192.168.246.231   E<br>软件版本：jdk-8u121-linux-x64.tar.gz、logstash-6.5.4.tar.gz</p>
+<h2 id="1-安装配置Logstash"><a href="#1-安装配置Logstash" class="headerlink" title="1.安装配置Logstash"></a>1.安装配置Logstash</h2><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@es-2-zk-log ~]# tar xvzf logstash-6.5.4.tar.gz -C /usr/local/<br></code></pre></td></tr></table></figure>
+
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>创建目录，我们将所有input、filter、output配置文件全部放到该目录中。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><code class="hljs shell">1.安装nginx:<br>[root@es-2-zk-log ~]# rpm -ivh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm<br>[root@es-2-zk-log ~]# yum install -y nginx<br>将原来的日志格式注释掉定义成json格式：<br>[root@es-2-zk-log conf.d]# vim /etc/nginx/nginx.conf<br>log_format  json &#x27;&#123;&quot;@timestamp&quot;:&quot;$time_iso8601&quot;,&#x27;<br>                           &#x27;&quot;@version&quot;:&quot;1&quot;,&#x27;<br>                           &#x27;&quot;client&quot;:&quot;$remote_addr&quot;,&#x27;<br>                           &#x27;&quot;url&quot;:&quot;$uri&quot;,&#x27;<br>                           &#x27;&quot;status&quot;:&quot;$status&quot;,&#x27;<br>                           &#x27;&quot;domain&quot;:&quot;$host&quot;,&#x27;<br>                           &#x27;&quot;host&quot;:&quot;$server_addr&quot;,&#x27;<br>                           &#x27;&quot;size&quot;:$body_bytes_sent,&#x27;<br>                           &#x27;&quot;responsetime&quot;:$request_time,&#x27;<br>                           &#x27;&quot;referer&quot;: &quot;$http_referer&quot;,&#x27;<br>                           &#x27;&quot;ua&quot;: &quot;$http_user_agent&quot;&#x27;<br>               &#x27;&#125;&#x27;;<br>2.引用定义的json格式的日志：<br>access_log  /var/log/nginx/access_json.log  json;	#在配置文件里改<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">启动</span><br>[root@es-2-zk-log ~]# systemctl start nginx <br>[root@es-2-zk-log ~]# systemctl enable nginx<br>浏览器多访问几次<br>[root@es-2-zk-log ~]# mkdir -p /usr/local/logstash-7.13.2/etc/conf.d<br>[root@es-2-zk-log ~]# cd /usr/local/logstash-6.5.4/etc/conf.d/       <br>[root@es-2-zk-log conf.d]# vim input.conf       #---在下面添加<br>input&#123;                        #让logstash可以读取特定的事件源。<br><br>    file&#123;                                       #从文件读取<br><br>   path =&gt; [&quot;/var/log/nginx/access_json.log&quot;]        #要输入的文件路径<br><br>   type =&gt; &quot;shopweb&quot;                       #定义一个类型，通用选项. <br><br>    &#125;<br><br>&#125;<br><br><br>[root@es-2-zk-log conf.d]# vim output.conf<br>output&#123;           #输出插件，将事件发送到特定目标<br>    elasticsearch &#123;            #输出到es<br>    hosts =&gt; [&quot;192.168.246.234:9200&quot;,&quot;192.168.246.231:9200&quot;,&quot;192.168.246.235:9200&quot;]       #指定es服务的ip加端口<br>    index =&gt; [&quot;%&#123;type&#125;-%&#123;+YYYY.MM.dd&#125;&quot;]     #引用input中的type名称，定义输出的格式<br>    &#125;<br>&#125;<br><br>`启动：`<br>[root@es-2-zk-log conf.d]# cd /usr/local/logstash-7.13.2/<br>[root@es-2-zk-log logstash-7.13.2]# nohup bin/logstash -f etc/conf.d/  --config.reload.automatic &amp; <br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">查看日志出现:</span><br>[root@es-2-zk-log logstash-7.13.2]# tail -f nohup.out<br></code></pre></td></tr></table></figure>
+
+<p>在浏览器中访问本机的nginx网站</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">随便刷新，主要刷新点数据，进行测试<br>web浏览器访问http://IP地址<br></code></pre></td></tr></table></figure>
+
+<h2 id="Kafka部署"><a href="#Kafka部署" class="headerlink" title="Kafka部署"></a>Kafka部署</h2><h2 id="1-安装配置jdk8"><a href="#1-安装配置jdk8" class="headerlink" title="1.安装配置jdk8"></a>1.安装配置jdk8</h2><h2 id="（1）Kafka、Zookeeper（简称：ZK）运行依赖jdk8"><a href="#（1）Kafka、Zookeeper（简称：ZK）运行依赖jdk8" class="headerlink" title="（1）Kafka、Zookeeper（简称：ZK）运行依赖jdk8"></a>（1）Kafka、Zookeeper（简称：ZK）运行依赖jdk8</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">tar zxvf /usr/local/package/jdk-8u121-linux-x64.tar.gz -C /usr/local/<br><span class="hljs-built_in">echo</span> <span class="hljs-string">&#x27;</span><br><span class="hljs-string">JAVA_HOME=/usr/local/jdk1.8.0_121</span><br><span class="hljs-string">PATH=$JAVA_HOME/bin:$PATH</span><br><span class="hljs-string">export JAVA_HOME PATH</span><br><span class="hljs-string">&#x27;</span> &gt;&gt;/etc/profile<br><span class="hljs-built_in">source</span> /etc/profile<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-安装配置ZK"><a href="#2-安装配置ZK" class="headerlink" title="2.安装配置ZK"></a>2.安装配置ZK</h2><p>Kafka运行依赖ZK，Kafka官网提供的tar包中，已经包含了ZK，这里不再额下载ZK程序。</p>
+<p>配置相互解析—三台机器</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@es-2-zk-log ~]# vim /etc/hosts<br>192.168.246.234 mes-1<br>192.168.246.231 es-2-zk-log<br>192.168.246.235 es-3-head-kib<br></code></pre></td></tr></table></figure>
+
+<h2 id="（1）安装-1"><a href="#（1）安装-1" class="headerlink" title="（1）安装"></a>（1）安装</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">安装kafka软件包，也可在官网搜索下载</span><br>[root@es-2-zk-log ~]# tar xzvf kafka_2.11-2.1.0.tgz -C /usr/local/<br></code></pre></td></tr></table></figure>
+
+<h2 id="（2）配置-1"><a href="#（2）配置-1" class="headerlink" title="（2）配置"></a>（2）配置</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@mes-1 ~]# sed -i &#x27;s/^[^#]/#&amp;/&#x27; /usr/local/kafka_2.11-2.1.0/config/zookeeper.properties<br>[root@mes-1 ~]# vim /usr/local/kafka_2.11-2.1.0/config/zookeeper.properties  #添加如下配置<br>dataDir=/opt/data/zookeeper/data <br>dataLogDir=/opt/data/zookeeper/logs<br>clientPort=2181 <br>tickTime=2000 <br>initLimit=20 <br>syncLimit=10 <br>server.1=192.168.246.231:2888:3888       //kafka集群IP:Port<br>server.2=192.168.246.234:2888:3888<br>server.3=192.168.246.235:2888:3888<br><span class="hljs-meta prompt_"># </span><span class="language-bash">直接添加</span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">创建data、<span class="hljs-built_in">log</span>目录</span><br>[root@mes-1 ~]# mkdir -p /opt/data/zookeeper/&#123;data,logs&#125;<br><span class="hljs-meta prompt_">#</span><span class="language-bash">创建myid文件</span><br>[root@mes-1 ~]# echo 1 &gt; /opt/data/zookeeper/data/myid     #myid号按顺序排<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@es-2-zk-log ~]# sed -i &#x27;s/^[^#]/#&amp;/&#x27; /usr/local/kafka_2.11-2.1.0/config/zookeeper.properties<br>[root@es-2-zk-log ~]# vim /usr/local/kafka_2.11-2.1.0/config/zookeeper.properties<br>dataDir=/opt/data/zookeeper/data <br>dataLogDir=/opt/data/zookeeper/logs<br>clientPort=2181 <br>tickTime=2000 <br>initLimit=20 <br>syncLimit=10 <br>server.1=192.168.246.231:2888:3888<br>server.2=192.168.246.234:2888:3888<br>server.3=192.168.246.235:2888:3888<br><span class="hljs-meta prompt_"># </span><span class="language-bash">以上内容直接添加</span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">创建data、<span class="hljs-built_in">log</span>目录</span><br>[root@es-2-zk-log ~]# mkdir -p /opt/data/zookeeper/&#123;data,logs&#125;<br><span class="hljs-meta prompt_">#</span><span class="language-bash">创建myid文件</span><br>[root@es-2-zk-log ~]# echo 2 &gt; /opt/data/zookeeper/data/myid<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@es-3 ~]# sed -i &#x27;s/^[^#]/#&amp;/&#x27; /usr/local/kafka_2.11-2.1.0/config/zookeeper.properties<br>[root@es-3-head-kib ~]# vim /usr/local/kafka_2.11-2.1.0/config/zookeeper.properties<br>dataDir=/opt/data/zookeeper/data <br>dataLogDir=/opt/data/zookeeper/logs<br>clientPort=2181 <br>tickTime=2000 <br>initLimit=20 <br>syncLimit=10 <br>server.1=192.168.246.231:2888:3888<br>server.2=192.168.246.234:2888:3888<br>server.3=192.168.246.235:2888:3888<br><span class="hljs-meta prompt_"># </span><span class="language-bash">直接添加</span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">创建data、<span class="hljs-built_in">log</span>目录</span><br>[root@es-3-head-kib ~]# mkdir -p /opt/data/zookeeper/&#123;data,logs&#125;<br><span class="hljs-meta prompt_">#</span><span class="language-bash">创建myid文件</span><br>[root@es-3-head-kib ~]# echo 3 &gt; /opt/data/zookeeper/data/myid<br></code></pre></td></tr></table></figure>
+
+<h2 id="配置Kafka"><a href="#配置Kafka" class="headerlink" title="配置Kafka"></a>配置Kafka</h2><h2 id="1）配置"><a href="#1）配置" class="headerlink" title="(1）配置"></a>(1）配置</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@mes-1 ~]# sed -i &#x27;s/^[^#]/#&amp;/&#x27; /usr/local/kafka_2.11-2.1.0/config/server.properties<br>[root@mes-1 ~]# vim /usr/local/kafka_2.11-2.1.0/config/server.properties  #在最后添加<br>broker.id=1		#需修改<br>listeners=PLAINTEXT://192.168.246.231:9092	#需修改本机IP<br>num.network.threads=3<br>num.io.threads=8<br>socket.send.buffer.bytes=102400<br>socket.receive.buffer.bytes=102400<br>socket.request.max.bytes=104857600<br>log.dirs=/opt/data/kafka/logs<br>num.partitions=6<br>num.recovery.threads.per.data.dir=1<br>offsets.topic.replication.factor=2<br>transaction.state.log.replication.factor=1<br>transaction.state.log.min.isr=1<br>log.retention.hours=168<br>log.segment.bytes=536870912<br>log.retention.check.interval.ms=300000<br>zookeeper.connect=192.168.246.231:2181,192.168.246.234:2181,192.168.246.235:2181	#修改集群的IP<br>zookeeper.connection.timeout.ms=6000<br>group.initial.rebalance.delay.ms=0<br>[root@mes-1 ~]# mkdir -p /opt/data/kafka/logs<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@es-2-zk-log ~]# sed -i &#x27;s/^[^#]/#&amp;/&#x27; /usr/local/kafka_2.11-2.1.0/config/server.properties<br>[root@es-2-zk-log ~]# vim /usr/local/kafka_2.11-2.1.0/config/server.properties<br>broker.id=2		#修改的<br>listeners=PLAINTEXT://192.168.246.234:9092<br>num.network.threads=3<br>num.io.threads=8<br>socket.send.buffer.bytes=102400<br>socket.receive.buffer.bytes=102400<br>socket.request.max.bytes=104857600<br>log.dirs=/opt/data/kafka/logs<br>num.partitions=6<br>num.recovery.threads.per.data.dir=1<br>offsets.topic.replication.factor=2<br>transaction.state.log.replication.factor=1<br>transaction.state.log.min.isr=1<br>log.retention.hours=168<br>log.segment.bytes=536870912<br>log.retention.check.interval.ms=300000<br>zookeeper.connect=192.168.246.231:2181,192.168.246.234:2181,192.168.246.235:2181<br>zookeeper.connection.timeout.ms=6000<br>group.initial.rebalance.delay.ms=0<br>[root@es-2-zk-log ~]# mkdir -p /opt/data/kafka/logs<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@es-3-head-kib ~]# sed -i &#x27;s/^[^#]/#&amp;/&#x27; /usr/local/kafka_2.11-2.1.0/config/server.properties<br>[root@es-3-head-kib ~]# vim /usr/local/kafka_2.11-2.1.0/config/server.properties<br>broker.id=3<br>listeners=PLAINTEXT://192.168.246.235:9092<br>num.network.threads=3<br>num.io.threads=8<br>socket.send.buffer.bytes=102400<br>socket.receive.buffer.bytes=102400<br>socket.request.max.bytes=104857600<br>log.dirs=/opt/data/kafka/logs<br>num.partitions=6<br>num.recovery.threads.per.data.dir=1<br>offsets.topic.replication.factor=2<br>transaction.state.log.replication.factor=1<br>transaction.state.log.min.isr=1<br>log.retention.hours=168<br>log.segment.bytes=536870912<br>log.retention.check.interval.ms=300000<br>zookeeper.connect=192.168.246.231:2181,192.168.246.234:2181,192.168.246.235:2181<br>zookeeper.connection.timeout.ms=6000<br>group.initial.rebalance.delay.ms=0<br>[root@es-3-head-kib ~]# mkdir -p /opt/data/kafka/logs<br></code></pre></td></tr></table></figure>
+
+<h2 id="启动、验证ZK集群"><a href="#启动、验证ZK集群" class="headerlink" title="启动、验证ZK集群"></a>启动、验证ZK集群</h2><h2 id="（1）启动"><a href="#（1）启动" class="headerlink" title="（1）启动"></a>（1）启动</h2><p>在三个节点依次执行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@mes-1 ~]# cd /usr/local/kafka_2.11-2.1.0/<br>[root@mes-1 kafka_2.11-2.1.0]# nohup bin/zookeeper-server-start.sh config/zookeeper.properties &amp;<br></code></pre></td></tr></table></figure>
+
+<h2 id="（2）验证"><a href="#（2）验证" class="headerlink" title="（2）验证"></a>（2）验证</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">查看端口有没有起来</span><br>[root@mes-1 ~]# netstat -lntp | grep 2181<br>tcp6       0      0 :::2181                 :::*                    LISTEN      1226/java<br><br></code></pre></td></tr></table></figure>
+
+<h2 id="6、启动、验证Kafka"><a href="#6、启动、验证Kafka" class="headerlink" title="6、启动、验证Kafka"></a>6、启动、验证Kafka</h2><h2 id="（1）启动-1"><a href="#（1）启动-1" class="headerlink" title="（1）启动"></a>（1）启动</h2><p>在三个节点依次执行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@mes-1 ~]# cd /usr/local/kafka_2.11-2.1.0/<br>[root@mes-1 kafka_2.11-2.1.0]# nohup bin/kafka-server-start.sh config/server.properties &amp;<br></code></pre></td></tr></table></figure>
+
+<h2 id="（2）验证-1"><a href="#（2）验证-1" class="headerlink" title="（2）验证"></a>（2）验证</h2><p>在192.168.246.231上创建topic</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@es-2-zk-log kafka_2.11-2.1.0]# bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic testtopic<br>Created topic &quot;testtopic&quot;.<br><br>参数解释：<br>–zookeeper指定zookeeper的地址和端口，<br>–partitions指定partition的数量，<br>–replication-factor指定数据副本的数量<br></code></pre></td></tr></table></figure>
+
+<p>在246.235上面查询192.168.246.231上的topic</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@es-3-head-kib kafka_2.11-2.1.0]# bin/kafka-topics.sh --zookeeper 192.168.246.231:2181 --list<br>testtopic<br></code></pre></td></tr></table></figure>
+
+<p>模拟消息生产和消费<br>发送消息到192.168.246.231</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@mes-1 kafka_2.11-2.1.0]# bin/kafka-console-producer.sh --broker-list 192.168.246.231:9092 --topic testtopic<br><span class="hljs-meta prompt_">&gt;</span><span class="language-bash">hello</span><br></code></pre></td></tr></table></figure>
+
+<p>从192.168.246.234接受消息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@es-2-zk-log kafka_2.11-2.1.0]# bin/kafka-console-consumer.sh --bootstrap-server  192.168.246.234:9092 --topic testtopic --from-beginning<br>hello<br></code></pre></td></tr></table></figure>
+
+<h2 id="修改logstash配置文件"><a href="#修改logstash配置文件" class="headerlink" title="修改logstash配置文件"></a>修改logstash配置文件</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">先关闭logstash，再修改配置文件---关闭进程</span><br>[root@es-2-zk-log ~]# ps -ef |grep logstash<br>[root@es-2-zk-log ~]# kill -9 进程号<br><br>kafka没有问题之后，回到logstash服务器：<br><span class="hljs-meta prompt_">#</span><span class="language-bash">安装完kafka之后的操作：</span><br>[root@es-2-zk-log ~]# cd /usr/local/logstash-6.5.4/etc/conf.d/<br>[root@es-2-zk-log conf.d]# cp input.conf input.conf.bak<br>[root@es-2-zk-log conf.d]# vim input.conf<br>input &#123;<br>kafka &#123;               #指定kafka服务<br>    type =&gt; &quot;nginx_log&quot;<br>    codec =&gt; &quot;json&quot;        #通用选项，用于输入数据的编解码器<br>    topics =&gt; &quot;nginx&quot;        #这里定义的topic<br>    decorate_events =&gt; true  #会将当前topic信息也带到message中<br>    bootstrap_servers =&gt; &quot;192.168.246.234:9092, 192.168.246.231:9092, 192.168.246.235:9092&quot;<br>  &#125;<br>&#125;  <br><br>`启动 logstash`<br>[root@es-2-zk-log conf.d]# cd /usr/local/logstash-6.5.4/<br>[root@es-2-zk-log logstash-6.5.4]# nohup bin/logstash -f etc/conf.d/  --config.reload.automatic &amp;<br></code></pre></td></tr></table></figure>
+
+<h2 id="Filebeat-部署"><a href="#Filebeat-部署" class="headerlink" title="Filebeat 部署"></a>Filebeat 部署</h2><h2 id="（1）下载"><a href="#（1）下载" class="headerlink" title="（1）下载"></a>（1）下载</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-comment">#wget https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.13.2-linux-x86_64.tar.gz</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="（2）解压"><a href="#（2）解压" class="headerlink" title="（2）解压"></a>（2）解压</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@es-3-head-kib ~]</span><span class="hljs-comment"># tar xzvf filebeat-6.5.4-linux-x86_64.tar.gz -C /usr/local/</span><br><span class="hljs-section">[root@es-3-head-kib ~]</span><span class="hljs-comment"># cd /usr/local/</span><br><span class="hljs-section">[root@es-3-head-kib local]</span><span class="hljs-comment"># mv filebeat-6.5.4-linux-x86_64 filebeat</span><br><span class="hljs-section">[root@es-3-head-kib local]</span><span class="hljs-comment"># cd filebeat/</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="（3）修改配置"><a href="#（3）修改配置" class="headerlink" title="（3）修改配置"></a>（3）修改配置</h2><p>修改 Filebeat 配置，支持收集本地目录日志，并输出日志到 Kafka 集群中</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@es-3-head-kib filebeat]# mv filebeat.yml filebeat.yml.bak<br>[root@es-3-head-kib filebeat]# vim filebeat.yml<br>filebeat.inputs:<br>- type: log   #指定输入类型<br>  enable: true<br>  paths:<br>    -  /var/log/nginx/*.log  #日志路径<br><br>output.kafka:   <br>  hosts: [&quot;192.168.246.234:9092&quot;,&quot;192.168.246.231:9092&quot;,&quot;192.168.246.235:9092&quot;]   #kafka服务器<br>  topic: &#x27;nginx&#x27;        #输出到kafka中的topic<br></code></pre></td></tr></table></figure>
+
+<h2 id="（4）启动"><a href="#（4）启动" class="headerlink" title="（4）启动"></a>（4）启动</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@es-3-head-kib filebeat]# nohup ./filebeat -e -c filebeat.yml &amp; <br>[root@es-3-head-kib filebeat]# tail -f nohup.out <br>2019-08-04T16:55:54.708+0800	INFO	kafka/log.go:53	kafka message: client/metadata found some partitions to be leaderless<br>2019-08-04T16:55:54.708+0800	INFO	kafka/log.go:53	client/metadata retrying after 250ms... (2 attempts remaining)<br>...<br><br>验证kafka是否生成topic<br>[root@es-3-head-kib filebeat]# cd /usr/local/kafka_2.11-2.1.0/<br>[root@es-3-head-kib kafka_2.11-2.1.0]# bin/kafka-topics.sh --zookeeper 192.168.246.231:2181 --list<br>__consumer_offsets<br>nginx     #已经生成topic<br>testtopic<br></code></pre></td></tr></table></figure>
+
+<h2 id="测试-2"><a href="#测试-2" class="headerlink" title="测试"></a>测试</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">浏览filebeat机器的IP地址，和浏览filebeat机器的IP地址+9100端口<br><br>web界面步骤<br>点击发现--创建索引模式--创建索引--再点左上角的3横杠里面的发现--这时候就可以看到创建好的索引了<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>ELK+kafka+filebeat 集群部署</div>
+      <div>http://example.com/2025/11/06/ELK-kafka-filebeat-集群部署/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Mr.xu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/11/06/zabbix-proxy%E9%85%8D%E7%BD%AE%E5%8F%8A%E9%82%AE%E4%BB%B6%E9%85%8D%E7%BD%AE/" title="zabbix-proxy配置及邮件配置">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">zabbix-proxy配置及邮件配置</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/11/06/ansible-%E9%85%8D%E7%BD%AEjspgou%E5%95%86%E5%9F%8E%E4%B8%8A%E7%BA%BF%EF%BC%88mariadb%E7%89%88%EF%BC%89/" title="ansible 配置jspgou商城上线（mariadb版）">
+                        <span class="hidden-mobile">ansible 配置jspgou商城上线（mariadb版）</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

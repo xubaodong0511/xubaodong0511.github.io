@@ -1,0 +1,619 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Mr.xu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1.8版jenkins安装–适应java 8 环境1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jenkins版本8部署">
+<meta property="og:url" content="http://example.com/2025/11/06/jenkins%E7%89%88%E6%9C%AC8%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1.8版jenkins安装–适应java 8 环境1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-11-06T08:15:43.000Z">
+<meta property="article:modified_time" content="2025-11-06T08:15:57.910Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>jenkins版本8部署 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="jenkins版本8部署"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-06 16:15" pubdate>
+          2025年11月6日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          882 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          8 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">jenkins版本8部署</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="1-8版jenkins安装–适应java-8-环境"><a href="#1-8版jenkins安装–适应java-8-环境" class="headerlink" title="1.8版jenkins安装–适应java 8 环境"></a>1.8版jenkins安装–适应java 8 环境</h2><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br></pre></td><td class="code"><pre><code class="hljs perl">dev-jenkins访问地址：<span class="hljs-number">106.15</span><span class="hljs-number">.94</span><span class="hljs-number">.146</span>:<span class="hljs-number">8181</span><br><span class="hljs-comment"># 用户 / 密码 / 邮箱</span><br>zijian / h8G*p%4d<span class="hljs-variable">%vqN</span>*wbJ  / <span class="hljs-number">13921808706</span><span class="hljs-variable">@163</span>.com<br>dev-network-jenkins访问地址：<span class="hljs-number">106.15</span><span class="hljs-number">.94</span><span class="hljs-number">.146</span>:<span class="hljs-number">8182</span><br><span class="hljs-comment"># 用户 / 密码 / 邮箱</span><br>zijian / h8G*p%4d<span class="hljs-variable">%vqN</span>*wbJ  / <span class="hljs-number">13921808706</span><span class="hljs-variable">@163</span>.com<br><br>博客地址：https:<span class="hljs-regexp">//</span>blog.csdn.net/DrakHP/article/details/<span class="hljs-number">136065639</span><br><br>wget https:<span class="hljs-regexp">//a</span>.xbd666.cn/d/Aliyun/Cloud_computing/Software_package/tomcat-jdk/jdk-8u271-linux-x64.tar.gz<br><br>wget https:<span class="hljs-regexp">//a</span>.xbd666.cn/d/Aliyun/Cloud_computing/Software_package/maven-nodejs/apache-maven-<span class="hljs-number">3.9</span>.<span class="hljs-number">3</span>-bin.tar.gz<br><br>[root<span class="hljs-variable">@localhost</span> ~]<span class="hljs-comment"># ls</span><br>anaconda-ks.cfg  apache-maven-<span class="hljs-number">3.9</span>.<span class="hljs-number">3</span>-bin.tar.gz  jdk-8u271-linux-x64.tar.gz<br>[root<span class="hljs-variable">@localhost</span> ~]<span class="hljs-comment"># tar xzf apache-maven-3.9.3-bin.tar.gz  -C /usr/local/</span><br>[root<span class="hljs-variable">@localhost</span> ~]<span class="hljs-comment"># tar xzf jdk-8u271-linux-x64.tar.gz  -C /usr/local/</span><br>[root<span class="hljs-variable">@localhost</span> ~]<span class="hljs-comment"># cd /usr/local/</span><br>[root<span class="hljs-variable">@localhost</span> <span class="hljs-keyword">local</span>]<span class="hljs-comment"># ls</span><br>apache-maven-<span class="hljs-number">3.9</span>.<span class="hljs-number">3</span>  bin  etc  games  include  jdk1.<span class="hljs-number">8.0_271</span>  lib  lib64  libexec  sbin  share  src<br>[root<span class="hljs-variable">@localhost</span> <span class="hljs-keyword">local</span>]<span class="hljs-comment"># mv apache-maven-3.9.3/ maven</span><br>[root<span class="hljs-variable">@localhost</span> <span class="hljs-keyword">local</span>]<span class="hljs-comment"># mv jdk1.8.0_271/ java</span><br>[root<span class="hljs-variable">@localhost</span> <span class="hljs-keyword">local</span>]<span class="hljs-comment"># ls</span><br>bin  etc  games  include  java  lib  lib64  libexec  maven  sbin  share  src<br>[root<span class="hljs-variable">@localhost</span> <span class="hljs-keyword">local</span>]<span class="hljs-comment"># mkdir jenkins</span><br>[root<span class="hljs-variable">@localhost</span> <span class="hljs-keyword">local</span>]<span class="hljs-comment"># cd jenkins/</span><br>[root<span class="hljs-variable">@localhost</span> jenkins]<span class="hljs-comment"># ls</span><br>[root<span class="hljs-variable">@localhost</span> jenkins]<span class="hljs-comment">#  wget https://repo.huaweicloud.com/jenkins/redhat-stable/jenkins-2.346.3-1.1.noarch.rpm</span><br><br>[root<span class="hljs-variable">@localhost</span> jenkins]<span class="hljs-comment"># ls</span><br>jenkins-<span class="hljs-number">2.346</span>.<span class="hljs-number">3</span>-<span class="hljs-number">1.1</span>.noarch.rpm<br>[root<span class="hljs-variable">@localhost</span> jenkins]<span class="hljs-comment"># rpm -ivh jenkins-2.346.3-1.1.noarch.rpm</span><br>警告：jenkins-<span class="hljs-number">2.346</span>.<span class="hljs-number">3</span>-<span class="hljs-number">1.1</span>.noarch.rpm: 头V4 RSA/SHA512 Signature, 密钥 ID 45f2c3d5: NOKEY<br>准备中...                          <span class="hljs-comment">################################# [100%]</span><br><span class="hljs-keyword">stat</span>: 无法获取<span class="hljs-string">&quot;/var/cache/jenkins&quot;</span> 的文件状态(<span class="hljs-keyword">stat</span>): 没有那个文件或目录<br><span class="hljs-keyword">stat</span>: 无法获取<span class="hljs-string">&quot;/var/log/jenkins&quot;</span> 的文件状态(<span class="hljs-keyword">stat</span>): 没有那个文件或目录<br><span class="hljs-keyword">stat</span>: 无法获取<span class="hljs-string">&quot;/var/lib/jenkins&quot;</span> 的文件状态(<span class="hljs-keyword">stat</span>): 没有那个文件或目录<br>错误：<span class="hljs-variable">%pre</span>(jenkins-<span class="hljs-number">2.346</span>.<span class="hljs-number">3</span>-<span class="hljs-number">1.1</span>.noarch) 脚本执行失败，退出状态码为 <span class="hljs-number">1</span><br>错误：jenkins-<span class="hljs-number">2.346</span>.<span class="hljs-number">3</span>-<span class="hljs-number">1.1</span>.noarch: 安裝 已失败<br><br>[root<span class="hljs-variable">@localhost</span> jenkins]<span class="hljs-comment"># mkdir -p /var/cache/jenkins</span><br>[root<span class="hljs-variable">@localhost</span> jenkins]<span class="hljs-comment"># mkdir -p /var/log/jenkins</span><br>[root<span class="hljs-variable">@localhost</span> jenkins]<span class="hljs-comment"># mkdir -p /var/lib/jenkins</span><br>[root<span class="hljs-variable">@localhost</span> jenkins]<span class="hljs-comment"># rpm -ivh jenkins-2.346.3-1.1.noarch.rpm</span><br>警告：jenkins-<span class="hljs-number">2.346</span>.<span class="hljs-number">3</span>-<span class="hljs-number">1.1</span>.noarch.rpm: 头V4 RSA/SHA512 Signature, 密钥 ID 45f2c3d5: NOKEY<br>准备中...                          <span class="hljs-comment">################################# [100%]</span><br>正在升级/安装...<br>   <span class="hljs-number">1</span>:jenkins-<span class="hljs-number">2.346</span>.<span class="hljs-number">3</span>-<span class="hljs-number">1.1</span>              <span class="hljs-comment">################################# [100%]</span><br><br>[root<span class="hljs-variable">@localhost</span> jenkins]<span class="hljs-comment"># vim /etc/profile</span><br><br>JAVA_HOME=<span class="hljs-regexp">/usr/l</span>ocal/java<br>MAVEN_HOME=<span class="hljs-regexp">/usr/l</span>ocal/maven<br>PATH=<span class="hljs-variable">$PATH</span>:<span class="hljs-variable">$JAVA_HOME</span>/bin:<span class="hljs-variable">$MAVEN_HOME</span>/bin<br>export JAVA_HOME MAVEN_HOME PATH<br>export JENKINS_HOME=<span class="hljs-regexp">/usr/l</span>ocal/jenkins		<span class="hljs-comment">#添加到最后一行,并添加环境变量</span><br><br>[root<span class="hljs-variable">@localhost</span> jenkins]<span class="hljs-comment"># vim /etc/sysconfig/jenkins</span><br><br>JENKINS_HOME=<span class="hljs-string">&quot;/var/lib/jenkins&quot;</span>	改为	JENKINS_HOME=<span class="hljs-string">&quot;/usr/local/jenkins&quot;</span><br><br>JENKINS_USER=<span class="hljs-string">&quot;jenkins&quot;</span>	改为	JENKINS_USER=<span class="hljs-string">&quot;root&quot;</span><br><br>JENKINS_PORT=<span class="hljs-string">&quot;8080&quot;</span>	端口改为	JENKINS_PORT=<span class="hljs-string">&quot;8181&quot;</span><br><br>[root<span class="hljs-variable">@localhost</span> jenkins]<span class="hljs-comment"># source /etc/profile</span><br>[root<span class="hljs-variable">@localhost</span> jenkins]<span class="hljs-comment"># which java</span><br>/usr/<span class="hljs-keyword">local</span>/java/bin/java<br>[root<span class="hljs-variable">@localhost</span> jenkins]<span class="hljs-comment"># vim /etc/init.d/jenkins </span><br><br>往下滑，找到 candidates=<br><br>将“”中的最后一行改为我们刚刚得到的jdk路径  /usr/<span class="hljs-keyword">local</span>/java/bin/java<br><br>candidates=<span class="hljs-string">&quot;</span><br><span class="hljs-string">/etc/alternatives/java</span><br><span class="hljs-string">/usr/lib/jvm/java-1.8.0/bin/java</span><br><span class="hljs-string">/usr/lib/jvm/jre-1.8.0/bin/java</span><br><span class="hljs-string">/usr/lib/jvm/java-11.0/bin/java</span><br><span class="hljs-string">/usr/lib/jvm/jre-11.0/bin/java</span><br><span class="hljs-string">/usr/lib/jvm/java-11-openjdk-amd64</span><br><span class="hljs-string">/usr/bin/java</span><br><span class="hljs-string">/usr/local/java/bin/java		#直接添加我们刚刚得到的JDK路径</span><br><span class="hljs-string">&quot;</span><br><br>[root<span class="hljs-variable">@localhost</span> jenkins]<span class="hljs-comment"># systemctl daemon-reload</span><br>[root<span class="hljs-variable">@localhost</span> jenkins]<span class="hljs-comment"># systemctl stop firewalld</span><br>[root<span class="hljs-variable">@localhost</span> jenkins]<span class="hljs-comment"># cd /etc/init.d/</span><br>[root<span class="hljs-variable">@localhost</span> init.d]<span class="hljs-comment"># ls</span><br>functions  jenkins  netconsole  network  README<br>[root<span class="hljs-variable">@localhost</span> init.d]<span class="hljs-comment"># ./jenkins start</span><br><br><span class="hljs-comment">#访问网址：139.224.245.121:8181</span><br><br>接下来，先别安装插件，此时重新输入网址，ip+端口号/pluginManager/advanced<br><br>例如：<span class="hljs-number">139.224</span><span class="hljs-number">.245</span><span class="hljs-number">.121</span>:<span class="hljs-number">8181</span>/pluginManager/advanced<br><br>进入界面后，往下滑，找到Update Site，修改URL<br><br>https:<span class="hljs-regexp">//mirr</span>or.tuna.tsinghua.edu.cn/jenkins/updates/dynamic-stable-<span class="hljs-number">2.346</span>.<span class="hljs-number">1</span>/update-center.json	<span class="hljs-comment"># 将原有的更改为这个URL</span><br><br>然后点击上方的Availabale  后  点击Check now<br><br>然后需要重新启动jenkins，更新配置<br><br>输入网址：<span class="hljs-number">172.16</span><span class="hljs-number">.11</span><span class="hljs-number">.31</span>:<span class="hljs-number">8181</span>/restart<br><br>会提示我们是否要重启，点击Yes，等待重启成功<br><br>然后需要再重复一次输入管理面密码的操作，进入finalshell中，输入cat 得到的密码进行访问<br><br><span class="hljs-comment">#访问网址：139.224.245.121:8181</span><br><br><span class="hljs-comment"># 在网关的机器上配置Nginx代理</span><br>server &#123;<br>        <span class="hljs-keyword">listen</span>  <span class="hljs-number">9966</span>;<br><br>        location / &#123;<br>                proxy_pass http:<span class="hljs-regexp">//</span><span class="hljs-number">172.16</span><span class="hljs-number">.174</span><span class="hljs-number">.124</span>:<span class="hljs-number">8181</span>/;<br>                proxy_set_header Host <span class="hljs-variable">$host</span>:<span class="hljs-variable">$server_port</span>;<br>                proxy_set_header X-Real-IP <span class="hljs-variable">$remote_addr</span>;<br>                proxy_set_header X-Forwarded-For <span class="hljs-variable">$proxy_add_x_forwarded_for</span>;<br>        &#125;<br>&#125;<br><span class="hljs-comment"># 访问网址：http://106.15.94.146:9966/</span><br><br><span class="hljs-comment"># 用户 / 密码 / 邮箱</span><br>zijian / h8G*p%4d<span class="hljs-variable">%vqN</span>*wbJ  / <span class="hljs-number">13921808706</span><span class="hljs-variable">@163</span>.com<br><br><span class="hljs-comment"># git安装--脚本安装</span><br>密码：Zj123456<br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>jenkins版本8部署</div>
+      <div>http://example.com/2025/11/06/jenkins版本8部署/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Mr.xu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/11/06/%E6%97%A5%E5%B8%B8%E5%B7%A5%E4%BD%9C%EF%BC%88%E6%9B%B4%E6%96%B0%E4%B8%AD%EF%BC%89/" title="日常工作（更新中）">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">日常工作（更新中）</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/11/06/%E9%83%A8%E7%BD%B2/" title="部署">
+                        <span class="hidden-mobile">部署</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
