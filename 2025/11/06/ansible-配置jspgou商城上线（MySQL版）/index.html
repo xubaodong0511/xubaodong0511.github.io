@@ -1,0 +1,642 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Mr.xu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="准备实验环境，准备两台电脑10.31.162.24—-10.31.162.25 关闭防火墙，关闭setenforce 0 hosts解析123[root@ansible-server ~]# vim &#x2F;etc&#x2F;hosts10.31.162.24    ansible-server10.31.162.25    ansible-web  更改主机名1234510.31.162.24[root@ans">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ansible 配置jspgou商城上线（MySQL版）">
+<meta property="og:url" content="http://example.com/2025/11/06/ansible-%E9%85%8D%E7%BD%AEjspgou%E5%95%86%E5%9F%8E%E4%B8%8A%E7%BA%BF%EF%BC%88MySQL%E7%89%88%EF%BC%89/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="准备实验环境，准备两台电脑10.31.162.24—-10.31.162.25 关闭防火墙，关闭setenforce 0 hosts解析123[root@ansible-server ~]# vim &#x2F;etc&#x2F;hosts10.31.162.24    ansible-server10.31.162.25    ansible-web  更改主机名1234510.31.162.24[root@ans">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xbd666.cn/upload/jspgou1.png">
+<meta property="article:published_time" content="2025-11-06T12:58:03.000Z">
+<meta property="article:modified_time" content="2025-11-06T12:58:20.376Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://xbd666.cn/upload/jspgou1.png">
+  
+  
+  
+  <title>ansible 配置jspgou商城上线（MySQL版） - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="ansible 配置jspgou商城上线（MySQL版）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-06 20:58" pubdate>
+          2025年11月6日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          11 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">ansible 配置jspgou商城上线（MySQL版）</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="准备实验环境，准备两台电脑"><a href="#准备实验环境，准备两台电脑" class="headerlink" title="准备实验环境，准备两台电脑"></a>准备实验环境，准备两台电脑</h2><p>10.31.162.24—-10.31.162.25</p>
+<p>关闭防火墙，关闭setenforce 0</p>
+<h2 id="hosts解析"><a href="#hosts解析" class="headerlink" title="hosts解析"></a>hosts解析</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">[root@ansible-server ~]# vim /etc/hosts<br>10.31.162.24    ansible-server<br>10.31.162.25    ansible-web<br></code></pre></td></tr></table></figure>
+
+<h2 id="更改主机名"><a href="#更改主机名" class="headerlink" title="更改主机名"></a>更改主机名</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">10.31.162.24<br>[root@ansible-server ~]# hostnamectl set-hostname ansible-server<br><br>10.31.162.25<br>[root@ansible-web ~]# hostnamectl set-hostname ansible-web<br></code></pre></td></tr></table></figure>
+
+<h2 id="安装ansible"><a href="#安装ansible" class="headerlink" title="安装ansible"></a>安装ansible</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs shell">10.31.162.24<br>安装：控制节点<br> 1. 配置EPEL网络yum源<br> [root@ansible-server ~]# yum install -y epel*<br> 2. 安装ansible<br> [root@ansible-server ~]# yum install -y ansible<br> 3.查看版本<br> [root@ansiable-server ~]# ansible --version<br> 4.查看配置文件：<br>[root@ansible-server ~]# rpm  -qc ansible<br>---1.主配置文件：/etc/ansible/ansible.cfg  #主要设置一些ansible初始化的信息，比如日志存放路径、模块、插件等配置信息<br>---2.主机清单文件:默认位置/etc/ansible/hosts<br></code></pre></td></tr></table></figure>
+
+<h2 id="安装nginx"><a href="#安装nginx" class="headerlink" title="安装nginx"></a>安装nginx</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">配置nginx源</span><br>[root@ansible-server ~]# vim /etc/yum.repos.d/nginx.repo<br>[nginx-stable]<br>name=nginx stable repo<br>baseurl=http://nginx.org/packages/centos/$releasever/$basearch/<br>gpgcheck=0<br>enabled=1<br>gpgkey=https://nginx.org/keys/nginx_signing.key<br>module_hotfixes=true<br><span class="hljs-meta prompt_"># </span><span class="language-bash">下载nginx</span><br>[root@ansible-server ~]# yum install -y nginx<br>[root@ansible-server ~]# systemctl start nginx<br>[root@ansible-server ~]# systemctl enable nginx<br></code></pre></td></tr></table></figure>
+
+<h2 id="上传jdk、tomcat、jspgou压缩包"><a href="#上传jdk、tomcat、jspgou压缩包" class="headerlink" title="上传jdk、tomcat、jspgou压缩包"></a>上传jdk、tomcat、jspgou压缩包</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs shell">将下载好的jdk、tomcat、jspgou，上传到server机器上<br><span class="hljs-meta prompt_"># </span><span class="language-bash">也可以直接官网下载</span><br>apache-tomcat-9.0.83.tar.gz<br>jdk-8u321-linux-x64.tar.gz<br>jspgouV6.1-ROOT.zip<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">jspgou包是gz的包，需要解压重新压缩才可以用，只能用tar包</span><br>[root@ansible-server ~]# yum -y install unzip<br>[root@ansible-server ~]# unzip jspgouV6.1-ROOT.zip<br>[root@ansible-server ~]# ls<br>DB ROOT<br>[root@ansible-server ~]# tar zcvf jspgouv6.1.tar.gz DB ROOT<br>jspgouv6.1.tar.gz<br></code></pre></td></tr></table></figure>
+
+<h2 id="添加主机"><a href="#添加主机" class="headerlink" title="添加主机"></a>添加主机</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">添加主机清单</span><br>[root@ansible-server ~]# vim /etc/ansible/hosts<br>[jspgou]<br>ansible-web<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">其他语法</span><br>1.添加主机或者主机组：<br>[root@ansible-server ~]# vim /etc/ansible/hosts  #在最后追加被管理端的机器<br>ansible-web1                      #单独指定主机，可以使用主机名称或IP地址<br>2.添加主机组：<br>[webservers]        #使用[]标签指定主机组 ----标签自定义<br>192.168.10.11        #如果未解析添加ip<br>ansible-web2      #解析添加主机名<br>3.组可以包含其他组：<br>[webservers1]     #组一<br>ansible-web1<br>[webservers2]     #组二<br>ansible-web2<br>[weball:children]      #caildren-照写 #weball包括两个子组<br>webservers1        #组一<br>webservers2        #组二<br>4.为一个组指定变量，组内每个主机都可以使用该变量：<br>[weball:vars]         #设置变量,vars--照写<br>ansible_ssh_port=22     <br>ansible_ssh_user=root   <br>ansible_ssh_private_key_file=/root/.ssh/id_rsa  <br><span class="hljs-meta prompt_">#</span><span class="language-bash">ansible_ssh_pass=1      <span class="hljs-comment">#也可以定义密码，如果没有互传秘钥可以使用密码。</span></span><br></code></pre></td></tr></table></figure>
+
+<h2 id="配置ssh密钥"><a href="#配置ssh密钥" class="headerlink" title="配置ssh密钥"></a>配置ssh密钥</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">配置ssh公钥认证：控制节点需要发送ssh公钥给所有非被控制节点<br>[root@ansible-server ~]# ssh-keygen<br>[root@ansible-server ~]# ssh-copy-id -i 10.31.126.25  #所有机器<br></code></pre></td></tr></table></figure>
+
+<h2 id="配置剧本"><a href="#配置剧本" class="headerlink" title="配置剧本"></a>配置剧本</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">在vars目录里配置file.yml配置文件</span><br>[root@ansible-server ~]# vim /etc/ansible/vars/file.yml<br>src_gou_path: /root/jspgouv6.1.tar.gz<br>src_jdk_path: /root/jdk-8u321-linux-x64.tar.gz<br>src_tomcat_path: /root/apache-tomcat-9.0.83.tar.gz<br>dest_gou_path: /root<br>dest_jdk_path: /root<br>dest_tomcat_path: /root<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">配置安装MySQL脚本</span><br>[root@ansible-server ~]# vim /etc/ansible/jsp.sh<br><span class="hljs-meta prompt_">#</span><span class="language-bash">!/bin/bash</span><br>PASS_WORD=&quot;Qianfeng@123&quot;<br><span class="hljs-meta prompt_">#</span><span class="language-bash">配置源</span><br>cat &gt;&gt; /etc/yum.repos.d/mysql.repo &lt;&lt;EOF<br>[mysql]<br>name=mysql<br>baseurl=https://mirrors.tuna.tsinghua.edu.cn/mysql/yum/mysql-5.7-community-el7-x86_64/<br>gpgcheck=0<br>enabled=1<br>gpgkey=https://mirrors.ustc.edu.cn/mysql-repo/RPM-GPG-KEY-mysql<br>EOF<br><span class="hljs-meta prompt_">#</span><span class="language-bash">下载mysql</span><br>yum repolist enabled | grep mysql<br>yum -y install mysql-community-server &amp;&gt; /dev/null<br><span class="hljs-meta prompt_">#</span><span class="language-bash">启动</span><br>systemctl start mysqld &amp;&amp; systemctl enable mysqld<br><span class="hljs-meta prompt_">#</span><span class="language-bash">获取密码</span><br>TEMP_PASSWORD=$(sudo grep &#x27;temporary password&#x27; /var/log/mysqld.log | awk &#x27;&#123;print $NF&#125;&#x27;)<br><span class="hljs-meta prompt_">#</span><span class="language-bash">修改密码</span><br>mysql -u root -p&quot;$&#123;TEMP_PASSWORD&#125;&quot; --connect-expired-password &lt;&lt;EOF<br>ALTER USER &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED BY &quot;$PASS_WORD&quot;;<br>GRANT ALL PRIVILEGES ON *.* TO &#x27;root&#x27;@&#x27;localhost&#x27; WITH GRANT OPTION;<br>FLUSH PRIVILEGES;<br>EOF<br><span class="hljs-meta prompt_">#</span><span class="language-bash">重启mysql</span><br>systemctl restart mysqld<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">赋予jsp.sh权限</span><br>[root@ansible-server ~]# cd /etc/ansible/<br>[root@ansible-server ansible]# chmod o+x jsp.sh<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">在ansible目录里配置jspgou.yml配置文件</span><br>[root@ansible-server ~]# vim /etc/ansible/jspgou.yml<br>- hosts: jspgou<br>  user: root<br>  become: yes<br>  vars_files:<br>  - /etc/ansible/vars/file.yml<br>  <br>  tasks:<br>  - name: configure jdk1<br>    copy: src=&#123;&#123; src_jdk_path &#125;&#125; dest=&#123;&#123; dest_jdk_path &#125;&#125;<br><br>  - name: unzip jdk<br>    unarchive: src=&#123;&#123; dest_jdk_path &#125;&#125;/jdk-8u321-linux-x64.tar.gz dest=/usr/local/ copy=no<br><br>  - name: rename java<br>    shell: mv /usr/local/jdk1.8.0_321 /usr/local/java<br><br>  - name: configure jdk envirement1<br>    shell: echo &quot;JAVA_HOME=/usr/local/java&quot; &gt;&gt; /etc/profile<br><br>  - name: configure jdk envirement2<br>    shell: echo &#x27;PATH=$JAVA_HOME/bin:$PATH&#x27; &gt;&gt; /etc/profile<br><br>  - name: copy tomcat<br>    copy: src=&#123;&#123; src_tomcat_path &#125;&#125; dest=&#123;&#123; dest_tomcat_path &#125;&#125;<br><br>  - name: unzip tomcat<br>    unarchive: src=&#123;&#123; dest_tomcat_path &#125;&#125;/apache-tomcat-9.0.83.tar.gz dest=/usr/local/ copy=no<br><br>  - name: rename tomcat<br>    shell: mv /usr/local/apache-tomcat-9.0.83 /usr/local/tomcat<br><br>  - name: rm -rf webapps<br>    shell: rm -rf /usr/local/tomcat/webapps/*<br><br>  - name: add /etc/profile<br>    shell: sed -i &quot;2i source /etc/profile&quot; /usr/local/tomcat/bin/startup.sh<br><br>  - name: add /etc/profile to shutdown.sh<br>    shell: sed -i &quot;2i source /etc/profile&quot; /usr/local/tomcat/bin/shutdown.sh<br><br>  - name: copy jspgou<br>    copy: src=&#123;&#123; src_gou_path &#125;&#125; dest=&#123;&#123; dest_gou_path &#125;&#125;<br><br>  - name: unzip jspgou<br>    unarchive: src=&#123;&#123; dest_gou_path &#125;&#125;/jspgouv6.1.tar.gz dest=/usr/local/tomcat/webapps copy=no<br><br>  - name: Modify MySQL user initial password<br>    script: /etc/ansible/jsp.sh removes=/etc/passwd<br><br>  - name: enter MySQL<br>    shell: mysql -uroot -p&#x27;Qianfeng@123&#x27; -e &quot;create database jspgou default charset=utf8;&quot;<br>    <br>  - name: edit mysqld<br>    shell: sed -i &#x27;s/jdbc.password=/jdbc.password=Qianfeng@123/&#x27; /usr/local/tomcat/webapps/ROOT/WEB-INF/config/jdbc.properties<br><br>  - name: append mysql<br>    shell: echo &quot;max_allowed_packet= 64m&quot; &gt;&gt; /etc/my.cnf<br><br>  - name: append mysql1<br>    shell: echo &quot;sql_mode=STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUB&quot; &gt;&gt; /etc/my.cnf<br><br>  - name: append mysql2<br>    shell: echo &quot;explicit_defaults_for_timestamp=1&quot; &gt;&gt; /etc/my.cnf<br><br>  - name: restart mysqld1<br>    shell: systemctl restart mysqld<br><br>  - name: Import data<br>    shell: mysql -uroot -p&quot;Qianfeng@123&quot; -D jspgou &lt; /usr/local/tomcat/webapps/DB/jspgou.sql<br><br>  - name: restart mysql11<br>    shell: systemctl restart mysqld<br>    notify: start jspgou<br>  handlers:<br>  <br>  - name: start jspgou<br>    shell: nohup /usr/local/tomcat/bin/startup.sh &amp;<br></code></pre></td></tr></table></figure>
+<h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs autoit">[root<span class="hljs-symbol">@ansible</span> ansible]<span class="hljs-meta"># ansible-playbook jspgou.yml</span><br></code></pre></td></tr></table></figure>
+<h1 id="配置nginx代理"><a href="#配置nginx代理" class="headerlink" title="配置nginx代理"></a>配置nginx代理</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">备份原有配置文件</span><br>[root@ansible-server ~]#  cp default.conf default.conf.bak<br><span class="hljs-meta prompt_"># </span><span class="language-bash">添加jspgou.conf配置文件</span><br>[root@ansible-server ~]#  vim /etc/nginx/conf.d/jspgou.conf <br>server &#123;<br>    listen       80;<br>    server_name  localhost;<br><br>    location / &#123;<br>        proxy_pass http://10.31.162.25:8080;<br>        proxy_set_header Host $host:$server_port;<br>        proxy_set_header X-Real-IP $remote_addr;<br>        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;<br>    &#125;<br><br>&#125;<br><span class="hljs-meta prompt_"># </span><span class="language-bash">重启nginx</span><br>[root@ansible-server ~]#  systemctl restart nginx<br></code></pre></td></tr></table></figure>
+
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">打开网址输入10.31.162.24----会出来jspgou商城界面<br></code></pre></td></tr></table></figure>
+<p><img src="https://xbd666.cn/upload/jspgou1.png" srcset="/img/loading.gif" lazyload alt="jspgou1.png"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>ansible 配置jspgou商城上线（MySQL版）</div>
+      <div>http://example.com/2025/11/06/ansible-配置jspgou商城上线（MySQL版）/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Mr.xu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/11/06/ansible-%E9%85%8D%E7%BD%AEjspgou%E5%95%86%E5%9F%8E%E4%B8%8A%E7%BA%BF%EF%BC%88mariadb%E7%89%88%EF%BC%89/" title="ansible 配置jspgou商城上线（mariadb版）">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">ansible 配置jspgou商城上线（mariadb版）</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/11/06/gitlab-%E4%BB%93%E5%BA%93%E5%88%9B%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="gitlab 仓库创建及使用">
+                        <span class="hidden-mobile">gitlab 仓库创建及使用</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

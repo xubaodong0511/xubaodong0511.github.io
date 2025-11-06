@@ -1,0 +1,653 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Mr.xu">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="部署harbor–方式一部署环境  关闭防火墙 下载harbor包1wget https:&#x2F;&#x2F;a.xbd666.cn&#x2F;d&#x2F;Aliyun&#x2F;Cloud_computing&#x2F;Software_package&#x2F;docker&#x2F;harbor-online-installer-v2.10.0.tgz 下载docker-compose1curl -L https:&#x2F;&#x2F;github.com&#x2F;docker&#x2F;compo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker--harbor私有仓库部署">
+<meta property="og:url" content="http://example.com/2025/11/06/docker-harbor%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="部署harbor–方式一部署环境  关闭防火墙 下载harbor包1wget https:&#x2F;&#x2F;a.xbd666.cn&#x2F;d&#x2F;Aliyun&#x2F;Cloud_computing&#x2F;Software_package&#x2F;docker&#x2F;harbor-online-installer-v2.10.0.tgz 下载docker-compose1curl -L https:&#x2F;&#x2F;github.com&#x2F;docker&#x2F;compo">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xbd666.cn/upload/harbor1.webp">
+<meta property="og:image" content="http://example.com/upload/harbor2.webp">
+<meta property="article:published_time" content="2025-11-06T12:52:23.000Z">
+<meta property="article:modified_time" content="2025-11-06T12:52:38.454Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://xbd666.cn/upload/harbor1.webp">
+  
+  
+  
+  <title>docker--harbor私有仓库部署 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="docker--harbor私有仓库部署"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-06 20:52" pubdate>
+          2025年11月6日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          874 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          8 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">docker--harbor私有仓库部署</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="部署harbor–方式一"><a href="#部署harbor–方式一" class="headerlink" title="部署harbor–方式一"></a>部署harbor–方式一</h2><p><code>部署环境  关闭防火墙</code></p>
+<h2 id="下载harbor包"><a href="#下载harbor包" class="headerlink" title="下载harbor包"></a>下载harbor包</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini">wget https://a.xbd666.cn/d/Aliyun/Cloud_computing/Software_package/docker/harbor-online-installer-v2.10.0.tgz<br></code></pre></td></tr></table></figure>
+<h2 id="下载docker-compose"><a href="#下载docker-compose" class="headerlink" title="下载docker-compose"></a>下载docker-compose</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini">curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose<br></code></pre></td></tr></table></figure>
+<h2 id="授权"><a href="#授权" class="headerlink" title="授权"></a>授权</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@iZ8vb3lp570ckxi53yb66gZ ~]</span><span class="hljs-comment"># chmod +x /usr/local/bin/docker-compose</span><br></code></pre></td></tr></table></figure>
+<h2 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@kub-k8s-master ~]</span><span class="hljs-comment"># tar xf harbor-offline-installer-v1.8.0.tgz</span><br><span class="hljs-section">[root@kub-k8s-master ~]</span><span class="hljs-comment"># cd harbor</span><br></code></pre></td></tr></table></figure>
+<h2 id="http访问方式的配置："><a href="#http访问方式的配置：" class="headerlink" title="http访问方式的配置："></a>http访问方式的配置：</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@kub-k8s-master harbor]</span><span class="hljs-comment"># cp harbor.yml.tmpl  harbor.yml</span><br><span class="hljs-section">[root@kub-k8s-master harbor]</span><span class="hljs-comment"># vim harbor.yml #使用IP地址,需要修改的内容如下</span><br>hostname: 192.168.246.166  <span class="hljs-comment">#改成自己的ip</span><br>注释443的模块<br><br><span class="hljs-section">[root@kub-k8s-master harbor]</span><span class="hljs-comment"># ./prepare  #需要等待下载镜像</span><br>						或   ./install.sh<br></code></pre></td></tr></table></figure>
+
+<h2 id="docker-compose-使用"><a href="#docker-compose-使用" class="headerlink" title="docker-compose 使用"></a>docker-compose 使用</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@kub-k8s-master harbor]</span><span class="hljs-comment"># docker-compose up -d  #放后台</span><br><br><span class="hljs-section">[root@kub-k8s-master harbor]</span><span class="hljs-comment"># docker-compose down #停止服务</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="浏览器访问测试："><a href="#浏览器访问测试：" class="headerlink" title="浏览器访问测试："></a>浏览器访问测试：</h2><p><code>http://10.31.162.25</code><br><code>账号admin  密码Harbor12345</code></p>
+<h2 id="设置域名"><a href="#设置域名" class="headerlink" title="设置域名"></a>设置域名</h2><figure class="highlight brainfuck"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs brainfuck"><span class="hljs-comment">配置域名，并通过反向代理docker客户端</span><br><span class="hljs-comment">1、网站</span><span class="hljs-literal">--</span><span class="hljs-comment">创建网站</span><span class="hljs-literal">--</span><span class="hljs-comment">定义域名</span><br><span class="hljs-comment">2、网站</span><span class="hljs-literal">--</span><span class="hljs-comment">证书</span><span class="hljs-literal">--</span><span class="hljs-comment">申请证书</span><br><span class="hljs-comment">3、网站</span><span class="hljs-literal">--</span><span class="hljs-comment">创建好的网站</span><span class="hljs-literal">--</span><span class="hljs-comment">HTTPS</span><span class="hljs-literal">--</span><span class="hljs-comment">启用 HTTPS</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="上传镜像"><a href="#上传镜像" class="headerlink" title="上传镜像"></a>上传镜像</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-comment"># 在终端上登入</span><br>docker login IP地址<br><br>推送<br><span class="hljs-comment">#在项目中标记镜像：</span><br>现在终端上给要上传的镜像打标记tag<br><span class="hljs-section">[root@localhost ~]</span><span class="hljs-comment">#docker tag mysql：5.7 har.xbd666.cn/qingfeng/mysql：5.7</span><br><span class="hljs-comment">#推送到仓库</span><br><span class="hljs-section">[root@localhost ~]</span><span class="hljs-comment">#docker push 120.27.128.132:81/qingfeng/REPOSITORY[:TAG]</span><br><br><span class="hljs-comment"># 备注</span><br>如果出现413<br>error parsing HTTP 413 response body: invalid character &#x27;&lt;&#x27; looking for beginning of value<br>回到1panel上做设置<br>1panel网址--网站--设置--性能调优--client_max_body_size（这里改成0）<br>或者 在nginx配置文件里更改最大上传文件大小值<br></code></pre></td></tr></table></figure>
+
+<h2 id="下载镜像"><a href="#下载镜像" class="headerlink" title="下载镜像"></a>下载镜像</h2><figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs autoit">[root<span class="hljs-symbol">@localhost</span> ~]<span class="hljs-meta"># docker push har.xbd666.cn/qingfeng/mysql：5.7</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://xbd666.cn/upload/harbor1.webp" srcset="/img/loading.gif" lazyload alt="harbor1.webp"></p>
+<h2 id="部署harbor–方式二"><a href="#部署harbor–方式二" class="headerlink" title="部署harbor–方式二"></a>部署harbor–方式二</h2><h2 id="构建环境"><a href="#构建环境" class="headerlink" title="构建环境"></a>构建环境</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ini">systemctl stop firewalld<br>setenforce 0<br>yum -y install vim wget net-tools lrzsz <br></code></pre></td></tr></table></figure>
+
+<h2 id="下载docker"><a href="#下载docker" class="headerlink" title="下载docker"></a>下载docker</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-comment">#删除已安装的Docker</span><br><span class="hljs-section">[root@localhost ~]</span><span class="hljs-comment"># yum remove docker \</span><br>docker-client \<br>docker-client-latest \<br>docker-common \<br>docker-latest \<br>docker-latest-logrotate \<br>docker-logrotate \<br>docker-selinux \<br>docker-engine-selinux \<br>docker-engine<br><br><span class="hljs-comment">#配置阿里云Docker Yum源</span><br><span class="hljs-section">[root@localhost ~]</span><span class="hljs-comment"># yum install -y yum-utils device-mapper-persistent-data lvm2</span><br><span class="hljs-section">[root@localhost ~]</span><span class="hljs-comment"># yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br><br><span class="hljs-comment">#查看docker版本</span><br><span class="hljs-section">[root@localhost ~]</span><span class="hljs-comment"># yum list docker-ce --showduplicates</span><br>或<br>docker -v  或  dockers version<br><br><span class="hljs-comment">#安装Docker新版本或指定版本号</span><br><span class="hljs-section">[root@localhost ~]</span><span class="hljs-comment"># yum install -y docker-ce</span><br>或 <br>yum install docker-ce-18.03.0.ce  -y<br><br><span class="hljs-comment">#启动Docker服务：</span><br><span class="hljs-section">[root@localhost ~]</span><span class="hljs-comment"># systemctl start docker &amp;&amp; systemctl enable docker</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="配置Docker-加速器"><a href="#配置Docker-加速器" class="headerlink" title="配置Docker 加速器"></a>配置Docker 加速器</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@localhost ~]</span><span class="hljs-comment"># vim /etc/docker/daemon.json</span><br>&#123;<br>&quot;registry-mirrors&quot;: <span class="hljs-section">[&quot;https://br003st4.mirror.aliyuncs.com&quot;]</span><br>&#125;<br><span class="hljs-section">[root@localhost ~]</span><span class="hljs-comment"># systemctl daemon-reload</span><br><span class="hljs-section">[root@localhost ~]</span><span class="hljs-comment"># systemctl restart docker</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="部署私有仓库–harbor"><a href="#部署私有仓库–harbor" class="headerlink" title="部署私有仓库–harbor"></a>部署私有仓库–harbor</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs ini">cwget https://a.xbd666.cn/d/Aliyun/Cloud_computing/Software_package/docker/harbor-offline-installer-v1.8.0.tgz<br><br><span class="hljs-comment">#下载docker-compose</span><br><span class="hljs-section">[root@localhost ~]</span><span class="hljs-comment"># curl -L https://github.7boe.top/https://github.com/docker/compose/releases/download/1.22.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose</span><br><br><span class="hljs-comment"># 给予执行权限</span><br><span class="hljs-comment">#[root@localhost ~]# mv docker-compose-Linux-x86_64 docker-compose</span><br><span class="hljs-section">[root@localhost ~]</span><span class="hljs-comment"># chmod +x /usr/local/bin/docker-compose</span><br><br><span class="hljs-comment"># 解压harbor仓库</span><br><span class="hljs-section">[root@localhost ~]</span><span class="hljs-comment"># tar xf harbor-offline-installer-v1.8.0.tgz</span><br><span class="hljs-section">[root@localhost ~]</span><span class="hljs-comment"># cd harbor</span><br><br><span class="hljs-comment"># http访问方式的配置：</span><br><span class="hljs-section">[root@localhost harbor]</span><span class="hljs-comment"># vim harbor.yml		#使用IP地址,需要修改的内容如下</span><br>hostname: 10.31.162.39  <span class="hljs-comment">#改成自己的ip</span><br><span class="hljs-comment">#注释443的模块</span><br><br><span class="hljs-section">[root@localhost harbor]</span><span class="hljs-comment"># ./install.sh  #需要等待下载镜像</span><br>							或  ./prepare <br>							<br><span class="hljs-comment"># docker-compose 使用</span><br><span class="hljs-comment">#[root@localhost harbor]#docker-compose up -d  #放后台</span><br><span class="hljs-comment">#[root@localhost harbor]#docker-compose down #停止服务</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="浏览器访问测试：-1"><a href="#浏览器访问测试：-1" class="headerlink" title="浏览器访问测试："></a>浏览器访问测试：</h2><p><code>http://10.31.162.39</code></p>
+<p>然后在web界面新建项目，自定义名字</p>
+<h2 id="客户端配置连接仓库地址"><a href="#客户端配置连接仓库地址" class="headerlink" title="客户端配置连接仓库地址"></a>客户端配置连接仓库地址</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@localhost ~]</span><span class="hljs-comment"># vim /etc/docker/daemon.json</span><br>&#123;<br>&quot;insecure-registries&quot;: <span class="hljs-section">[&quot;39.98.169.219&quot;]</span>  <span class="hljs-comment">#仓库的ip地址 </span><br>&#125;	<span class="hljs-comment">#在镜像加速器下面添加时，要做镜像加速器代码后面添加逗号（,）作为分割</span><br><br><span class="hljs-section">[root@localhost ~]</span><span class="hljs-comment"># systemctl restart docker</span><br><span class="hljs-section">[root@localhost ~]</span><span class="hljs-comment"># docker-compose up -d #启动harbor仓库</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="终端登入仓库"><a href="#终端登入仓库" class="headerlink" title="终端登入仓库"></a>终端登入仓库</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[root@localhost ~]</span><span class="hljs-comment"># docker login 10.31.162.39</span><br>Username: admin<br>Password: Hardor12345<br>Login Succeeded  	<span class="hljs-comment">#代表登入成功</span><br><br><span class="hljs-comment"># 将生成的jspgou镜像上传到仓库中</span><br>先打标签<br><span class="hljs-section">[root@localhost ~]</span><span class="hljs-comment"># docker tag nginx:latest 10.31.162.39/qingfeng/nginx:1.1</span><br>上传镜像<br><span class="hljs-section">[root@localhost ~]</span><span class="hljs-comment"># docker push 10.31.162.39/qingfeng/nginx:1.1</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/upload/harbor2.webp" srcset="/img/loading.gif" lazyload alt="harbor2.webp"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>docker--harbor私有仓库部署</div>
+      <div>http://example.com/2025/11/06/docker-harbor私有仓库部署/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Mr.xu</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/11/06/%E5%B8%B8%E7%94%A8%E7%9A%84linux%E5%91%BD%E4%BB%A4/" title="常用的linux命令">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">常用的linux命令</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/11/06/docker-%E5%81%8C%E4%BE%9D-%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2/" title="docker-偌依 项目部署">
+                        <span class="hidden-mobile">docker-偌依 项目部署</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
