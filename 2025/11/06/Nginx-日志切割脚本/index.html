@@ -1,0 +1,163 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Nginx 日志切割脚本实验 | Dong_Blog</title><meta name="author" content="Mr.xu"><meta name="copyright" content="Mr.xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="nginx日志切割脚本123456789101112131415[root@nginx-web script]# vim nginx_log.sh#!&#x2F;bin&#x2F;bashdate&#x3D;&#96;date +%F -d -1day&#96;log_dir&#x3D;&#x2F;var&#x2F;log&#x2F;nginx&#x2F;log_name&#x3D;access.log[ -d $log_dir ] &amp;&amp; cd $log_dir || exit 1[">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nginx 日志切割脚本实验">
+<meta property="og:url" content="http://example.com/2025/11/06/Nginx-%E6%97%A5%E5%BF%97%E5%88%87%E5%89%B2%E8%84%9A%E6%9C%AC/index.html">
+<meta property="og:site_name" content="Dong_Blog">
+<meta property="og:description" content="nginx日志切割脚本123456789101112131415[root@nginx-web script]# vim nginx_log.sh#!&#x2F;bin&#x2F;bashdate&#x3D;&#96;date +%F -d -1day&#96;log_dir&#x3D;&#x2F;var&#x2F;log&#x2F;nginx&#x2F;log_name&#x3D;access.log[ -d $log_dir ] &amp;&amp; cd $log_dir || exit 1[">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/picture/9.jpg">
+<meta property="article:published_time" content="2025-11-06T13:08:52.000Z">
+<meta property="article:modified_time" content="2026-01-27T10:24:12.959Z">
+<meta property="article:author" content="Mr.xu">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Nginx">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/picture/9.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Nginx 日志切割脚本实验",
+  "url": "http://example.com/2025/11/06/Nginx-%E6%97%A5%E5%BF%97%E5%88%87%E5%89%B2%E8%84%9A%E6%9C%AC/",
+  "image": "http://example.com/img/picture/9.jpg",
+  "datePublished": "2025-11-06T13:08:52.000Z",
+  "dateModified": "2026-01-27T10:24:12.959Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Mr.xu",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/dong.png"><link rel="canonical" href="http://example.com/2025/11/06/Nginx-%E6%97%A5%E5%BF%97%E5%88%87%E5%89%B2%E8%84%9A%E6%9C%AC/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Nginx 日志切割脚本实验',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/picture/9.jpg);"><nav id="nav"><span id="blog-info"><a id="site-name" href="/">🍀 <strong class="site-title-bold">东</strong></a><a class="nav-page-title" href="/"><span class="site-name">Nginx 日志切割脚本实验</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div></div><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Nginx 日志切割脚本实验</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-06T13:08:52.000Z" title="发表于 2025-11-06 21:08:52">2025-11-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-01-27T10:24:12.959Z" title="更新于 2026-01-27 18:24:12">2026-01-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/operations/">operations</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="nginx日志切割脚本"><a href="#nginx日志切割脚本" class="headerlink" title="nginx日志切割脚本"></a>nginx日志切割脚本</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@nginx-web script]# vim nginx_log.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line">date=`date +%F -d -1day`</span><br><span class="line">log_dir=/var/log/nginx/</span><br><span class="line">log_name=access.log</span><br><span class="line">[ -d $log_dir ] &amp;&amp; cd $log_dir || exit 1</span><br><span class="line">[ -f $log_name ] || exit 1</span><br><span class="line">/bin/mv $log_name $log_name.$&#123;date&#125;</span><br><span class="line">/usr/sbin/nginx -s reload</span><br><span class="line">tar czf $log_name.$&#123;date&#125;.tar.gz $log_name.$&#123;date&#125; &amp;&amp; rm -rf $log_name_$&#123;date&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#delete</span><br><span class="line">cd $log_dir || exit 1</span><br><span class="line">find ./ -mtime +7 -type f -name *.log | xargs rm -rf</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Mr.xu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/11/06/Nginx-%E6%97%A5%E5%BF%97%E5%88%87%E5%89%B2%E8%84%9A%E6%9C%AC/">http://example.com/2025/11/06/Nginx-%E6%97%A5%E5%BF%97%E5%88%87%E5%89%B2%E8%84%9A%E6%9C%AC/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">Dong_Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/Nginx/">Nginx</a></div><div class="post-share"><div class="social-share" data-image="/img/picture/9.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/11/06/Nginx-%E5%9C%B0%E5%9D%80%E9%87%8D%E5%86%99-rewrite/" title="Nginx 地址重写 rewrite实验"><img class="cover" src="/img/picture/11.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Nginx 地址重写 rewrite实验</div></div><div class="info-2"><div class="info-item-1">nginx 地址重写 rewrite什么是Rewrite Rewrite对称URL Rewrite，即URL重写，就是把传入Web的请求重定向到其他URL的过程 Rewrite 相关指令 Nginx Rewrite 相关指令有 if、rewrite、set、return rewrite指令最后跟一个flag标记，支持的flag标记有1234last 			    表示完成rewrite。默认为last。会第二次验证break 				本条规则匹配完成后，终止匹配，不再匹配后面的规则redirect 			返回302临时重定向，浏览器地址会显示跳转后的URL地址permanent 		    返回301永久重定向，浏览器地址会显示跳转后URL地址  1、Rewrite匹配参考示例示例 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566例1：本地解析host文件--wind# http://...</div></div></div></a><a class="pagination-related" href="/2025/11/06/Nginx-%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6/" title="Nginx 流量控制实验"><img class="cover" src="/img/picture/18.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Nginx 流量控制实验</div></div><div class="info-2"><div class="info-item-1">Nginx 流量控制配置基本的限流–ngx_http_limit_req_module模块实现 流量限制”配置两个主要的指令，limit_req_zone和limit_req，limit_req_zone指令设置流量限制和内存区域的参数，但实际上并不限制请求速率。所以需要通过添加limit_req指令启用流量限制,应用在特定的location或者server块 limit_req_zone指令通常在HTTP块中定义，它需要以下三个参数： 123-Key - 定义应用限制的请求特性。示例中的 Nginx 变量$binary_remote_addr，保存客户端IP地址的二进制形式。-Zone - 定义用于存储每个IP地址状态以及被限制请求URL访问频率的内存区域。通过zone=keyword标识区域的名字(自定义)，以及冒号后面跟区域大小。16000个IP地址的状态信息，大约需要1MB。-Rate - 连接请求。在示例中，速率不能超过每秒1个请求。  示例一 这里需要两台机器，一台代理，一台宿主机 代理机配置 12345678910111213141516limit_req_zone...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/11/06/%E8%B4%9F%E8%BD%BD%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E9%AA%8C/" title="负载高可用实验"><img class="cover" src="/img/picture/18.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">负载高可用实验</div></div><div class="info-2"><div class="info-item-1">清风 关闭防火墙123systemctl stop firewalldsystemctl disable firewalldsetenforce 0 配置环境1234567[root@localhost ~]# vim /etc/hosts192.168.116.121	 tomcat  安装tomcat192.168.116.122	 php     安装php-fpm、nginx192.168.116.131	 nginx1  安装nginx192.168.116.132	 nginx2  安装nginx192.168.116.111	 master  安装lvs、keepalived192.168.116.156	 backup  安装lvs、keepalived`` 1、安装tomcat步骤–192.168.116.12112345678910111213141516171819202122232425261、安装 JDK（java）1.上传jdk到服务器中，安装jdk[root@localhost ~]# mkdir /application   #创建工作目录[roo...</div></div></div></a><a class="pagination-related" href="/2025/11/06/Nginx-%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6/" title="Nginx 流量控制实验"><img class="cover" src="/img/picture/18.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">Nginx 流量控制实验</div></div><div class="info-2"><div class="info-item-1">Nginx 流量控制配置基本的限流–ngx_http_limit_req_module模块实现 流量限制”配置两个主要的指令，limit_req_zone和limit_req，limit_req_zone指令设置流量限制和内存区域的参数，但实际上并不限制请求速率。所以需要通过添加limit_req指令启用流量限制,应用在特定的location或者server块 limit_req_zone指令通常在HTTP块中定义，它需要以下三个参数： 123-Key - 定义应用限制的请求特性。示例中的 Nginx 变量$binary_remote_addr，保存客户端IP地址的二进制形式。-Zone - 定义用于存储每个IP地址状态以及被限制请求URL访问频率的内存区域。通过zone=keyword标识区域的名字(自定义)，以及冒号后面跟区域大小。16000个IP地址的状态信息，大约需要1MB。-Rate - 连接请求。在示例中，速率不能超过每秒1个请求。  示例一 这里需要两台机器，一台代理，一台宿主机 代理机配置 12345678910111213141516limit_req_zone...</div></div></div></a><a class="pagination-related" href="/2025/11/06/Nginx-%E5%9C%B0%E5%9D%80%E9%87%8D%E5%86%99-rewrite/" title="Nginx 地址重写 rewrite实验"><img class="cover" src="/img/picture/11.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">Nginx 地址重写 rewrite实验</div></div><div class="info-2"><div class="info-item-1">nginx 地址重写 rewrite什么是Rewrite Rewrite对称URL Rewrite，即URL重写，就是把传入Web的请求重定向到其他URL的过程 Rewrite 相关指令 Nginx Rewrite 相关指令有 if、rewrite、set、return rewrite指令最后跟一个flag标记，支持的flag标记有1234last 			    表示完成rewrite。默认为last。会第二次验证break 				本条规则匹配完成后，终止匹配，不再匹配后面的规则redirect 			返回302临时重定向，浏览器地址会显示跳转后的URL地址permanent 		    返回301永久重定向，浏览器地址会显示跳转后URL地址  1、Rewrite匹配参考示例示例 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566例1：本地解析host文件--wind# http://...</div></div></div></a><a class="pagination-related" href="/2025/11/06/Nginx%E4%BC%98%E5%8A%BF%E5%8F%8A%E5%AE%89%E8%A3%85/" title="Nginx优势及安装"><img class="cover" src="/img/picture/22.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">Nginx优势及安装</div></div><div class="info-2"><div class="info-item-1">Nginx优势及安装为什么选择 nginx123456781.高并发，高性能2.高可靠--7*24小时不间断运行3.可扩展性强--模块化设计，使得添加模块非常的平稳4.热部署--可以在不停止服务器的情况下升级nginx5.BSD许可证--nginx不止开源免费的我们还可以更具实际需求进行定制修改源代码# 它是IO多路复用，通过记录跟踪每个I/O流的状态，来同时管理多个I/O流，另外通过epoll来监控处理有数据的代码# 外加它是异步非阻塞 yum安装1.配置yum源安装nginx12清理原有数据yum -y install yum-utils  配置源码文件1234567/etc/yum.repo.d/nginx.repo &lt;&lt; EOF[nginx-stable]name=nginx stable repobaseurl=http://nginx.org/packages/centos/$releasever/$basearch/gpgcheck=0enabled=1EOF  下载及启动服务12yum -y install nginxsystemctl start n...</div></div></div></a><a class="pagination-related" href="/2025/11/06/Nginx-%E4%BC%9A%E8%AF%9D%E4%BF%9D%E6%8C%81/" title="Nginx 会话保持"><img class="cover" src="/img/picture/25.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">Nginx 会话保持</div></div><div class="info-2"><div class="info-item-1">nginx 会话保持nginx会话保持主要有以下几种实现方式： 1、ip_hash 12345ip_hash使用源地址哈希算法，将同一客户端的请求总是发往同一个后端服务器，除非该服务器不可用。ip_hash简单易用，但有如下问题：当后端服务器宕机后，session会丢失；来自同一局域网的客户端会被转发到同一个后端服务器，可能导致负载失衡；  示例 123456upstream backend &#123;    ip_hash;    server backend1.example.com;    server backend2.example.com;    server backend3.example.com down;&#125;  2、sticky_cookie_insert—而是基于cookie实现 使用sticky_cookie_insert，这会让来自同一客户端的请求被传递到一组服务器的同一台服务器。与ip_hash不同之处在于，它不是基于IP来判断客户端的，而是基于cookie来判断。(需要引入第三方模块才能实现)—sticky模块。因此可以避免上述ip_has...</div></div></div></a><a class="pagination-related" href="/2025/11/06/4%E5%B1%82-DR%E6%A8%A1%E5%BC%8F-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" title="4层--DR模式--负载均衡实验"><img class="cover" src="/img/picture/16.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">4层--DR模式--负载均衡实验</div></div><div class="info-2"><div class="info-item-1">环境准备准备3台纯洁的虚拟机，2台web服务器 安装lvs管理软件1yum -y install ipvsadm  1234567程序包：ipvsadm（LVS管理工具）主程序：/usr/sbin/ipvsadm规则保存工具：/usr/sbin/ipvsadm-save  &gt; /path/to/file配置文件：/etc/sysconfig/ipvsadm-config   LVS&#x2F;DR 模式简介1DR模式的组网要求LVS和Real server在同一网段二层互通。因为LVS DR模式在负载均衡转发报文时，只修改目的mac为real server的mac，lvs要能将报文转发给real server，就必须满足LVS和real server是同网段二层互通。   实验说明 网络使用NAT模式 DR模式要求Director DIP 和所有RealServer RIP必须在同一个网段及广播域  1. 关闭防火墙12[root@lvs-server ~]# systemctl stop firewalld[root@lvs-server ~]# setenforce 0...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Mr.xu</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xubaodong0511"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-author-social"><a href="https://github.com/xubaodong0511" target="_blank" rel="noopener"><i class="fab fa-github"></i></a><a href="https://gitee.com/xbd666" target="_blank" rel="noopener"><i class="fab fa-gitee"></i></a><a href="https://www.bilibili.com/" target="_blank" rel="noopener"><i class="fab fa-bilibili"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">相遇即是缘。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#nginx%E6%97%A5%E5%BF%97%E5%88%87%E5%89%B2%E8%84%9A%E6%9C%AC"><span class="toc-number">1.</span> <span class="toc-text">nginx日志切割脚本</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/01/27/hello-world/" title="Hello World"><img src="/img/picture/7.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hello World"/></a><div class="content"><a class="title" href="/2026/01/27/hello-world/" title="Hello World">Hello World</a><time datetime="2026-01-27T10:24:12.961Z" title="发表于 2026-01-27 18:24:12">2026-01-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客"><img src="/img/picture/30.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="docker 创建halo博客"/></a><div class="content"><a class="title" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客">docker 创建halo博客</a><time datetime="2025-11-06T13:17:32.000Z" title="发表于 2025-11-06 21:17:32">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置"><img src="/img/picture/16.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Centos网卡配置"/></a><div class="content"><a class="title" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置">Centos网卡配置</a><time datetime="2025-11-06T13:16:51.000Z" title="发表于 2025-11-06 21:16:51">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp"><img src="/img/picture/21.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="shell添加用户，计算，vsftp"/></a><div class="content"><a class="title" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp">shell添加用户，计算，vsftp</a><time datetime="2025-11-06T13:13:49.000Z" title="发表于 2025-11-06 21:13:49">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本"><img src="/img/picture/26.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="系统工具箱--脚本"/></a><div class="content"><a class="title" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本">系统工具箱--脚本</a><time datetime="2025-11-06T13:13:16.000Z" title="发表于 2025-11-06 21:13:16">2025-11-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">© 2025 - 2026 By <span class="copyright-author">Mr.xu</span></span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div><script src="/js/snow.js"></script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"></div><meting-js server="netease" type="playlist" id="570548381" fixed="true" autoplay="true" theme="#000000" loop="all" order="random" preload="auto" volume="0.7" muted="true" ></meting-js><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

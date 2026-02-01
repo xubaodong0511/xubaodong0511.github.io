@@ -1,0 +1,272 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>MongoDB部署 | Dong_Blog</title><meta name="author" content="Mr.xu"><meta name="copyright" content="Mr.xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="MongoDB作用MongoDB 是一种开源的文档型 NoSQL 数据库，采用 BSON（二进制 JSON）格式存储数据。以下是 MongoDB 的主要作用和用途：  灵活的数据模型:  MongoDB 使用文档存储数据，文档之间可以有不同的结构。这种灵活性使得 MongoDB 非常适合处理不规则和变化频繁的数据。   大数据和实时分析:  MongoDB 的高性能和扩展性使其适合处理大数据和实时">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MongoDB部署">
+<meta property="og:url" content="http://example.com/2025/11/06/MongoDB%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:site_name" content="Dong_Blog">
+<meta property="og:description" content="MongoDB作用MongoDB 是一种开源的文档型 NoSQL 数据库，采用 BSON（二进制 JSON）格式存储数据。以下是 MongoDB 的主要作用和用途：  灵活的数据模型:  MongoDB 使用文档存储数据，文档之间可以有不同的结构。这种灵活性使得 MongoDB 非常适合处理不规则和变化频繁的数据。   大数据和实时分析:  MongoDB 的高性能和扩展性使其适合处理大数据和实时">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/picture/9.jpg">
+<meta property="article:published_time" content="2025-11-06T08:11:37.000Z">
+<meta property="article:modified_time" content="2026-01-27T10:24:12.958Z">
+<meta property="article:author" content="Mr.xu">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="MongoDB">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/picture/9.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "MongoDB部署",
+  "url": "http://example.com/2025/11/06/MongoDB%E9%83%A8%E7%BD%B2/",
+  "image": "http://example.com/img/picture/9.jpg",
+  "datePublished": "2025-11-06T08:11:37.000Z",
+  "dateModified": "2026-01-27T10:24:12.958Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Mr.xu",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/dong.png"><link rel="canonical" href="http://example.com/2025/11/06/MongoDB%E9%83%A8%E7%BD%B2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'MongoDB部署',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/picture/9.jpg);"><nav id="nav"><span id="blog-info"><a id="site-name" href="/">🍀 <strong class="site-title-bold">东</strong></a><a class="nav-page-title" href="/"><span class="site-name">MongoDB部署</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div></div><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">MongoDB部署</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-06T08:11:37.000Z" title="发表于 2025-11-06 16:11:37">2025-11-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-01-27T10:24:12.958Z" title="更新于 2026-01-27 18:24:12">2026-01-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/operations/">operations</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h3 id="MongoDB"><a href="#MongoDB" class="headerlink" title="MongoDB"></a>MongoDB</h3><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>MongoDB 是一种开源的文档型 NoSQL 数据库，采用 BSON（二进制 JSON）格式存储数据。以下是 MongoDB 的主要作用和用途：</p>
+<ol>
+<li><p><strong>灵活的数据模型</strong>:</p>
+<ul>
+<li>MongoDB 使用文档存储数据，文档之间可以有不同的结构。这种灵活性使得 MongoDB 非常适合处理不规则和变化频繁的数据。</li>
+</ul>
+</li>
+<li><p><strong>大数据和实时分析</strong>:</p>
+<ul>
+<li>MongoDB 的高性能和扩展性使其适合处理大数据和实时分析应用。它能够快速存储和查询大量数据，并支持实时数据处理。</li>
+</ul>
+</li>
+<li><p><strong>内容管理和目录服务</strong>:</p>
+<ul>
+<li>MongoDB 常用于内容管理系统（CMS）和目录服务，适合存储和管理大量的文档、图像、视频等非结构化数据。</li>
+</ul>
+</li>
+<li><p><strong>物联网（IoT）和传感器数据</strong>:</p>
+<ul>
+<li>由于 MongoDB 可以高效地存储和处理大量的时间序列数据，它非常适合物联网应用中的传感器数据存储和分析。</li>
+</ul>
+</li>
+<li><p><strong>移动应用和社交网络</strong>:</p>
+<ul>
+<li>MongoDB 的灵活性和高性能使其成为移动应用和社交网络的理想选择，能够处理用户生成的内容、用户个人资料、消息和活动流等数据。</li>
+</ul>
+</li>
+<li><p><strong>电子商务</strong>:</p>
+<ul>
+<li>在电子商务平台中，MongoDB 可以用于存储产品目录、用户数据、订单信息等，并支持复杂的查询和数据分析。</li>
+</ul>
+</li>
+<li><p><strong>日志和事件存储</strong>:</p>
+<ul>
+<li>MongoDB 可以用于存储和分析日志数据和事件数据，适用于日志管理、监控和审计等场景。</li>
+</ul>
+</li>
+<li><p><strong>地理空间数据</strong>:</p>
+<ul>
+<li>MongoDB 提供了强大的地理空间查询功能，可以存储和查询地理位置数据，适用于地图服务、定位服务等应用。</li>
+</ul>
+</li>
+<li><p><strong>分布式文件存储</strong>:</p>
+<ul>
+<li>MongoDB 的 GridFS 功能允许存储和检索大文件，如图像、视频和音频文件，适合作为分布式文件存储系统。</li>
+</ul>
+</li>
+<li><p><strong>高可用性和扩展性</strong>:</p>
+<ul>
+<li>MongoDB 支持复制集和分片机制，能够实现数据的高可用性和水平扩展，适合大规模分布式系统。</li>
+</ul>
+</li>
+<li><p><strong>快速开发和迭代</strong>:</p>
+<ul>
+<li>由于 MongoDB 的模式灵活性，开发人员可以快速进行数据模型的修改和应用程序的迭代，适合敏捷开发和快速原型设计。</li>
+</ul>
+</li>
+</ol>
+<p>MongoDB 的文档存储模型、灵活性、高性能和扩展性使其成为现代应用程序中处理多样化和大规模数据的理想选择。</p>
+<h4 id="资源需求"><a href="#资源需求" class="headerlink" title="资源需求"></a>资源需求</h4><ul>
+<li><strong>CPU</strong>:  4 核 </li>
+<li><strong>内存</strong>: 32GB </li>
+<li><strong>存储</strong>: 500G</li>
+<li><strong>节点</strong>：1</li>
+</ul>
+<h4 id="网络端口"><a href="#网络端口" class="headerlink" title="网络端口"></a>网络端口</h4><ul>
+<li><p><strong>默认端口</strong></p>
+<ul>
+<li><p><strong>端口号</strong>: 27017</p>
+</li>
+<li><p><strong>用途</strong>: MongoDB 默认的客户端连接端口，用于应用程序和用户连接到 MongoDB 数据库进行数据操作。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>副本集成员之间的通信端口</strong></p>
+<ul>
+<li><strong>端口号</strong>: 27017（默认）</li>
+<li><strong>用途</strong>: 副本集成员之间通过该端口进行数据同步和心跳检测。</li>
+</ul>
+</li>
+<li><p><strong>分片集群配置服务器端口</strong></p>
+<ul>
+<li><strong>端口号</strong>: 27019</li>
+<li><strong>用途</strong>: 分片集群中的配置服务器使用的默认端口。</li>
+</ul>
+</li>
+<li><p><strong>分片服务器端口</strong></p>
+<ul>
+<li><strong>端口号</strong>: 27018</li>
+</ul>
+</li>
+</ul>
+<h4 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"># 下载安装包</span><br><span class="line">wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-4.0.6.tgz</span><br><span class="line">curl -O https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-3.4.24.tgz</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# ls</span><br><span class="line">anaconda-ks.cfg  mongodb-linux-x86_64-rhel70-4.0.6.tgz</span><br><span class="line">[root@localhost ~]# systemctl stop friewalld</span><br><span class="line">Failed to stop friewalld.service: Unit friewalld.service not loaded.</span><br><span class="line">[root@localhost ~]# setenforce 0</span><br><span class="line">[root@localhost ~]# systemctl disable firewalld</span><br><span class="line">Removed symlink /etc/systemd/system/multi-user.target.wants/firewalld.service.</span><br><span class="line">Removed symlink /etc/systemd/system/dbus-org.fedoraproject.FirewallD1.service.</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# ulimit -n</span><br><span class="line">1024</span><br><span class="line">[root@localhost ~]# ulimit -n 65535</span><br><span class="line">[root@localhost ~]# ulimit -n</span><br><span class="line">65535</span><br><span class="line">[root@localhost ~]# ulimit -u</span><br><span class="line">63447</span><br><span class="line">[root@localhost ~]# ulimit -u 65535</span><br><span class="line">[root@localhost ~]# ulimit -u</span><br><span class="line">65535</span><br><span class="line">[root@localhost ~]# vim  /etc/rc.local </span><br><span class="line">[root@localhost ~]# ls</span><br><span class="line">anaconda-ks.cfg  mongodb-linux-x86_64-rhel70-4.0.6.tgz</span><br><span class="line"></span><br><span class="line">[root@worker02 ~]# mkdir /data/mongodb</span><br><span class="line">[root@worker02 ~]# tar xzf mongodb-linux-x86_64-rhel70-4.0.6.tgz -C /data/mongodb/</span><br><span class="line">[root@worker02 mongodb]# mv mongodb-linux-x86_64-rhel70-4.0.6/ mongodb</span><br><span class="line"></span><br><span class="line">[root@worker02 mongodb]# ln -s /data/mongodb/mongodb/bin/* /bin/</span><br><span class="line"></span><br><span class="line">[root@worker02 mongodb]# mkdir  data</span><br><span class="line">[root@worker02 mongodb]# mkdir logs</span><br><span class="line">[root@worker02 mongodb]# touch logs/mongodb.log</span><br><span class="line"></span><br><span class="line">[root@worker02 mongodb]# ls</span><br><span class="line">data  logs  mongodb</span><br><span class="line">[root@worker02 mongodb]# mkdir conf</span><br><span class="line">[root@worker02 mongodb]# vim conf/mongodb.conf</span><br><span class="line"># 添加以下内容</span><br><span class="line">port=27017</span><br><span class="line">dbpath=/data/mongodb/data</span><br><span class="line">logpath=/data/mongodb/logs/mongodb.log</span><br><span class="line">logappend=true</span><br><span class="line">fork=true</span><br><span class="line">maxConns=5000</span><br><span class="line"># 将存储引擎切换为 WiredTiger</span><br><span class="line">storageEngine=wiredTiger  </span><br><span class="line"># 绑定到所有 IP 地址</span><br><span class="line">bind_ip=0.0.0.0  </span><br><span class="line"># 启用访问控制</span><br><span class="line">auth=true</span><br><span class="line"></span><br><span class="line"># 启动</span><br><span class="line">[root@worker02 mongodb]# /data/mongodb/mongodb/bin/mongod -f /data/mongodb/conf/mongodb.conf </span><br><span class="line">about to fork child process, waiting until server is ready for connections.</span><br><span class="line">forked process: 1834</span><br><span class="line">[root@localhost mongodb]#  netstat -lnpt | grep mongod</span><br><span class="line">tcp        0      0 127.0.0.1:27017         0.0.0.0:*               LISTEN      1834/mongod</span><br><span class="line">[root@localhost mongodb]# ps aux | grep mongod | grep -v grep</span><br><span class="line">root      1834 24.7  0.5 1502384 96948 ?       Sl   5月27   1:41 /usr/local/mongodb/bin/mongod -f /usr/local/mongodb/conf/mongodb1.conf</span><br><span class="line">设置开机自动启动</span><br><span class="line">[root@mongodb mongodb]# vim /etc/rc.local</span><br><span class="line">rm -f /data/mongodb1/mongod.lock</span><br><span class="line">mongod -f /usr/local/mongodb/conf/mongodb1.conf</span><br><span class="line">[root@localhost mongodb]# mongo</span><br><span class="line">MongoDB shell version v4.0.6</span><br><span class="line">connecting to: mongodb://127.0.0.1:27017/?gssapiServiceName=mongodb</span><br><span class="line">Implicit session: session &#123; &quot;id&quot; : UUID(&quot;be032cef-e2b3-4856-927c-0a560a40d1fd&quot;) &#125;</span><br><span class="line">MongoDB server version: 4.0.6</span><br><span class="line">Welcome to the MongoDB shell.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&gt; show dbs</span><br><span class="line">admin   0.078GB</span><br><span class="line">config  0.078GB</span><br><span class="line">local   0.078GB</span><br><span class="line">&gt; exit</span><br></pre></td></tr></table></figure>
+<pre><code>报错处理：
+dmesg | grep -i watchdog
+journalctl -k | grep -i watchdog
+vim /etc/sysctl.conf
+添加以下内容
+kernel.watchdog_thresh = 60
+#使其生效
+ sysctl -p
+#启动
+/data/mongodb/mongodb/bin/mongod -f /data/mongodb/conf/mongodb.conf 
+
+# 可做可不做--作用是禁用透明大页
+vim /etc/default/grub
+添加以下内容
+GRUB_CMDLINE_LINUX=&quot;... transparent_hugepage=never&quot;
+</code></pre>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Mr.xu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/11/06/MongoDB%E9%83%A8%E7%BD%B2/">http://example.com/2025/11/06/MongoDB%E9%83%A8%E7%BD%B2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">Dong_Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/MongoDB/">MongoDB</a></div><div class="post-share"><div class="social-share" data-image="/img/picture/9.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/11/06/zipkin%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86%E9%83%A8%E7%BD%B2/" title="zipkin日志收集部署"><img class="cover" src="/img/picture/16.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">zipkin日志收集部署</div></div><div class="info-2"><div class="info-item-1">zipkin日志收集部署jar包部署1234567891011121314151617181920212223242526272829303132333435363738# 安装jdk8[root@dev ~]# wget https://a.xbd666.cn/d/Aliyun/Cloud_computing/Software_package/tomcat-jdk/jdk-8u271-linux-x64.tar.gz# 变量[root@dev ~]# vim /etc/profileJAVA_HOME=/usr/local/javaMAVEN_HOME=/usr/local/mavenPATH=$PATH:$JAVA_HOME/bin:$MAVEN_HOME/binexport JAVA_HOME MAVEN_HOME PATH[root@dev ~]# source /etc/profile# npm环境安装这个国内目前知道的只有淘宝有。[root@dev ~]# alias npm=&quot;npm --registry=https://registry.npm.taob...</div></div></div></a><a class="pagination-related" href="/2025/11/06/TDEngine%E6%97%B6%E5%BA%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/" title="TDEngine时序数据库部署"><img class="cover" src="/img/picture/24.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">TDEngine时序数据库部署</div></div><div class="info-2"><div class="info-item-1">TDEngine–集群作用TDEngine 是一种高性能、分布式、时间序列数据库（TSDB），专门为物联网（IoT）、工业互联网、车联网、金融、IT 运维监控等领域设计。它具有高效的数据写入和查询性能，适合处理大规模的时间序列数据。以下是 TDEngine 的主要作用和用途：  物联网（IoT）数据存储和分析:  TDEngine 能够高效地存储和处理来自各种 IoT 设备和传感器的大量时间序列数据，支持实时数据写入和复杂查询。   工业互联网:  在工业互联网应用中，TDEngine 可以用于存储和分析工业设备的运行数据、传感器数据、生产线数据等，帮助进行设备监控、预测性维护和优化生产流程。   车联网:  TDEngine 能够存储和处理车辆的运行数据、位置数据、传感器数据等，支持实时数据分析和查询，适用于车联网应用中的数据管理和分析。   金融数据分析:  在金融领域，TDEngine 可以用于存储和分析股票、期货、外汇等金融市场的时间序列数据，支持高频交易数据的存储和实时查询分析。   IT 运维监控:  TDEngine 适用于 IT 运维监控场景，可以存储和分析服务器...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/11/06/%E5%AE%89%E8%A3%85Tomcat%E3%80%81JDK%EF%BC%88java%EF%BC%89/" title="安装Tomcat、JDK（java）实验"><img class="cover" src="/img/picture/13.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">安装Tomcat、JDK（java）实验</div></div><div class="info-2"><div class="info-item-1">1、安装JDK上传jdk1.8到服务器，安装jdk 123[root@java-tomcat1 ~]# tar xzf jdk-8u191-linux-x64.tar.gz -C /usr/local/[root@java-tomcat1 ~]# cd /usr/local/[root@java-tomcat1 local]# mv jdk1.8.0_191/ java 设置环境变量: 1234[root@java-tomcat1 local]# vim /etc/profileJAVA_HOME=/usr/local/java #指定java安装目录PATH=$JAVA_HOME/bin:$PATH #用于指定java系统查找命令的路径export JAVA_HOME PATH #类的路径，在编译运行java程序时，如果有调用到其他类的时候，在classpath中寻找需要的类。 检测JDK是否安装成功: 12345[root@java-tomcat1 local]# source /etc/profile[root@java-tomcat1 local]# java -vers...</div></div></div></a><a class="pagination-related" href="/2025/11/06/gitlab-%E4%BB%93%E5%BA%93%E5%88%9B%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/" title="gitlab 仓库创建及使用"><img class="cover" src="/img/picture/25.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">gitlab 仓库创建及使用</div></div><div class="info-2"><div class="info-item-1">git的工作环境 123456工作区暂存区	git add *版本库	git commit -m “版本描述信息” HEAD版本号版本日志 1234git clone git@IP地址:/自建的目录/自建的库/     #克隆到本地git add .    #存储到暂存区git commit -m &quot;描述信息&quot;    #更新版本git push origin master    #上传到gitlab  每个版本都会有一个id号，也就是commit id 123[root@vm20 ~]# git logcommit fbecfa3d04ae5038aa11bf55942e46c840077ace  #id号  部署git 123456789101112环境：    git-server    192.168.246.214  充当服务器    client        192.168.246.213安装：所有机器都安装   [root@git-server ~]# yum install -y git   [root@git-server ~]# git -...</div></div></div></a><a class="pagination-related" href="/2025/11/06/zabbix-proxy%E9%85%8D%E7%BD%AE%E5%8F%8A%E9%82%AE%E4%BB%B6%E9%85%8D%E7%BD%AE/" title="zabbix-proxy配置及邮件配置"><img class="cover" src="/img/picture/12.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">zabbix-proxy配置及邮件配置</div></div><div class="info-2"><div class="info-item-1">一、下载配置server，agent端下载zabbix-server，server客户端1234567891011121314151617# 备注：zabbix源不能和epel源同时存在，要给epel源注释了# 更新下载zabbix源[root@zabbix-server ~]# rpm -Uvh https://repo.zabbix.com/zabbix/5.0/rhel/7/x86_64/zabbix-release-5.0-1.el7.noarch.rpm# 更新yum仓库[root@zabbix-server ~]# yum clean all[root@zabbix-server ~]# yum repolist# 安装安装 zabbix rpm 源,鉴于国内网络情况，使用阿里云 zabbix 源# 更换源[root@zabbix-server ~]# sed -i &#x27;s#http://repo.zabbix.com#https://mirrors.aliyun.com/zabbix#&#x27; /etc/yum.repos.d/zabbix.repo# ...</div></div></div></a><a class="pagination-related" href="/2025/11/06/Nginx-%E7%9A%84localtion%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3/" title="Nginx 的localtion指令详解"><img class="cover" src="/img/picture/22.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">Nginx 的localtion指令详解</div></div><div class="info-2"><div class="info-item-1">nginx的localtion指令详解Nginx 的 HTTP 配置主要包括三个区块，结构如下： 1234567891011121314http &#123; 						# 这个是协议级别　　include mime.types;　　default_type application/octet-stream;　　keepalive_timeout 65;　　gzip on;　　　　server &#123;			 # 这个是服务器级别　　　　　　listen 80;　　　　　　server_name localhost;　　　　　　　　location / &#123;  # 这个是请求级别　　　　　　　　　　root html;　　　　　　　　　　index index.html index.htm;　　　　　　　　&#125;　　　　　　&#125;&#125;  一个HTTP模块里可以有多个server模块 一个server模块里可以有多个location模块 location 前缀含义12345678=    表示精确匹配，优先级也是最高的 ^~   表示uri以某个常...</div></div></div></a><a class="pagination-related" href="/2025/11/06/K8S%E9%83%A8%E7%BD%B2nexus/" title="K8S部署nexus"><img class="cover" src="/img/picture/23.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">K8S部署nexus</div></div><div class="info-2"><div class="info-item-1">环境准备1234服务器	  IP地址master	192.168.0.173node1	192.168.0.253node2	192.168.0.233  安装nfs安装nfs123456789101112131415161718192021# master节点yum -y install  nfs-utils rpcbind# 创建共享目录mkdir /var/nfs/nexus# 授予权限chmod 777 /var/nfs/nexus# 启动nfs服务systemctl start nfs-serversystemctl enabled nfs-serversystemctl start rpcbindsystemctl enabled rpcbind# node节点yum -y install  nfs-utils rpcbindsystemctl start nfs-serversystemctl enabled nfs-serversystemctl start rpcbindsystemctl enabled rpcbind  挂载NFS12345678910111...</div></div></div></a><a class="pagination-related" href="/2025/11/06/Redis-%E9%83%A8%E7%BD%B2%E5%8D%95%E6%9C%BA-%E4%B8%BB%E4%BB%8E-%E5%93%A8%E5%85%B5/" title="Redis 部署单机-主从-哨兵模式"><img class="cover" src="/img/picture/7.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">Redis 部署单机-主从-哨兵模式</div></div><div class="info-2"><div class="info-item-1">Redis 1、安装单机版redis 官网下载redis 1https://redis.io/  点击download，往下拉，找到以下内容 1234List of all releases and hash digestsYou can find a listing of all previous Redis releases on the releases page. SHA-256 digests for these downloads are available in the redis-hashes git repository. listing of all previous Redis releases --&gt; 点击此内容--&gt;进入选取想要的版本（学习实验用的7.0.9版本）  下载 1234567891011121314151617181920212223242526272829303132[root@localhost ~]# wget https://download.redis.io/releases/redis-7.0.9.tar.gz		//...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Mr.xu</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xubaodong0511"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-author-social"><a href="https://github.com/xubaodong0511" target="_blank" rel="noopener"><i class="fab fa-github"></i></a><a href="https://gitee.com/xbd666" target="_blank" rel="noopener"><i class="fab fa-gitee"></i></a><a href="https://www.bilibili.com/" target="_blank" rel="noopener"><i class="fab fa-bilibili"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">相遇即是缘。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#MongoDB"><span class="toc-number">1.</span> <span class="toc-text">MongoDB</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8"><span class="toc-number">1.1.</span> <span class="toc-text">作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E9%9C%80%E6%B1%82"><span class="toc-number">1.2.</span> <span class="toc-text">资源需求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E7%AB%AF%E5%8F%A3"><span class="toc-number">1.3.</span> <span class="toc-text">网络端口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2"><span class="toc-number">1.4.</span> <span class="toc-text">安装部署</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/01/27/hello-world/" title="Hello World"><img src="/img/picture/7.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hello World"/></a><div class="content"><a class="title" href="/2026/01/27/hello-world/" title="Hello World">Hello World</a><time datetime="2026-01-27T10:24:12.961Z" title="发表于 2026-01-27 18:24:12">2026-01-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客"><img src="/img/picture/30.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="docker 创建halo博客"/></a><div class="content"><a class="title" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客">docker 创建halo博客</a><time datetime="2025-11-06T13:17:32.000Z" title="发表于 2025-11-06 21:17:32">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置"><img src="/img/picture/16.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Centos网卡配置"/></a><div class="content"><a class="title" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置">Centos网卡配置</a><time datetime="2025-11-06T13:16:51.000Z" title="发表于 2025-11-06 21:16:51">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp"><img src="/img/picture/21.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="shell添加用户，计算，vsftp"/></a><div class="content"><a class="title" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp">shell添加用户，计算，vsftp</a><time datetime="2025-11-06T13:13:49.000Z" title="发表于 2025-11-06 21:13:49">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本"><img src="/img/picture/26.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="系统工具箱--脚本"/></a><div class="content"><a class="title" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本">系统工具箱--脚本</a><time datetime="2025-11-06T13:13:16.000Z" title="发表于 2025-11-06 21:13:16">2025-11-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">© 2025 - 2026 By <span class="copyright-author">Mr.xu</span></span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div><script src="/js/snow.js"></script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"></div><meting-js server="netease" type="playlist" id="570548381" fixed="true" autoplay="true" theme="#000000" loop="all" order="random" preload="auto" volume="0.7" muted="true" ></meting-js><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
