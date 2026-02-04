@@ -1,0 +1,302 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Minio存储部署 | Dong_Blog</title><meta name="author" content="Mr.xu"><meta name="copyright" content="Mr.xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="minio–单节点作用MinIO 是一个高性能的对象存储服务器，兼容 Amazon S3 API。它主要用于存储海量的非结构化数据，如图片、视频、备份文件、日志文件等。MinIO 是开源的，并且设计为云原生应用，适用于私有云、公有云和混合云环境。  对象存储：  MinIO 提供了对象存储服务，允许用户存储和检索任意数量的非结构化数据。 数据以对象的形式存储，每个对象包含文件数据、元数据和唯一的对">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Minio存储部署">
+<meta property="og:url" content="http://example.com/2025/11/05/Minio%E5%AD%98%E5%82%A8%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:site_name" content="Dong_Blog">
+<meta property="og:description" content="minio–单节点作用MinIO 是一个高性能的对象存储服务器，兼容 Amazon S3 API。它主要用于存储海量的非结构化数据，如图片、视频、备份文件、日志文件等。MinIO 是开源的，并且设计为云原生应用，适用于私有云、公有云和混合云环境。  对象存储：  MinIO 提供了对象存储服务，允许用户存储和检索任意数量的非结构化数据。 数据以对象的形式存储，每个对象包含文件数据、元数据和唯一的对">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/picture/5.jpg">
+<meta property="article:published_time" content="2025-11-05T14:15:12.000Z">
+<meta property="article:modified_time" content="2026-02-04T10:20:38.844Z">
+<meta property="article:author" content="Mr.xu">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Minio">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/picture/5.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Minio存储部署",
+  "url": "http://example.com/2025/11/05/Minio%E5%AD%98%E5%82%A8%E9%83%A8%E7%BD%B2/",
+  "image": "http://example.com/img/picture/5.jpg",
+  "datePublished": "2025-11-05T14:15:12.000Z",
+  "dateModified": "2026-02-04T10:20:38.844Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Mr.xu",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/dong.png"><link rel="canonical" href="http://example.com/2025/11/05/Minio%E5%AD%98%E5%82%A8%E9%83%A8%E7%BD%B2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Minio存储部署',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/picture/5.jpg);"><nav id="nav"><span id="blog-info"><a id="site-name" href="/">🍀 <strong class="site-title-bold">东</strong></a><a class="nav-page-title" href="/"><span class="site-name">Minio存储部署</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Minio存储部署</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-05T14:15:12.000Z" title="发表于 2025-11-05 22:15:12">2025-11-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-04T10:20:38.844Z" title="更新于 2026-02-04 18:20:38">2026-02-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/operations/">operations</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h3 id="minio–单节点"><a href="#minio–单节点" class="headerlink" title="minio–单节点"></a>minio–单节点</h3><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>MinIO 是一个高性能的对象存储服务器，兼容 Amazon S3 API。它主要用于存储海量的非结构化数据，如图片、视频、备份文件、日志文件等。MinIO 是开源的，并且设计为云原生应用，适用于私有云、公有云和混合云环境。</p>
+<ol>
+<li><p><strong>对象存储</strong>：</p>
+<ul>
+<li>MinIO 提供了对象存储服务，允许用户存储和检索任意数量的非结构化数据。</li>
+<li>数据以对象的形式存储，每个对象包含文件数据、元数据和唯一的对象标识符。</li>
+</ul>
+</li>
+<li><p><strong>兼容 S3 API</strong>：</p>
+<ul>
+<li>MinIO 兼容 Amazon S3 API，这意味着使用 S3 API 的应用可以无缝迁移到 MinIO。</li>
+<li>支持常用的 S3 操作，如创建桶（bucket）、上传&#x2F;下载对象、设置权限等。</li>
+</ul>
+</li>
+<li><p><strong>高性能</strong>：</p>
+<ul>
+<li>MinIO 设计为高性能对象存储，能够在标准硬件上提供极高的吞吐量和低延迟。</li>
+<li>适用于需要快速数据访问的场景，如实时数据分析、机器学习等。</li>
+</ul>
+</li>
+<li><p><strong>可扩展性</strong>：</p>
+<ul>
+<li>MinIO 支持水平扩展，通过增加节点可以扩展存储容量和处理能力。</li>
+<li>支持分布式部署，适用于大规模存储需求。</li>
+</ul>
+</li>
+<li><p><strong>高可用性</strong>：</p>
+<ul>
+<li>MinIO 提供数据冗余和自动故障恢复，确保数据的高可用性和可靠性。</li>
+<li>支持多副本存储和纠删码（Erasure Coding）技术，防止数据丢失。</li>
+</ul>
+</li>
+<li><p><strong>安全性</strong>：</p>
+<ul>
+<li>MinIO 支持数据加密、访问控制和审计日志，确保数据存储和传输的安全性。</li>
+<li>支持基于角色的访问控制（RBAC）和细粒度的权限管理。</li>
+</ul>
+</li>
+<li><p><strong>多云和混合云支持</strong>：</p>
+<ul>
+<li>MinIO 可以在私有云、公有云和混合云环境中部署，支持跨云的数据管理。</li>
+<li>提供统一的存储接口，简化多云环境中的数据管理。</li>
+</ul>
+</li>
+</ol>
+<h4 id="资源需求"><a href="#资源需求" class="headerlink" title="资源需求"></a>资源需求</h4><ul>
+<li><strong>CPU</strong>: 4 核 </li>
+<li><strong>内存</strong>:  8 GB </li>
+<li><strong>存储</strong>: 4T</li>
+<li><strong>节点</strong>：1</li>
+</ul>
+<h4 id="网络端口"><a href="#网络端口" class="headerlink" title="网络端口"></a>网络端口</h4><ol>
+<li><strong>默认服务端口</strong><ul>
+<li><strong>端口号</strong>: 9000</li>
+<li><strong>用途</strong>: MinIO API 服务端口，用于客户端与 MinIO 服务器的通信。</li>
+</ul>
+</li>
+<li><strong>控制台端口（Console）</strong><ul>
+<li><strong>端口号</strong>: 9001</li>
+<li><strong>用途</strong>: MinIO 控制台（管理界面）端口，用于管理和监控 MinIO。</li>
+</ul>
+</li>
+</ol>
+<h4 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h4><pre><code># 下载docker
+
+# 下载minio镜像
+docker pull minio/minio:RELEASE.2024-05-27T19-17-46Z.fips
+# 创建目录
+mkdir -p /data/minio/data
+#启动
+docker run -d \
+   --net=host \
+   --user $(id -u):$(id -g) \
+   --name minio \
+   -e &quot;MINIO_ROOT_USER=minioadmin&quot; \
+   -e &quot;MINIO_ROOT_PASSWORD=minioadmin&quot; \
+   -v /data/minio/data:/data \
+   minio/minio:RELEASE.2024-05-27T19-17-46Z.fips server /data --console-address &quot;:9001&quot; --address &quot;:9000&quot;    
+# 访问：http://10.100.40.212:9001/login 用户名：密码  minioadmin：minioadmin
+</code></pre>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Mr.xu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/11/05/Minio%E5%AD%98%E5%82%A8%E9%83%A8%E7%BD%B2/">http://example.com/2025/11/05/Minio%E5%AD%98%E5%82%A8%E9%83%A8%E7%BD%B2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">Dong_Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/Minio/">Minio</a></div><div class="post-share"><div class="social-share" data-image="/img/picture/5.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/11/05/EMQX%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" title="EMQX集群部署"><img class="cover" src="/img/picture/27.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">EMQX集群部署</div></div><div class="info-2"><div class="info-item-1">emqx–集群作用EMQX（Erlang MQTT Broker）是一个高性能、可扩展的开源 MQTT 消息代理服务器。它基于 Erlang&#x2F;OTP 开发，专为大规模物联网（IoT）应用设计。EMQX 的核心作用和功能如下：  消息代理：EMQX 作为 MQTT 消息代理，负责在发布者和订阅者之间路由消息。它支持 MQTT 协议的所有功能，包括 QoS（Quality of Service）级别、持久会话和遗嘱消息等。 设备连接管理：EMQX 可以管理大量 IoT 设备的连接，支持数百万级别的并发连接，适用于大规模的物联网应用。 数据分发：EMQX 能够高效地分发数据，确保消息在发布者和订阅者之间的快速传递，支持多种消息格式和传输协议。 扩展性：EMQX 支持插件机制，用户可以根据需求扩展其功能，如数据持久化、规则引擎、认证和授权等。  主要功能  支持多种协议  MQTT&#x2F;MQTT-SN：原生支持 MQTT 3.1.1 和 MQTT 5.0 协议。 HTTP&#x2F;HTTPS：支持通过 HTTP&#x2F;HTTPS 协议进行消息发布和订阅。 CoAP：...</div></div></div></a><a class="pagination-related" href="/2025/11/05/kkFileview%E6%96%87%E4%BB%B6%E9%A2%84%E8%A7%88/" title="kkFileview文件预览"><img class="cover" src="/img/picture/11.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">kkFileview文件预览</div></div><div class="info-2"><div class="info-item-1">kkfileview–单节点作用 文档预览： 支持预览多种文档格式，如 Word（.doc、.docx）、Excel（.xls、.xlsx）、PowerPoint（.ppt、.pptx）、PDF、TXT、图片（.jpg、.png、.gif）等。 用户无需下载文件即可在浏览器中查看文档内容。   跨平台支持： 兼容多种操作系统和浏览器，用户可以在不同设备上进行文档预览。   集成简单： 提供 RESTful API，方便与其他系统集成，如文件管理系统、内容管理系统（CMS）、企业内部系统等。 通过简单的 HTTP 请求即可实现文档预览功能。   高性能： 采用高效的文档转换和渲染技术，确保文档预览的速度和质量。 支持缓存机制，提高文档预览的响应速度。   安全性： 提供多种安全配置选项，如访问控制、数据加密等，确保文档预览过程中的数据安全。 支持配置白名单，限制只有特定 IP 地址可以访问预览服务。   扩展性： 支持插件机制，用户可以根据需求扩展支持的文档格式和功能。 提供详细的文档和示例，方便用户进行二次开发和定制。    资源需求 CPU: 4 核  内存:  8 GB  存...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/11/06/syncTV%E8%BF%9C%E7%A8%8B%E5%85%B1%E4%BA%AB%E8%A7%86%E9%A2%91%E7%BD%91%E7%AB%99%E9%83%A8%E7%BD%B2/" title="syncTV远程共享视频网站部署"><img class="cover" src="/img/picture/30.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">syncTV远程共享视频网站部署</div></div><div class="info-2"><div class="info-item-1">syncTV远程同步观看web部署官网地址点这里 一、docker安装docker官网点这里 docker一键脚本安装1bash &lt;(curl -sSL https://gitee.com/xbd666/qingfeng/raw/master/toolbox.sh) 二、可以直接用命令运行synctv，但是建议用下面yaml文件方式运行synctv1docker run --name synctv -d -p 8080:8080 synctvorg/synctv:latest  三、创建docker-compose.yaml文件1mkdir synctv &amp;&amp; cd synctv      #创建一个目录，并进入此目录 1vim docker-compose.yaml 1234567891011121314version: &quot;3.3&quot;    #这是docker-compose文件版本的声明services: synctv:       #服务的别名，可以自定义  container_name: synctv     #容器名，可以自定义 ...</div></div></div></a><a class="pagination-related" href="/2025/11/06/%E5%B8%B8%E7%94%A8%E8%84%9A%E6%9C%AC/" title="常用脚本"><img class="cover" src="/img/picture/12.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">常用脚本</div></div><div class="info-2"><div class="info-item-1">IP质量检测1bash &lt;(curl -Ls IP.Check.Place)  融合怪1curl -L https://gitlab.com/spiritysdx/za/-/raw/main/ecs.sh -o ecs.sh &amp;&amp; chmod +x ecs.sh &amp;&amp; bash ecs.sh  线路测试1curl https://raw.githubusercontent.com/zhucaidan/mtr_trace/main/mtr_trace.sh|bash  # 检测回程脚本  综合工具箱1wget -O box.sh https://raw.githubusercontent.com/BlueSkyXN/SKY-BOX/main/box.sh &amp;&amp; chmod +x box.sh &amp;&amp; clear &amp;&amp; ./box.sh++  VPS工具箱1curl -fsSL https://raw.githubusercontent.com/eooce/ssh_tool/main/ssh_tool...</div></div></div></a><a class="pagination-related" href="/2025/11/06/deban12%E5%88%9D%E5%A7%8B%E5%8C%96%E9%97%AE%E9%A2%98%E3%80%81%E7%94%A8%E6%B3%95/" title="deban12初始化问题、用法"><img class="cover" src="/img/picture/7.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">deban12初始化问题、用法</div></div><div class="info-2"><div class="info-item-1">debian和ubuntu本身的vi编辑器是不支持用退格键删除和用上下左右键的所以要 1234567vi /etc/vim/vimrc.tiny把 set compatible修改改为：set nocompatible加入一句：set backspace=2 还有debian和ubuntu用不了ll命令直接分别到普通用户的家目录和root用户的家目录 有个隐藏文件.bashrc在他们的家目录下，root和用户的都要改，因为root和每个普通用户的家目录下都有一个 .bashrc的文件你改那个用户就生效那个 vim  ~/.bashrc  在打开的文件里面加入(你想让什么命令变成什么命令就像这样写就行，而为这里的root用户本身是文件夹不显示颜色的，容易一定要加下面那个让文件夹显示颜色的命令。要添加的命令最好是想要转化成的命令的本身是这个系统没有的; 比如:debian本身没有ll这个命令的简写那就可以像这样添加) 1234alias ll=&#x27;ls -l&#x27;alias tailf=&#x27;tail -f&#x27;alias dir=&#x27;dir --c...</div></div></div></a><a class="pagination-related" href="/2025/11/06/%E5%81%8C%E4%BE%9D-%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%B8%8A%E7%BA%BF%E6%AD%A5%E9%AA%A4/" title="偌依 项目部署及上线步骤"><img class="cover" src="/img/picture/21.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">偌依 项目部署及上线步骤</div></div><div class="info-2"><div class="info-item-1">准备实验环境，准备3台机器 1.作为前端服务器，mysql,redis服务器–同时临时作为代码打包服务器192.168.2.65	nginx-server  2.作为后端服务器192.168.2.66	java-server-1192.168.2.67	java-server-2   关闭防火墙，selinux 环境一键脚本1bash &lt;(curl -sSL https://gitee.com/xbd666/qingfeng/raw/master/toolbox.sh  安装nginx&#x2F;mysql123456789101112131415161718192021222324252627282930313233#安装nginx[root@web-nginx ~]# vim /etc/yum.repos.d/nginx.repo[nginx-stable]name=nginx stable repobaseurl=http://nginx.org/packages/centos/$releasever/$basearch/gpgcheck=0enabled=1[roo...</div></div></div></a><a class="pagination-related" href="/2025/11/06/RabbiMQ%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" title="RabbiMQ集群部署"><img class="cover" src="/img/picture/20.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">RabbiMQ集群部署</div></div><div class="info-2"><div class="info-item-1">普通集群准备环境注意，这⾥三台服务器都关闭防火墙和selinux 123192.168.50.138 	rabbitmq-1192.168.50.139	rabbitmq-2192.168.50.140	rabbitmq-3  三台机器都操作: 1、配置hosts⽂件更改三台MQ节点的计算机名分别为rabbitmq-1、rabbitmq-2 和rabbitmq-3，然后修改hosts配置⽂件 1234567891011[root@rabbitmq-1 ~]# vim /etc/hosts127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4::1         localhost localhost.localdomain localhost6 localhost6.localdomain6192.168.50.138 rabbitmq-1192.168.50.139 rabbitmq-2192.168.50.140 rabbitmq-3# 主机的名字也要改了，不然后面命令匹配...</div></div></div></a><a class="pagination-related" href="/2025/11/06/K8S%E9%83%A8%E7%BD%B2nacos%E6%9C%8D%E5%8A%A1/" title="K8S部署nacos服务"><img class="cover" src="/img/picture/11.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">K8S部署nacos服务</div></div><div class="info-2"><div class="info-item-1">K8S部署nacos服务prod环境prod数据库使用的端口3306的数据库123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133134[root@master ~]# mkdir nacos &amp;&amp; cd nacos[root@master nacos]# vim nacos-service.yaml---apiVersion: v1kind: Servicemetadata:  name: nacos-prod  labels:    app:...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Mr.xu</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xubaodong0511"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-author-social"><a href="https://github.com/xubaodong0511" target="_blank" rel="noopener"><i class="fab fa-github"></i></a><a href="https://gitee.com/xbd666" target="_blank" rel="noopener"><i class="fab fa-gitee"></i></a><a href="https://www.bilibili.com/" target="_blank" rel="noopener"><i class="fab fa-bilibili"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">相遇即是缘。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#minio%E2%80%93%E5%8D%95%E8%8A%82%E7%82%B9"><span class="toc-number">1.</span> <span class="toc-text">minio–单节点</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8"><span class="toc-number">1.1.</span> <span class="toc-text">作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E9%9C%80%E6%B1%82"><span class="toc-number">1.2.</span> <span class="toc-text">资源需求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E7%AB%AF%E5%8F%A3"><span class="toc-number">1.3.</span> <span class="toc-text">网络端口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2"><span class="toc-number">1.4.</span> <span class="toc-text">安装部署</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vercel部署Twikoo评论系统"/></a><div class="content"><a class="title" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统">Vercel部署Twikoo评论系统</a><time datetime="2026-02-04T05:49:39.000Z" title="发表于 2026-02-04 13:49:39">2026-02-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客"><img src="/img/picture/9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="docker 创建halo博客"/></a><div class="content"><a class="title" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客">docker 创建halo博客</a><time datetime="2025-11-06T13:17:32.000Z" title="发表于 2025-11-06 21:17:32">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置"><img src="/img/picture/5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Centos网卡配置"/></a><div class="content"><a class="title" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置">Centos网卡配置</a><time datetime="2025-11-06T13:16:51.000Z" title="发表于 2025-11-06 21:16:51">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp"><img src="/img/picture/20.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="shell添加用户，计算，vsftp"/></a><div class="content"><a class="title" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp">shell添加用户，计算，vsftp</a><time datetime="2025-11-06T13:13:49.000Z" title="发表于 2025-11-06 21:13:49">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="系统工具箱--脚本"/></a><div class="content"><a class="title" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本">系统工具箱--脚本</a><time datetime="2025-11-06T13:13:16.000Z" title="发表于 2025-11-06 21:13:16">2025-11-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">© 2025 - 2026 By <span class="copyright-author">Mr.xu</span></span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div><script src="/js/snow.js"></script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://hexoblogtwikoovercel.vercel.app',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://hexoblogtwikoovercel.vercel.app',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://cdn.jsdelivr.net/npm/twikoo@1.6.44/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><meting-js server="netease" type="playlist" id="570548381" fixed="true" autoplay="true" theme="#000000" loop="all" order="random" preload="auto" volume="0.7" muted="true" ></meting-js><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- 只保留这一行--><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></body></html>

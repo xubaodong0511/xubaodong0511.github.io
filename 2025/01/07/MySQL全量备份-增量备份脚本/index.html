@@ -1,0 +1,231 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>MySQL全量备份/增量备份脚本 | Dong_Blog</title><meta name="author" content="Mr.xu"><meta name="copyright" content="Mr.xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="#!&#x2F;bin&#x2F;bash mysql物理备份脚本每周日进行全量备份，周一到周六进行增量备份，7天为一个周期备份路径、日志路径123456backup_dir&#x3D;&quot;&#x2F;backup&quot;log_dir&#x3D;&quot;&#x2F;backup&#x2F;log&quot;full_backup_dir&#x3D;&quot;&#x2F;backup&#x2F;full&quot;inc_backup_dir&#x3D;&quot;&#x2F;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL全量备份&#x2F;增量备份脚本">
+<meta property="og:url" content="http://example.com/2025/01/07/MySQL%E5%85%A8%E9%87%8F%E5%A4%87%E4%BB%BD-%E5%A2%9E%E9%87%8F%E5%A4%87%E4%BB%BD%E8%84%9A%E6%9C%AC/index.html">
+<meta property="og:site_name" content="Dong_Blog">
+<meta property="og:description" content="#!&#x2F;bin&#x2F;bash mysql物理备份脚本每周日进行全量备份，周一到周六进行增量备份，7天为一个周期备份路径、日志路径123456backup_dir&#x3D;&quot;&#x2F;backup&quot;log_dir&#x3D;&quot;&#x2F;backup&#x2F;log&quot;full_backup_dir&#x3D;&quot;&#x2F;backup&#x2F;full&quot;inc_backup_dir&#x3D;&quot;&#x2F;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/picture/29.jpg">
+<meta property="article:published_time" content="2025-01-07T12:49:48.000Z">
+<meta property="article:modified_time" content="2026-02-04T10:20:38.845Z">
+<meta property="article:author" content="Mr.xu">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Mysql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/picture/29.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "MySQL全量备份/增量备份脚本",
+  "url": "http://example.com/2025/01/07/MySQL%E5%85%A8%E9%87%8F%E5%A4%87%E4%BB%BD-%E5%A2%9E%E9%87%8F%E5%A4%87%E4%BB%BD%E8%84%9A%E6%9C%AC/",
+  "image": "http://example.com/img/picture/29.jpg",
+  "datePublished": "2025-01-07T12:49:48.000Z",
+  "dateModified": "2026-02-04T10:20:38.845Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Mr.xu",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/dong.png"><link rel="canonical" href="http://example.com/2025/01/07/MySQL%E5%85%A8%E9%87%8F%E5%A4%87%E4%BB%BD-%E5%A2%9E%E9%87%8F%E5%A4%87%E4%BB%BD%E8%84%9A%E6%9C%AC/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'MySQL全量备份/增量备份脚本',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/picture/29.jpg);"><nav id="nav"><span id="blog-info"><a id="site-name" href="/">🍀 <strong class="site-title-bold">东</strong></a><a class="nav-page-title" href="/"><span class="site-name">MySQL全量备份/增量备份脚本</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">MySQL全量备份/增量备份脚本</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-01-07T12:49:48.000Z" title="发表于 2025-01-07 20:49:48">2025-01-07</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-04T10:20:38.845Z" title="更新于 2026-02-04 18:20:38">2026-02-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/operations/">operations</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>#!&#x2F;bin&#x2F;bash</p>
+<h1 id="mysql物理备份脚本"><a href="#mysql物理备份脚本" class="headerlink" title="mysql物理备份脚本"></a>mysql物理备份脚本</h1><h1 id="每周日进行全量备份，周一到周六进行增量备份，7天为一个周期"><a href="#每周日进行全量备份，周一到周六进行增量备份，7天为一个周期" class="headerlink" title="每周日进行全量备份，周一到周六进行增量备份，7天为一个周期"></a>每周日进行全量备份，周一到周六进行增量备份，7天为一个周期</h1><h1 id="备份路径、日志路径"><a href="#备份路径、日志路径" class="headerlink" title="备份路径、日志路径"></a>备份路径、日志路径</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">backup_dir=&quot;/backup&quot;</span><br><span class="line">log_dir=&quot;/backup/log&quot;</span><br><span class="line">full_backup_dir=&quot;/backup/full&quot;</span><br><span class="line">inc_backup_dir=&quot;/backup/inc&quot;</span><br><span class="line"></span><br><span class="line">log_date=$(date &quot;+%F-%T&quot;)</span><br></pre></td></tr></table></figure>
+<h1 id="数据库用户、密码"><a href="#数据库用户、密码" class="headerlink" title="数据库用户、密码"></a>数据库用户、密码</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MY_USER=root</span><br><span class="line">MY_PASS=P@ssword1</span><br></pre></td></tr></table></figure>
+<h1 id="判断日志、备份路径是否存在"><a href="#判断日志、备份路径是否存在" class="headerlink" title="判断日志、备份路径是否存在"></a>判断日志、备份路径是否存在</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[ -d $backup_dir ] || mkdir $backup_dir</span><br><span class="line">[ -d $log_dir ] || mkdir $log_dir</span><br><span class="line">[ -d $full_backup_dir ] || mkdir $full_backup_dir</span><br><span class="line">[ -d $inc_backup_dir ] || mkdir $inc_backup_dir</span><br></pre></td></tr></table></figure>
+<h1 id="全量备份函数"><a href="#全量备份函数" class="headerlink" title="全量备份函数"></a>全量备份函数</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">full_backup()&#123;</span><br><span class="line">	# 全量备份命令 </span><br><span class="line">	innobackupex --user=$MY_USER --password=$MY_PASS $full_backup_dir</span><br><span class="line">	if [ $? -eq 0 ];then</span><br><span class="line">		echo &quot;$&#123;log_date&#125; full backup!!!&quot; &gt;&gt; $log_dir/back.log</span><br><span class="line">	else</span><br><span class="line">		echo &quot;$&#123;log_date&#125; full failed!!&quot; &gt;&gt; $log_dir/err.log</span><br><span class="line">	fi</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="获取上周日的时间-以-Y-m-d格式显示"><a href="#获取上周日的时间-以-Y-m-d格式显示" class="headerlink" title="获取上周日的时间,以%Y-%m-%d格式显示"></a>获取上周日的时间,以%Y-%m-%d格式显示</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sunday=$(date -d &quot;last sunday&quot; +%F)</span><br></pre></td></tr></table></figure>
+<h1 id="获取前一天的时间-以-Y-m-d格式显示"><a href="#获取前一天的时间-以-Y-m-d格式显示" class="headerlink" title="获取前一天的时间,以%Y-%m-%d格式显示"></a>获取前一天的时间,以%Y-%m-%d格式显示</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yesterday=$(date -d &quot;yesterday&quot; +%F)</span><br></pre></td></tr></table></figure>
+<h1 id="增量备份函数"><a href="#增量备份函数" class="headerlink" title="增量备份函数"></a>增量备份函数</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">inc_backup()&#123;</span><br><span class="line">	# 判断当前时间是否为周一(周一需要去找全量备份，周二到周六找前一天的备份)</span><br><span class="line">	if [ $week_date -eq 1 ];then</span><br><span class="line">		# 查找全量备份的文件路径</span><br><span class="line">		local full_backup_dir=$(find $backup_dir -name $&#123;sunday&#125;*)</span><br><span class="line">		innobackupex --user=$MY_USER --password=$MY_PASS --incremental $&#123;inc_backup_dir&#125; --incremental-basedir=$&#123;full_backup_dir&#125;</span><br><span class="line">		# 判断命令是否执行成功,写入日志文件</span><br><span class="line">    	if [ $? -eq 0 ];then</span><br><span class="line">        	echo &quot;$&#123;log_date&#125; inc backup!!!&quot; &gt;&gt; $log_dir/back.log</span><br><span class="line">    	else</span><br><span class="line">        	echo &quot;$&#123;log_date&#125; inc failed!!&quot; &gt;&gt; $log_dir/err.log</span><br><span class="line">    	fi</span><br><span class="line">	else</span><br><span class="line">		# 查找前一天的文件路径</span><br><span class="line">        local yesterday_backup_dir=$(find $backup_dir -name $&#123;yesterday&#125;*)</span><br><span class="line">        innobackupex --user=$MY_USER --password=$MY_PASS --incremental $&#123;inc_backup_dir&#125; --incremental-basedir=$&#123;yesterday_backup_dir&#125;</span><br><span class="line">		# 判断命令是否执行成功,写入日志文件</span><br><span class="line">    	if [ $? -eq 0 ];then</span><br><span class="line">        	echo &quot;$&#123;log_date&#125; inc backup!!!&quot; &gt;&gt; $log_dir/back.log</span><br><span class="line">    	else</span><br><span class="line">        	echo &quot;$&#123;log_date&#125; inc failed!!&quot; &gt;&gt; $log_dir/err.log</span><br><span class="line">    	fi</span><br><span class="line">	fi</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="查看当前是周几"><a href="#查看当前是周几" class="headerlink" title="查看当前是周几"></a>查看当前是周几</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">week_date=$(date +%u)</span><br></pre></td></tr></table></figure>
+<h1 id="判断当前是周几，周日则执行全量备份，周一到周六执行增量备份"><a href="#判断当前是周几，周日则执行全量备份，周一到周六执行增量备份" class="headerlink" title="判断当前是周几，周日则执行全量备份，周一到周六执行增量备份"></a>判断当前是周几，周日则执行全量备份，周一到周六执行增量备份</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if [ $week_date -eq 7 ];then</span><br><span class="line">	full_backup</span><br><span class="line">else</span><br><span class="line">	inc_backup	</span><br><span class="line">fi</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Mr.xu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/01/07/MySQL%E5%85%A8%E9%87%8F%E5%A4%87%E4%BB%BD-%E5%A2%9E%E9%87%8F%E5%A4%87%E4%BB%BD%E8%84%9A%E6%9C%AC/">http://example.com/2025/01/07/MySQL%E5%85%A8%E9%87%8F%E5%A4%87%E4%BB%BD-%E5%A2%9E%E9%87%8F%E5%A4%87%E4%BB%BD%E8%84%9A%E6%9C%AC/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">Dong_Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/Mysql/">Mysql</a></div><div class="post-share"><div class="social-share" data-image="/img/picture/29.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/01/08/linux%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="linux网卡配置"><img class="cover" src="/img/picture/28.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">linux网卡配置</div></div><div class="info-2"><div class="info-item-1">永久设置网卡  另外也可以在终端上输入nmtui，进入网卡设置界面  1、Centos 7 配置 123456789101112131415Centos 7# vim	/etc/sysconfig/network-scripts/ifcfg-ens33 		//网卡配置文件的路径TYPE=Ethernet			//网卡类型BOOTPROTO=dhcp 			//网卡模式     --&gt;  dhcp 			//自动获取     --&gt;  static 		//手动获取     --&gt;  none 			//手动获取NAME=ens33 				//网卡名称（可以修改的）DEVICE=ens33 			//设备名称ONBOOT=yes 				//网卡开关IPADDR=192.168.10.104	//IP地址PREFIX=24				//子网掩码NETMASK=255.255.255.0 	//子网掩码GATEWAY=192.168.10.2 	//网关DNS1=192.168.10.2 		//DNS 重启 1systemctl restart network ...</div></div></div></a><a class="pagination-related" href="/2025/01/06/docker%E9%83%A8%E7%BD%B2halo%E5%8D%9A%E5%AE%A2/" title="docker部署halo博客"><img class="cover" src="/img/picture/26.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">docker部署halo博客</div></div><div class="info-2"><div class="info-item-1">docker博客创建编辑配置文件1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859vim /halo/docker-compose.yamlversion: &quot;3&quot;services:  halo    image: halohub/halo:2.11    container_name: halo    restart: on-failure:3    depends_on:      halodb:        condition: service_healthy    networks:      halo_network:    volumes:   - ./halo2:/root/.halo2     rts:        - &quot;8090:8090&quot;          althcheck:                test: [&quot;CMD&quot;...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/11/06/ansible-%E9%85%8D%E7%BD%AEjspgou%E5%95%86%E5%9F%8E%E4%B8%8A%E7%BA%BF%EF%BC%88MySQL%E7%89%88%EF%BC%89/" title="ansible 配置jspgou商城上线（MySQL版）"><img class="cover" src="/img/picture/18.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">ansible 配置jspgou商城上线（MySQL版）</div></div><div class="info-2"><div class="info-item-1">准备实验环境，准备两台电脑10.31.162.24—-10.31.162.25 关闭防火墙，关闭setenforce 0 hosts解析123[root@ansible-server ~]# vim /etc/hosts10.31.162.24    ansible-server10.31.162.25    ansible-web  更改主机名1234510.31.162.24[root@ansible-server ~]# hostnamectl set-hostname ansible-server10.31.162.25[root@ansible-web ~]# hostnamectl set-hostname ansible-web  安装ansible12345678910111210.31.162.24安装：控制节点 1. 配置EPEL网络yum源 [root@ansible-server ~]# yum install -y epel* 2. 安装ansible [root@ansible-server ~]# yum install -y ansible 3.查...</div></div></div></a><a class="pagination-related" href="/2025/11/05/ansible%E9%83%A8%E7%BD%B2mysql%E4%B8%BB%E4%BB%8E/" title="ansible部署mysql主从"><img class="cover" src="/img/picture/26.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">ansible部署mysql主从</div></div><div class="info-2"><div class="info-item-1">MySQL主从作用：MySQL 是一种开源的关系数据库管理系统（RDBMS），广泛用于各种应用场景。以下是 MySQL 的主要作用和用途：  数据存储和管理:  MySQL 用于存储和管理大量结构化数据。它支持多种数据类型和复杂的查询操作，适合处理各种业务数据。   Web 应用程序:  MySQL 是许多 Web 应用程序的后端数据库，尤其是与 PHP 结合使用。常见的内容管理系统（CMS）如 WordPress、Joomla 和 Drupal 都依赖 MySQL。   电子商务:  电子商务平台如 Magento、WooCommerce 和 Shopify 使用 MySQL 来管理产品信息、订单、客户数据等。   数据分析:  MySQL 可以用于数据分析和商业智能（BI），通过与工具如 Tableau、Power BI 和 Excel 集成，帮助企业做出数据驱动的决策。   企业应用:  企业资源计划（ERP）、客户关系管理（CRM）和其他企业级应用程序常常使用 MySQL 作为其数据库后端。   高可用性和扩展性:  MySQL 支持复制和集群功能，可以实现高可用性和扩展...</div></div></div></a><a class="pagination-related" href="/2025/01/09/%E5%AE%89%E8%A3%85MySQL/" title="安装MySQL"><img class="cover" src="/img/picture/16.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-09</div><div class="info-item-2">安装MySQL</div></div><div class="info-2"><div class="info-item-1">1、yum安装MySQL#关闭防火墙 12systemctl stop firewalldsetenforce 0  清理环境1234yum erase mariadb mariadb-server mariadb-libs mariadb-devel -yuserdel -r mysqlrm -rf /etc/my*         //配置文件rm -rf /var/lib/mysql   //初始化生成密码的路径目录  编辑yum文件1234567[root@localhost yum.repos.d]# vim mysql.repo[mysql]name=mysqlbaseurl=https://mirrors.tuna.tsinghua.edu.cn/mysql/yum/mysql-5.7-community-el7-x86_64/gpgcheck=1enabled=1gpgkey=https://mirrors.ustc.edu.cn/mysql-repo/RPM-GPG-KEY-mysql  安装软件12345# yum repolist enabled | gre...</div></div></div></a><a class="pagination-related" href="/2025/11/06/Docker%E9%A1%B9%E7%9B%AE%EF%BC%9A%E6%90%AD%E5%BB%BA%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9B%91%E6%8E%A7%E9%9D%A2%E6%9D%BF/" title="Docker项目：搭建服务器监控面板"><img class="cover" src="/img/picture/13.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">Docker项目：搭建服务器监控面板</div></div><div class="info-2"><div class="info-item-1">搭建一个专属自己的网站监控——Uptime Kuma安装 Docker下载docker，docker官方网址docker.com 创建 yml 配置文件1234567891011vim docker-compose.yml代码version: &#x27;3.3&#x27;services:  uptime-kuma:    image: louislam/uptime-kuma    container_name: uptime-kuma    volumes:      - ./uptime-kuma:/app/data    ports:      - 3001:3001 反向代理配置1234567891011server  &#123;    listen 80;    server_name    vps.7boe.top;    location / &#123;        proxy_pass         http://localhost:3001;        proxy_http_version 1.1;        proxy_set_header...</div></div></div></a><a class="pagination-related" href="/2025/11/06/Nginx-%E5%AE%9E%E7%8E%B0%E5%8A%A8%E9%9D%99%E5%88%86%E7%A6%BB/" title="Nginx 实现动静分离实验"><img class="cover" src="/img/picture/13.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">Nginx 实现动静分离实验</div></div><div class="info-2"><div class="info-item-1">nginx 实现动静分离准备环境 准备3台机器，一个nginx代理 两个http 分别处理动态和静态 expires功能说明 1当nginx设置了expires后，例如设置为：expires 10d; 那么用户在10天内请求的时候，都只会访问浏览器中的缓存，而不会去请求nginx。  1、静态资源配置12345678910server &#123;        listen 80;        server_name     localhost;        location ~ \.(html|jpg|png|js|css) &#123;        root /home/www/nginx;        expires      1d; #为客户端设置静态资源缓存时间        &#125;&#125;  测试 1234curl -I http://192.168.116.111/test.jpgHTTP/1.1 200 OK		//显示200，代表成功# 也可以在网址访问：192.168.116.111/test.jpg  2、动态资源配置yum 安装php7...</div></div></div></a><a class="pagination-related" href="/2025/11/06/K8S%E9%83%A8%E7%BD%B2zentao/" title="K8S部署zentao"><img class="cover" src="/img/picture/19.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">K8S部署zentao</div></div><div class="info-2"><div class="info-item-1">环境准备1234服务器	  IP地址master	192.168.0.173node1	192.168.0.253node2	192.168.0.233  安装nfs安装nfs12345678910111213141516171819# master节点yum -y install  nfs-utils rpcbind# 创建共享目录mkdir -p /data/zentao# 启动nfs服务systemctl restart nfs-serversystemctl enabled nfs-serversystemctl restart rpcbindsystemctl enabled rpcbind# node节点yum -y install  nfs-utils rpcbindsystemctl restart nfs-serversystemctl enabled nfs-serversystemctl restart rpcbindsystemctl enabled rpcbind  挂载NFS123456789101112131415161718192021# 配置共享...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Mr.xu</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xubaodong0511"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-author-social"><a href="https://github.com/xubaodong0511" target="_blank" rel="noopener"><i class="fab fa-github"></i></a><a href="https://gitee.com/xbd666" target="_blank" rel="noopener"><i class="fab fa-gitee"></i></a><a href="https://www.bilibili.com/" target="_blank" rel="noopener"><i class="fab fa-bilibili"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">相遇即是缘。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mysql%E7%89%A9%E7%90%86%E5%A4%87%E4%BB%BD%E8%84%9A%E6%9C%AC"><span class="toc-number">1.</span> <span class="toc-text">mysql物理备份脚本</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AF%8F%E5%91%A8%E6%97%A5%E8%BF%9B%E8%A1%8C%E5%85%A8%E9%87%8F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%91%A8%E4%B8%80%E5%88%B0%E5%91%A8%E5%85%AD%E8%BF%9B%E8%A1%8C%E5%A2%9E%E9%87%8F%E5%A4%87%E4%BB%BD%EF%BC%8C7%E5%A4%A9%E4%B8%BA%E4%B8%80%E4%B8%AA%E5%91%A8%E6%9C%9F"><span class="toc-number">2.</span> <span class="toc-text">每周日进行全量备份，周一到周六进行增量备份，7天为一个周期</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%87%E4%BB%BD%E8%B7%AF%E5%BE%84%E3%80%81%E6%97%A5%E5%BF%97%E8%B7%AF%E5%BE%84"><span class="toc-number">3.</span> <span class="toc-text">备份路径、日志路径</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%94%A8%E6%88%B7%E3%80%81%E5%AF%86%E7%A0%81"><span class="toc-number">4.</span> <span class="toc-text">数据库用户、密码</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E6%97%A5%E5%BF%97%E3%80%81%E5%A4%87%E4%BB%BD%E8%B7%AF%E5%BE%84%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8"><span class="toc-number">5.</span> <span class="toc-text">判断日志、备份路径是否存在</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%A8%E9%87%8F%E5%A4%87%E4%BB%BD%E5%87%BD%E6%95%B0"><span class="toc-number">6.</span> <span class="toc-text">全量备份函数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E4%B8%8A%E5%91%A8%E6%97%A5%E7%9A%84%E6%97%B6%E9%97%B4-%E4%BB%A5-Y-m-d%E6%A0%BC%E5%BC%8F%E6%98%BE%E7%A4%BA"><span class="toc-number">7.</span> <span class="toc-text">获取上周日的时间,以%Y-%m-%d格式显示</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E5%89%8D%E4%B8%80%E5%A4%A9%E7%9A%84%E6%97%B6%E9%97%B4-%E4%BB%A5-Y-m-d%E6%A0%BC%E5%BC%8F%E6%98%BE%E7%A4%BA"><span class="toc-number">8.</span> <span class="toc-text">获取前一天的时间,以%Y-%m-%d格式显示</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A2%9E%E9%87%8F%E5%A4%87%E4%BB%BD%E5%87%BD%E6%95%B0"><span class="toc-number">9.</span> <span class="toc-text">增量备份函数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E6%98%AF%E5%91%A8%E5%87%A0"><span class="toc-number">10.</span> <span class="toc-text">查看当前是周几</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E5%BD%93%E5%89%8D%E6%98%AF%E5%91%A8%E5%87%A0%EF%BC%8C%E5%91%A8%E6%97%A5%E5%88%99%E6%89%A7%E8%A1%8C%E5%85%A8%E9%87%8F%E5%A4%87%E4%BB%BD%EF%BC%8C%E5%91%A8%E4%B8%80%E5%88%B0%E5%91%A8%E5%85%AD%E6%89%A7%E8%A1%8C%E5%A2%9E%E9%87%8F%E5%A4%87%E4%BB%BD"><span class="toc-number">11.</span> <span class="toc-text">判断当前是周几，周日则执行全量备份，周一到周六执行增量备份</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vercel部署Twikoo评论系统"/></a><div class="content"><a class="title" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统">Vercel部署Twikoo评论系统</a><time datetime="2026-02-04T05:49:39.000Z" title="发表于 2026-02-04 13:49:39">2026-02-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客"><img src="/img/picture/9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="docker 创建halo博客"/></a><div class="content"><a class="title" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客">docker 创建halo博客</a><time datetime="2025-11-06T13:17:32.000Z" title="发表于 2025-11-06 21:17:32">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置"><img src="/img/picture/5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Centos网卡配置"/></a><div class="content"><a class="title" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置">Centos网卡配置</a><time datetime="2025-11-06T13:16:51.000Z" title="发表于 2025-11-06 21:16:51">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp"><img src="/img/picture/20.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="shell添加用户，计算，vsftp"/></a><div class="content"><a class="title" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp">shell添加用户，计算，vsftp</a><time datetime="2025-11-06T13:13:49.000Z" title="发表于 2025-11-06 21:13:49">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="系统工具箱--脚本"/></a><div class="content"><a class="title" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本">系统工具箱--脚本</a><time datetime="2025-11-06T13:13:16.000Z" title="发表于 2025-11-06 21:13:16">2025-11-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">© 2025 - 2026 By <span class="copyright-author">Mr.xu</span></span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div><script src="/js/snow.js"></script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://hexoblogtwikoovercel.vercel.app',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://hexoblogtwikoovercel.vercel.app',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://cdn.jsdelivr.net/npm/twikoo@1.6.44/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><meting-js server="netease" type="playlist" id="570548381" fixed="true" autoplay="true" theme="#000000" loop="all" order="random" preload="auto" volume="0.7" muted="true" ></meting-js><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- 只保留这一行--><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></body></html>

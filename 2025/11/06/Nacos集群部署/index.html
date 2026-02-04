@@ -1,0 +1,365 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Nacos集群部署 | Dong_Blog</title><meta name="author" content="Mr.xu"><meta name="copyright" content="Mr.xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="Nacos–集群作用Nacos（Dynamic Naming and Configuration Service）是阿里巴巴开源的一个动态服务发现、配置管理和服务管理平台。它主要用于微服务架构中的服务注册与发现、分布式配置管理和动态 DNS 服务。Nacos 的核心功能和作用如下：  服务发现和注册   服务注册：Nacos 允许服务实例在启动时向 Nacos 注册自己的信息（如 IP 地址、端口">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nacos集群部署">
+<meta property="og:url" content="http://example.com/2025/11/06/Nacos%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:site_name" content="Dong_Blog">
+<meta property="og:description" content="Nacos–集群作用Nacos（Dynamic Naming and Configuration Service）是阿里巴巴开源的一个动态服务发现、配置管理和服务管理平台。它主要用于微服务架构中的服务注册与发现、分布式配置管理和动态 DNS 服务。Nacos 的核心功能和作用如下：  服务发现和注册   服务注册：Nacos 允许服务实例在启动时向 Nacos 注册自己的信息（如 IP 地址、端口">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/picture/21.jpg">
+<meta property="article:published_time" content="2025-11-06T08:10:08.000Z">
+<meta property="article:modified_time" content="2026-02-04T10:20:38.845Z">
+<meta property="article:author" content="Mr.xu">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Nacos">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/picture/21.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Nacos集群部署",
+  "url": "http://example.com/2025/11/06/Nacos%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/",
+  "image": "http://example.com/img/picture/21.jpg",
+  "datePublished": "2025-11-06T08:10:08.000Z",
+  "dateModified": "2026-02-04T10:20:38.845Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Mr.xu",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/dong.png"><link rel="canonical" href="http://example.com/2025/11/06/Nacos%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Nacos集群部署',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/picture/21.jpg);"><nav id="nav"><span id="blog-info"><a id="site-name" href="/">🍀 <strong class="site-title-bold">东</strong></a><a class="nav-page-title" href="/"><span class="site-name">Nacos集群部署</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Nacos集群部署</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-06T08:10:08.000Z" title="发表于 2025-11-06 16:10:08">2025-11-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-04T10:20:38.845Z" title="更新于 2026-02-04 18:20:38">2026-02-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/operations/">operations</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h3 id="Nacos–集群"><a href="#Nacos–集群" class="headerlink" title="Nacos–集群"></a>Nacos–集群</h3><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>Nacos（Dynamic Naming and Configuration Service）是阿里巴巴开源的一个动态服务发现、配置管理和服务管理平台。它主要用于微服务架构中的服务注册与发现、分布式配置管理和动态 DNS 服务。Nacos 的核心功能和作用如下：</p>
+<ol>
+<li><strong>服务发现和注册</strong></li>
+</ol>
+<ul>
+<li><strong>服务注册</strong>：Nacos 允许服务实例在启动时向 Nacos 注册自己的信息（如 IP 地址、端口、服务名称等），从而使其他服务能够发现它们。</li>
+<li><strong>服务发现</strong>：服务消费者可以通过 Nacos 查询到所需服务的实例信息，从而实现服务间的调用。Nacos 支持多种服务发现机制，如 DNS 和 HTTP。</li>
+</ul>
+<ol start="2">
+<li><strong>分布式配置管理</strong></li>
+</ol>
+<ul>
+<li><strong>配置管理</strong>：Nacos 提供了集中化的配置管理功能，允许开发者将应用配置存储在 Nacos 服务器上。配置的变更可以实时推送到各个服务实例，避免了因配置变更而重启服务的需求。</li>
+<li><strong>动态配置</strong>：通过 Nacos，配置可以在运行时动态更新，服务实例会自动感知配置的变化并做出相应调整。</li>
+</ul>
+<ol start="3">
+<li><strong>动态 DNS 服务</strong></li>
+</ol>
+<ul>
+<li><strong>动态 DNS</strong>：Nacos 支持动态 DNS 服务，可以将服务名解析为服务实例的 IP 地址和端口，方便服务间的调用和负载均衡。</li>
+</ul>
+<ol start="4">
+<li><strong>集群管理</strong></li>
+</ol>
+<ul>
+<li><strong>集群管理</strong>：Nacos 支持对服务实例进行健康检查和集群管理，确保服务的高可用性和可靠性。它可以自动剔除不健康的实例，并在实例恢复后重新加入到服务列表中。</li>
+</ul>
+<ol start="5">
+<li><strong>多语言支持</strong></li>
+</ol>
+<ul>
+<li><strong>多语言支持</strong>：Nacos 提供了丰富的客户端 SDK，支持 Java、Go、C++ 等多种编程语言，方便开发者在不同语言的项目中集成 Nacos。</li>
+</ul>
+<ol start="6">
+<li><strong>可视化管理界面</strong></li>
+</ol>
+<ul>
+<li><strong>可视化界面</strong>：Nacos 提供了友好的 Web 管理界面，方便开发者和运维人员对服务和配置进行管理和监控。</li>
+</ul>
+<ol start="7">
+<li><strong>高可用和扩展性</strong></li>
+</ol>
+<ul>
+<li><strong>高可用</strong>：Nacos 支持集群部署，保证服务的高可用性和容错性。</li>
+<li><strong>扩展性</strong>：Nacos 设计灵活，支持插件机制，可以根据需要扩展功能。</li>
+</ul>
+<p><strong>典型应用场景</strong></p>
+<ol>
+<li><strong>微服务架构</strong>：在微服务架构中，Nacos 作为服务注册与发现的核心组件，简化了服务间的通信和管理。</li>
+<li><strong>分布式系统</strong>：在分布式系统中，Nacos 提供集中化的配置管理，简化了配置的管理和推送。</li>
+<li><strong>云原生应用</strong>：在云原生应用中，Nacos 提供动态 DNS 和服务发现功能，支持服务的弹性伸缩和动态管理。</li>
+</ol>
+<h4 id="资源需求"><a href="#资源需求" class="headerlink" title="资源需求"></a>资源需求</h4><ul>
+<li><strong>CPU</strong>: 4 核 </li>
+<li><strong>内存</strong>:  8 GB </li>
+<li><strong>存储</strong>: 300G</li>
+<li><strong>节点</strong>：2</li>
+</ul>
+<h4 id="网络端口"><a href="#网络端口" class="headerlink" title="网络端口"></a>网络端口</h4><ol>
+<li><strong>默认端口</strong><ul>
+<li><strong>端口号</strong>: 8848</li>
+<li><strong>用途</strong>: Nacos 的 HTTP API 端口，用于服务注册、配置管理和其他 API 调用。</li>
+</ul>
+</li>
+<li><strong>集群通信端口</strong><ul>
+<li><strong>端口号</strong>: 7848</li>
+<li><strong>用途</strong>: Nacos 集群节点之间的通信端口。</li>
+</ul>
+</li>
+</ol>
+<h4 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h4><pre><code># 安装jdk
+wget https://a.xbd666.cn/d/Aliyun/Cloud_computing/Software_package/tomcat-jdk/jdk-8u271-linux-x64.tar.gz
+jdk在/usr/local目录下，设置变量
+
+# 下载nacos安装包
+wget https://a.xbd666.cn/d/Aliyun/Cloud_computing/Software_package/nacos/nacos-server-1.2.1.tar.gz
+
+#创建目录
+mkdir -p /data/nacos
+# 解压
+tar xzf nacos-server-2.3.2.tar.gz -C /data/nacos
+cd /data/nacos/nacos/conf
+# 编辑连数据库的 配置文件
+vim application.properties
+更改以下内容
+spring.datasource.platform=mysql      # 去除注释
+# spring.sql.init.platform=mysql
+
+### Count of DB:
+db.num=1    # 去除注释
+
+### Connect URL of DB:
+db.url.0=jdbc:mysql://10.100.40.171:3306/nacos?characterEncoding=utf8&amp;connectTimeout=1000&amp;socketTimeout=3000&amp;autoReconnect=true&amp;useUnicode=true&amp;useSSL=false&amp;serverTimezone=UTC    # 改MySQL机器的IP地址
+db.user.0=root     # 改为root用户
+db.password.0=Kunyue@123     # 改为MySQL的密码
+spring.data.dir=/data/nacos/data		#定义数据存放目录
+
+#创建目录
+mkdir -p /data/nacos/data
+chmod -R 755 /data/nacos
+# 导入数据--并创建nacos数据库
+CREATE USER &#39;root&#39;@&#39;%&#39; IDENTIFIED BY &#39;123456&#39;;
+GRANT ALL PRIVILEGES ON *.* TO &#39;root&#39;@&#39;%&#39;;
+flush privileges;
+
+# 编辑集群配置文件--添加集群IP地址
+cp cluster.conf.example cluster.conf.example.bak
+mv cluster.conf.example cluster.conf
+vim cluster.conf
+添加nacos集群的IP地址
+10.100.40.170:8848
+10.100.40.171:8848
+10.100.40.172:8848
+
+# 启动
+./bin/startup.sh
+# 停止
+./bin/shutdown.sh
+
+# 登入、验证
+http://IP + 8848/nacos
+在web界面左侧栏--集群管理--节点管理   # 可以看到所有集群的状态
+           
+           
+           
+### 开启鉴权
+通过base64命令随机生成token
+[root@emqx01 conf]# echo -n &#39;ThisIsARandomlyGeneratedSecureKey32CharactersLong&#39; | base64
+VGhpc0lzQVJhbmRvbWx5R2VuZXJhdGVkU2VjdXJlS2V5MzJDaGFyYWN0ZXJzTG9uZw==
+
+#编辑配置
+vim /data/nacos/nacos/conf/application.properties
+nacos.core.auth.enabled=true
+
+### 关闭使用user-agent判断服务端请求并放行鉴权的功能
+nacos.core.auth.enable.userAgentAuthWhite=false
+
+### 配置自定义身份识别的key（不可为空）和value（不可为空）
+nacos.core.auth.server.identity.key=example
+nacos.core.auth.server.identity.value=example
+
+nacos.core.auth.plugin.nacos.token.secret.key=VGhpc0lzQVJhbmRvbWx5R2VuZXJhdGVkU2VjdXJlS2V5MzJDaGFyYWN0ZXJzTG9uZw==
+</code></pre>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Mr.xu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/11/06/Nacos%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/">http://example.com/2025/11/06/Nacos%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">Dong_Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/Nacos/">Nacos</a></div><div class="post-share"><div class="social-share" data-image="/img/picture/21.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/11/06/TDEngine%E6%97%B6%E5%BA%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/" title="TDEngine时序数据库部署"><img class="cover" src="/img/picture/16.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">TDEngine时序数据库部署</div></div><div class="info-2"><div class="info-item-1">TDEngine–集群作用TDEngine 是一种高性能、分布式、时间序列数据库（TSDB），专门为物联网（IoT）、工业互联网、车联网、金融、IT 运维监控等领域设计。它具有高效的数据写入和查询性能，适合处理大规模的时间序列数据。以下是 TDEngine 的主要作用和用途：  物联网（IoT）数据存储和分析:  TDEngine 能够高效地存储和处理来自各种 IoT 设备和传感器的大量时间序列数据，支持实时数据写入和复杂查询。   工业互联网:  在工业互联网应用中，TDEngine 可以用于存储和分析工业设备的运行数据、传感器数据、生产线数据等，帮助进行设备监控、预测性维护和优化生产流程。   车联网:  TDEngine 能够存储和处理车辆的运行数据、位置数据、传感器数据等，支持实时数据分析和查询，适用于车联网应用中的数据管理和分析。   金融数据分析:  在金融领域，TDEngine 可以用于存储和分析股票、期货、外汇等金融市场的时间序列数据，支持高频交易数据的存储和实时查询分析。   IT 运维监控:  TDEngine 适用于 IT 运维监控场景，可以存储和分析服务器...</div></div></div></a><a class="pagination-related" href="/2025/11/05/EMQX%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" title="EMQX集群部署"><img class="cover" src="/img/picture/27.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">EMQX集群部署</div></div><div class="info-2"><div class="info-item-1">emqx–集群作用EMQX（Erlang MQTT Broker）是一个高性能、可扩展的开源 MQTT 消息代理服务器。它基于 Erlang&#x2F;OTP 开发，专为大规模物联网（IoT）应用设计。EMQX 的核心作用和功能如下：  消息代理：EMQX 作为 MQTT 消息代理，负责在发布者和订阅者之间路由消息。它支持 MQTT 协议的所有功能，包括 QoS（Quality of Service）级别、持久会话和遗嘱消息等。 设备连接管理：EMQX 可以管理大量 IoT 设备的连接，支持数百万级别的并发连接，适用于大规模的物联网应用。 数据分发：EMQX 能够高效地分发数据，确保消息在发布者和订阅者之间的快速传递，支持多种消息格式和传输协议。 扩展性：EMQX 支持插件机制，用户可以根据需求扩展其功能，如数据持久化、规则引擎、认证和授权等。  主要功能  支持多种协议  MQTT&#x2F;MQTT-SN：原生支持 MQTT 3.1.1 和 MQTT 5.0 协议。 HTTP&#x2F;HTTPS：支持通过 HTTP&#x2F;HTTPS 协议进行消息发布和订阅。 CoAP：...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/11/06/K8S%E9%83%A8%E7%BD%B2nacos%E6%9C%8D%E5%8A%A1/" title="K8S部署nacos服务"><img class="cover" src="/img/picture/11.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">K8S部署nacos服务</div></div><div class="info-2"><div class="info-item-1">K8S部署nacos服务prod环境prod数据库使用的端口3306的数据库123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133134[root@master ~]# mkdir nacos &amp;&amp; cd nacos[root@master nacos]# vim nacos-service.yaml---apiVersion: v1kind: Servicemetadata:  name: nacos-prod  labels:    app:...</div></div></div></a><a class="pagination-related" href="/2025/11/06/Nginx-%E5%8F%98%E9%87%8F%E7%AE%80%E4%BB%8B/" title="Nginx 变量简介实验"><img class="cover" src="/img/picture/7.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">Nginx 变量简介实验</div></div><div class="info-2"><div class="info-item-1">Nginx 变量nginx变量简介  所有的 Nginx变量在Nginx配置文件中引用时都须带上 $ 前缀  在 Nginx 配置中，变量只能存放一种类型的值，而且也只存在一种类型，那就是字符串类型  所有的变量值都可以通过这种方式引用$变量名   nginx中的变量分为两种，自定义变量与内置预定义变量  自定义变量set $变量名 变量值  内置预定义变量   $arg_PARAMETER		GET请求中变量名PARAMETER参数的值。   $args		这个变量等于GET请求中的参数。例如，foo&#x3D;123&amp;bar&#x3D;blahblah;这个变量只可以被修改 $binary_remote_addr		二进制码形式的客户端地址 $body_bytes_sent		传送页面的字节数   $content_length		请求头中的Content-length字段 $content_type		请求头中的Content-Type字段 $cookie_COOKIE		cookie COOKIE的值 $document_root		当前请求在root指令中指定的...</div></div></div></a><a class="pagination-related" href="/2025/11/06/K8s-%E5%85%AC%E7%BD%91%E9%83%A8%E7%BD%B2%EF%BC%88%E9%94%99%E8%AF%AF%E4%BF%AE%E6%94%B9%EF%BC%89/" title="K8s 公网部署（错误修改）"><img class="cover" src="/img/picture/7.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">K8s 公网部署（错误修改）</div></div><div class="info-2"><div class="info-item-1">k8s公网部署翻新之前的文章写的很乱的，多种安装方式  本次实验使用三台机器在不同地区进行部署，实验环境使用到香港服务器和杭州阿里云服务器，公网环境部署网络稳定性不能得到保证，本文部署方式仅供参考。  环境准备环境    软件 软件版本    Docker 20.0.1   Kubernetes 1.23.6   服务器规划    服务器主机名 服务器公网IP    master 149.104.23.134   node1 121.41.53.83   node2 116.62.32.149    解析hosts 12345cat &gt;&gt; /etc/hosts &lt;&lt; EOF149.104.23.134 master121.41.53.83 node1116.62.32.149 node2EOF  执行初始化脚本 1bash &lt;(curl -sSl https://git.7boe.top/root/Shell/-/raw/af8fc85f5d15181942fc791305dc64e94c32c36e/k8s.sh?inline=false)  Do...</div></div></div></a><a class="pagination-related" href="/2025/11/06/Nginx-%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6/" title="Nginx 流量控制实验"><img class="cover" src="/img/picture/25.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">Nginx 流量控制实验</div></div><div class="info-2"><div class="info-item-1">Nginx 流量控制配置基本的限流–ngx_http_limit_req_module模块实现 流量限制”配置两个主要的指令，limit_req_zone和limit_req，limit_req_zone指令设置流量限制和内存区域的参数，但实际上并不限制请求速率。所以需要通过添加limit_req指令启用流量限制,应用在特定的location或者server块 limit_req_zone指令通常在HTTP块中定义，它需要以下三个参数： 123-Key - 定义应用限制的请求特性。示例中的 Nginx 变量$binary_remote_addr，保存客户端IP地址的二进制形式。-Zone - 定义用于存储每个IP地址状态以及被限制请求URL访问频率的内存区域。通过zone=keyword标识区域的名字(自定义)，以及冒号后面跟区域大小。16000个IP地址的状态信息，大约需要1MB。-Rate - 连接请求。在示例中，速率不能超过每秒1个请求。  示例一 这里需要两台机器，一台代理，一台宿主机 代理机配置 12345678910111213141516limit_req_zone...</div></div></div></a><a class="pagination-related" href="/2025/01/06/docker%E9%83%A8%E7%BD%B2halo%E5%8D%9A%E5%AE%A2/" title="docker部署halo博客"><img class="cover" src="/img/picture/26.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-06</div><div class="info-item-2">docker部署halo博客</div></div><div class="info-2"><div class="info-item-1">docker博客创建编辑配置文件1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859vim /halo/docker-compose.yamlversion: &quot;3&quot;services:  halo    image: halohub/halo:2.11    container_name: halo    restart: on-failure:3    depends_on:      halodb:        condition: service_healthy    networks:      halo_network:    volumes:   - ./halo2:/root/.halo2     rts:        - &quot;8090:8090&quot;          althcheck:                test: [&quot;CMD&quot;...</div></div></div></a><a class="pagination-related" href="/2025/11/06/K8S%E9%83%A8%E7%BD%B2zentao/" title="K8S部署zentao"><img class="cover" src="/img/picture/19.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">K8S部署zentao</div></div><div class="info-2"><div class="info-item-1">环境准备1234服务器	  IP地址master	192.168.0.173node1	192.168.0.253node2	192.168.0.233  安装nfs安装nfs12345678910111213141516171819# master节点yum -y install  nfs-utils rpcbind# 创建共享目录mkdir -p /data/zentao# 启动nfs服务systemctl restart nfs-serversystemctl enabled nfs-serversystemctl restart rpcbindsystemctl enabled rpcbind# node节点yum -y install  nfs-utils rpcbindsystemctl restart nfs-serversystemctl enabled nfs-serversystemctl restart rpcbindsystemctl enabled rpcbind  挂载NFS123456789101112131415161718192021# 配置共享...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Mr.xu</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xubaodong0511"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-author-social"><a href="https://github.com/xubaodong0511" target="_blank" rel="noopener"><i class="fab fa-github"></i></a><a href="https://gitee.com/xbd666" target="_blank" rel="noopener"><i class="fab fa-gitee"></i></a><a href="https://www.bilibili.com/" target="_blank" rel="noopener"><i class="fab fa-bilibili"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">相遇即是缘。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nacos%E2%80%93%E9%9B%86%E7%BE%A4"><span class="toc-number">1.</span> <span class="toc-text">Nacos–集群</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8"><span class="toc-number">1.1.</span> <span class="toc-text">作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E9%9C%80%E6%B1%82"><span class="toc-number">1.2.</span> <span class="toc-text">资源需求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E7%AB%AF%E5%8F%A3"><span class="toc-number">1.3.</span> <span class="toc-text">网络端口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2"><span class="toc-number">1.4.</span> <span class="toc-text">安装部署</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vercel部署Twikoo评论系统"/></a><div class="content"><a class="title" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统">Vercel部署Twikoo评论系统</a><time datetime="2026-02-04T05:49:39.000Z" title="发表于 2026-02-04 13:49:39">2026-02-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客"><img src="/img/picture/9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="docker 创建halo博客"/></a><div class="content"><a class="title" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客">docker 创建halo博客</a><time datetime="2025-11-06T13:17:32.000Z" title="发表于 2025-11-06 21:17:32">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置"><img src="/img/picture/5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Centos网卡配置"/></a><div class="content"><a class="title" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置">Centos网卡配置</a><time datetime="2025-11-06T13:16:51.000Z" title="发表于 2025-11-06 21:16:51">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp"><img src="/img/picture/20.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="shell添加用户，计算，vsftp"/></a><div class="content"><a class="title" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp">shell添加用户，计算，vsftp</a><time datetime="2025-11-06T13:13:49.000Z" title="发表于 2025-11-06 21:13:49">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="系统工具箱--脚本"/></a><div class="content"><a class="title" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本">系统工具箱--脚本</a><time datetime="2025-11-06T13:13:16.000Z" title="发表于 2025-11-06 21:13:16">2025-11-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">© 2025 - 2026 By <span class="copyright-author">Mr.xu</span></span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div><script src="/js/snow.js"></script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://hexoblogtwikoovercel.vercel.app',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://hexoblogtwikoovercel.vercel.app',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://cdn.jsdelivr.net/npm/twikoo@1.6.44/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><meting-js server="netease" type="playlist" id="570548381" fixed="true" autoplay="true" theme="#000000" loop="all" order="random" preload="auto" volume="0.7" muted="true" ></meting-js><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- 只保留这一行--><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></body></html>

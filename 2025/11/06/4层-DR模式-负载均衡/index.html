@@ -1,0 +1,251 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>4层--DR模式--负载均衡实验 | Dong_Blog</title><meta name="author" content="Mr.xu"><meta name="copyright" content="Mr.xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="环境准备准备3台纯洁的虚拟机，2台web服务器 安装lvs管理软件1yum -y install ipvsadm  1234567程序包：ipvsadm（LVS管理工具）主程序：&#x2F;usr&#x2F;sbin&#x2F;ipvsadm规则保存工具：&#x2F;usr&#x2F;sbin&#x2F;ipvsadm-save  &gt; &#x2F;path&#x2F;to&#x2F;file配置文件：&#x2F;etc&#x2F;sysconfig&#x2F;ipvsadm-config   LVS&amp;#x2F">
+<meta property="og:type" content="article">
+<meta property="og:title" content="4层--DR模式--负载均衡实验">
+<meta property="og:url" content="http://example.com/2025/11/06/4%E5%B1%82-DR%E6%A8%A1%E5%BC%8F-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/index.html">
+<meta property="og:site_name" content="Dong_Blog">
+<meta property="og:description" content="环境准备准备3台纯洁的虚拟机，2台web服务器 安装lvs管理软件1yum -y install ipvsadm  1234567程序包：ipvsadm（LVS管理工具）主程序：&#x2F;usr&#x2F;sbin&#x2F;ipvsadm规则保存工具：&#x2F;usr&#x2F;sbin&#x2F;ipvsadm-save  &gt; &#x2F;path&#x2F;to&#x2F;file配置文件：&#x2F;etc&#x2F;sysconfig&#x2F;ipvsadm-config   LVS&amp;#x2F">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/picture/25.jpg">
+<meta property="article:published_time" content="2025-11-06T13:05:12.000Z">
+<meta property="article:modified_time" content="2026-02-04T10:20:38.843Z">
+<meta property="article:author" content="Mr.xu">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Nginx">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/picture/25.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "4层--DR模式--负载均衡实验",
+  "url": "http://example.com/2025/11/06/4%E5%B1%82-DR%E6%A8%A1%E5%BC%8F-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/",
+  "image": "http://example.com/img/picture/25.jpg",
+  "datePublished": "2025-11-06T13:05:12.000Z",
+  "dateModified": "2026-02-04T10:20:38.843Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Mr.xu",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/dong.png"><link rel="canonical" href="http://example.com/2025/11/06/4%E5%B1%82-DR%E6%A8%A1%E5%BC%8F-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '4层--DR模式--负载均衡实验',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/picture/25.jpg);"><nav id="nav"><span id="blog-info"><a id="site-name" href="/">🍀 <strong class="site-title-bold">东</strong></a><a class="nav-page-title" href="/"><span class="site-name">4层--DR模式--负载均衡实验</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">4层--DR模式--负载均衡实验</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-06T13:05:12.000Z" title="发表于 2025-11-06 21:05:12">2025-11-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-04T10:20:38.843Z" title="更新于 2026-02-04 18:20:38">2026-02-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/operations/">operations</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p>准备3台纯洁的虚拟机，2台web服务器</p>
+<h3 id="安装lvs管理软件"><a href="#安装lvs管理软件" class="headerlink" title="安装lvs管理软件"></a>安装lvs管理软件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install ipvsadm</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">程序包：ipvsadm（LVS管理工具）</span><br><span class="line"></span><br><span class="line">主程序：/usr/sbin/ipvsadm</span><br><span class="line"></span><br><span class="line">规则保存工具：/usr/sbin/ipvsadm-save  &gt; /path/to/file</span><br><span class="line"></span><br><span class="line">配置文件：/etc/sysconfig/ipvsadm-config</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="LVS-DR-模式简介"><a href="#LVS-DR-模式简介" class="headerlink" title="LVS&#x2F;DR 模式简介"></a>LVS&#x2F;DR 模式简介</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DR模式的组网要求LVS和Real server在同一网段二层互通。因为LVS DR模式在负载均衡转发报文时，只修改目的mac为real server的mac，lvs要能将报文转发给real server，就必须满足LVS和real server是同网段二层互通。</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="实验说明"><a href="#实验说明" class="headerlink" title="实验说明"></a>实验说明</h2><ol>
+<li>网络使用NAT模式</li>
+<li>DR模式要求Director DIP 和所有RealServer RIP必须在同一个网段及广播域</li>
+</ol>
+<h3 id="1-关闭防火墙"><a href="#1-关闭防火墙" class="headerlink" title="1. 关闭防火墙"></a>1. 关闭防火墙</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@lvs-server ~]# systemctl stop firewalld</span><br><span class="line">[root@lvs-server ~]# setenforce 0</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="2-负载均衡器的配置"><a href="#2-负载均衡器的配置" class="headerlink" title="2. 负载均衡器的配置"></a>2. 负载均衡器的配置</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@lvs-server ~]# ip addr add dev ens33 192.168.246.160/32 #设置VIP</span><br><span class="line">[root@lvs-server ~]# yum install -y ipvsadm   #RHEL确保LoadBalancer仓库可用</span><br><span class="line">[root@lvs-server ~]# service ipvsadm start  #启动</span><br><span class="line">注意:启动如果报错: /bin/bash: /etc/sysconfig/ipvsadm: 没有那个文件或目录</span><br><span class="line">需要手动生成文件</span><br><span class="line">[root@lvs-server ~]# ipvsadm --save &gt; /etc/sysconfig/ipvsadm</span><br><span class="line"></span><br><span class="line">为什么RS上lo配置的VIP掩码为32位</span><br><span class="line">这是由于lo设备的特殊性导致， 如果lo绑定VIP/24，则该设备会响应该网段所有IP(192.168.246.0-254)的请求，而不是只响应192.168.246.160这一个地址。,就算是不设置为32也是可以的，只不过会影响访问</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="定义LVS分发策略"><a href="#定义LVS分发策略" class="headerlink" title="定义LVS分发策略"></a>定义LVS分发策略</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">-A：添加VIP</span><br><span class="line">-t：用的是tcp协议</span><br><span class="line">-a：添加的是lo的vip地址</span><br><span class="line">-r：转发到real-serve rip</span><br><span class="line">-s：算法</span><br><span class="line">-L|-l –list #显示内核虚拟服务器表</span><br><span class="line">--numeric, -n：#以数字形式输出地址和端口号</span><br><span class="line">-g --gatewaying #指定LVS工作模式为直接路由器模式（也是LVS默认的模式）</span><br><span class="line">-S -save #保存虚拟服务器规则到标准输出，输出为-R 选项可读的格式</span><br><span class="line">rr：轮循</span><br><span class="line">如果添加ip错了，删除命令如下:</span><br><span class="line"># ip addr del 192.168.246.193 dev ens33</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@lvs-server ~]# ipvsadm -C  #清除内核虚拟服务器表中的所有记录。</span><br><span class="line">[root@lvs-server ~]# ipvsadm -A -t 192.168.246.160:80 -s rr </span><br><span class="line">[root@lvs-server ~]# ipvsadm -a -t 192.168.246.160:80 -r 192.168.246.161 -g</span><br><span class="line">[root@lvs-server ~]# ipvsadm -a -t 192.168.246.160:80 -r 192.168.246.162 -g </span><br><span class="line">[root@lvs-server ~]# service ipvsadm save #保存方式一，使用下面的保存方式，版本7已经不支持了</span><br><span class="line">[root@lvs-server ~]# ipvsadm -S &gt; /etc/sysconfig/ipvsadm  #保存方式二，保存到一个文件中</span><br><span class="line">[root@lvs-server ~]# ipvsadm -ln</span><br><span class="line">IP Virtual Server version 1.2.1 (size=4096)</span><br><span class="line">Prot LocalAddress:Port Scheduler Flags</span><br><span class="line">  -&gt; RemoteAddress:Port           Forward Weight ActiveConn InActConn</span><br><span class="line">TCP  192.168.246.160:80 rr</span><br><span class="line">  -&gt; 192.168.246.161:80           Route   1      0          0         </span><br><span class="line">  -&gt; 192.168.246.162:80           Route   1      0          0         </span><br><span class="line">[root@lvs-server ~]# ipvsadm -L -n</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="3-配置RS后端机器"><a href="#3-配置RS后端机器" class="headerlink" title="3. 配置RS后端机器"></a>3. 配置RS后端机器</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[root@real-server1 ~]# yum install -y nginx</span><br><span class="line">[root@real-server1 ~]# echo &quot;real-server1&quot; &gt;&gt; /usr/share/nginx/html/index.html</span><br><span class="line">两台机器都安装，按顺序添加不同的主机名以示区分</span><br><span class="line">[root@real-server1 ~]# ip addr add dev lo 192.168.246.160/32   #在lo接口上绑定VIP</span><br><span class="line">[root@real-server1 ~]# echo 1 &gt; /proc/sys/net/ipv4/conf/all/arp_ignore  #忽略arp广播</span><br><span class="line">[root@real-server1 ~]# echo 2 &gt; /proc/sys/net/ipv4/conf/all/arp_announce #匹配精确ip地址回包</span><br><span class="line">[root@real-server1 ~]# systemctl start nginx </span><br><span class="line">[root@real-server1 ~]# systemctl enable  nginx </span><br><span class="line"></span><br><span class="line">#关闭65秒的控制刷新</span><br><span class="line">[root@real-server1 ~]# vim /etc/nginx/nginx.conf</span><br><span class="line">65--改成--0</span><br><span class="line">[root@real-server1 ~]# systemctl restart nginx </span><br><span class="line">=============================================================================</span><br><span class="line">因为：realServer的vip有了，接着就是同一个网段中拥有两个vip, 客户端在网关发送arp广播需找vip时需要让realServer不接受响应.  </span><br><span class="line">解决：</span><br><span class="line">echo 1 &gt;/proc/sys/net/ipv4/conf/eth0/arp_ignore </span><br><span class="line">arp_ignore 设置为1，意味着当别人的arp请求过来的时候，如果接收的设备没有这个ip，就不做出响应(这个ip在lo上，lo不是接收设备的进口)</span><br><span class="line">echo 2 &gt;/proc/sys/net/ipv4/conf/eth0/arp_announce   </span><br><span class="line">使用最好的ip来回应，什么是最好的ip？同一个网段内子网掩码最长的</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="4-测试"><a href="#4-测试" class="headerlink" title="4. 测试"></a>4. 测试</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">测试一</span><br><span class="line">在游览器上输入vip地址</span><br><span class="line"></span><br><span class="line">测试二</span><br><span class="line">[root@client ~]# elinks -dump http://192.168.246.160</span><br><span class="line">-dump:非交互式模式</span><br></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Mr.xu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/11/06/4%E5%B1%82-DR%E6%A8%A1%E5%BC%8F-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">http://example.com/2025/11/06/4%E5%B1%82-DR%E6%A8%A1%E5%BC%8F-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">Dong_Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/Nginx/">Nginx</a></div><div class="post-share"><div class="social-share" data-image="/img/picture/25.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/11/06/%E5%AE%89%E8%A3%85Tomcat%E3%80%81JDK%EF%BC%88java%EF%BC%89/" title="安装Tomcat、JDK（java）实验"><img class="cover" src="/img/picture/3.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">安装Tomcat、JDK（java）实验</div></div><div class="info-2"><div class="info-item-1">1、安装JDK上传jdk1.8到服务器，安装jdk 123[root@java-tomcat1 ~]# tar xzf jdk-8u191-linux-x64.tar.gz -C /usr/local/[root@java-tomcat1 ~]# cd /usr/local/[root@java-tomcat1 local]# mv jdk1.8.0_191/ java 设置环境变量: 1234[root@java-tomcat1 local]# vim /etc/profileJAVA_HOME=/usr/local/java #指定java安装目录PATH=$JAVA_HOME/bin:$PATH #用于指定java系统查找命令的路径export JAVA_HOME PATH #类的路径，在编译运行java程序时，如果有调用到其他类的时候，在classpath中寻找需要的类。 检测JDK是否安装成功: 12345[root@java-tomcat1 local]# source /etc/profile[root@java-tomcat1 local]# java -vers...</div></div></div></a><a class="pagination-related" href="/2025/11/06/RabbiMQ%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" title="RabbiMQ集群部署"><img class="cover" src="/img/picture/20.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">RabbiMQ集群部署</div></div><div class="info-2"><div class="info-item-1">普通集群准备环境注意，这⾥三台服务器都关闭防火墙和selinux 123192.168.50.138 	rabbitmq-1192.168.50.139	rabbitmq-2192.168.50.140	rabbitmq-3  三台机器都操作: 1、配置hosts⽂件更改三台MQ节点的计算机名分别为rabbitmq-1、rabbitmq-2 和rabbitmq-3，然后修改hosts配置⽂件 1234567891011[root@rabbitmq-1 ~]# vim /etc/hosts127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4::1         localhost localhost.localdomain localhost6 localhost6.localdomain6192.168.50.138 rabbitmq-1192.168.50.139 rabbitmq-2192.168.50.140 rabbitmq-3# 主机的名字也要改了，不然后面命令匹配...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/11/06/Nginx-%E5%8F%98%E9%87%8F%E7%AE%80%E4%BB%8B/" title="Nginx 变量简介实验"><img class="cover" src="/img/picture/7.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">Nginx 变量简介实验</div></div><div class="info-2"><div class="info-item-1">Nginx 变量nginx变量简介  所有的 Nginx变量在Nginx配置文件中引用时都须带上 $ 前缀  在 Nginx 配置中，变量只能存放一种类型的值，而且也只存在一种类型，那就是字符串类型  所有的变量值都可以通过这种方式引用$变量名   nginx中的变量分为两种，自定义变量与内置预定义变量  自定义变量set $变量名 变量值  内置预定义变量   $arg_PARAMETER		GET请求中变量名PARAMETER参数的值。   $args		这个变量等于GET请求中的参数。例如，foo&#x3D;123&amp;bar&#x3D;blahblah;这个变量只可以被修改 $binary_remote_addr		二进制码形式的客户端地址 $body_bytes_sent		传送页面的字节数   $content_length		请求头中的Content-length字段 $content_type		请求头中的Content-Type字段 $cookie_COOKIE		cookie COOKIE的值 $document_root		当前请求在root指令中指定的...</div></div></div></a><a class="pagination-related" href="/2025/11/06/Nginx-%E7%9B%91%E6%8E%A7%E6%8E%A7%E5%88%B6/" title="Nginx 监控控制实验"><img class="cover" src="/img/picture/16.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">Nginx 监控控制实验</div></div><div class="info-2"><div class="info-item-1">Nginx 监控nginx 提供了 ngx_http_stub_status_module.这个模块提供了基本的监控功能 nginx的基础监控12- 进程监控- 端口监控  监控的指标1Accepts（接受）、Handled（已处理）、Requests（请求数）是一直在增加的计数器。Active（活跃）、Waiting（等待）、Reading（读）、Writing（写）随着请求量而增减  nginx Stub Status 监控模块安装先使用命令查看是否已经安装这个模块123# -V大写会显示版本号和模块等信息、v小写仅显示版本信息[root@localhost ~]# nginx -V  如果没有此模块，需要重新安装，编译命令如下123# 添加--with-http_stub_status_module模块./configure --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib64/nginx/modules --conf-path=/etc/nginx/nginx.conf --er...</div></div></div></a><a class="pagination-related" href="/2025/11/06/Nginx-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/" title="Nginx 负载均衡&amp;反向代理"><img class="cover" src="/img/picture/10.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">Nginx 负载均衡&amp;反向代理</div></div><div class="info-2"><div class="info-item-1">负载均衡&amp;反向代理准备三台机器：版本为yum源安装 这个配置是写代理的机器上 12345678910111213141516171819202122232425262728293031# 1.首先在主配置文件上http模块里添加 [root@localhost ~]# vim /etc/nginx/nginx.conf http &#123;     include       /etc/nginx/mime.types;     default_type  application/octet-stream; # 以下模块添加到代理的机器上 upstream testapp &#123;       server 10.0.105.199:8081;       server 10.0.105.202:8081;        &#125;     include /etc/nginx/conf.d/*.conf;  &#125;server &#123;        listen       80;        server_name  www.test.com; ...</div></div></div></a><a class="pagination-related" href="/2025/11/06/Nginx-%E4%BC%9A%E8%AF%9D%E4%BF%9D%E6%8C%81/" title="Nginx 会话保持"><img class="cover" src="/img/picture/25.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">Nginx 会话保持</div></div><div class="info-2"><div class="info-item-1">nginx 会话保持nginx会话保持主要有以下几种实现方式： 1、ip_hash 12345ip_hash使用源地址哈希算法，将同一客户端的请求总是发往同一个后端服务器，除非该服务器不可用。ip_hash简单易用，但有如下问题：当后端服务器宕机后，session会丢失；来自同一局域网的客户端会被转发到同一个后端服务器，可能导致负载失衡；  示例 123456upstream backend &#123;    ip_hash;    server backend1.example.com;    server backend2.example.com;    server backend3.example.com down;&#125;  2、sticky_cookie_insert—而是基于cookie实现 使用sticky_cookie_insert，这会让来自同一客户端的请求被传递到一组服务器的同一台服务器。与ip_hash不同之处在于，它不是基于IP来判断客户端的，而是基于cookie来判断。(需要引入第三方模块才能实现)—sticky模块。因此可以避免上述ip_has...</div></div></div></a><a class="pagination-related" href="/2025/11/06/Nginx-%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6/" title="Nginx 流量控制实验"><img class="cover" src="/img/picture/25.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">Nginx 流量控制实验</div></div><div class="info-2"><div class="info-item-1">Nginx 流量控制配置基本的限流–ngx_http_limit_req_module模块实现 流量限制”配置两个主要的指令，limit_req_zone和limit_req，limit_req_zone指令设置流量限制和内存区域的参数，但实际上并不限制请求速率。所以需要通过添加limit_req指令启用流量限制,应用在特定的location或者server块 limit_req_zone指令通常在HTTP块中定义，它需要以下三个参数： 123-Key - 定义应用限制的请求特性。示例中的 Nginx 变量$binary_remote_addr，保存客户端IP地址的二进制形式。-Zone - 定义用于存储每个IP地址状态以及被限制请求URL访问频率的内存区域。通过zone=keyword标识区域的名字(自定义)，以及冒号后面跟区域大小。16000个IP地址的状态信息，大约需要1MB。-Rate - 连接请求。在示例中，速率不能超过每秒1个请求。  示例一 这里需要两台机器，一台代理，一台宿主机 代理机配置 12345678910111213141516limit_req_zone...</div></div></div></a><a class="pagination-related" href="/2025/11/06/Nginx-%E9%85%8D%E7%BD%AE%E5%81%A5%E5%BA%B7%E6%A3%80%E6%9F%A5%E6%A8%A1%E5%9D%97/" title="Nginx 配置健康检查模块"><img class="cover" src="/img/picture/23.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">Nginx 配置健康检查模块</div></div><div class="info-2"><div class="info-item-1">nginx配置健康检查模块1231.nginx自带的针对后端节点健康检查的功能比较简单，通过默认自带的ngx_http_proxy_module 模块和ngx_http_upstream_module模块中的参数来完成，当后端节点出现故障时，自动切换到健康节点来提供访问。但是nginx不能事先知道后端节点状态是否健康，后端即使有不健康节点，负载均衡器依然会先把请求转发给该不健康节点，然后再转发给别的节点，这样就会浪费一次转发，而且自带模块无法做到预警。所以我们可以使用第三方模块 nginx_upstream_check_module模块2.nginx_upstream_check_module模块由淘宝团队开发 淘宝自己的 tengine 上是自带了该模块的。我们使用原生Nginx，采用添加模块的方式  健康检查模块最高支持1.22及以下的nginx版本获取nginx_upstream_check_module模块，从github上面获取 下载模块1wget https://github.com/yaoweibin/nginx_upstream_check_module/arch...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Mr.xu</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xubaodong0511"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-author-social"><a href="https://github.com/xubaodong0511" target="_blank" rel="noopener"><i class="fab fa-github"></i></a><a href="https://gitee.com/xbd666" target="_blank" rel="noopener"><i class="fab fa-gitee"></i></a><a href="https://www.bilibili.com/" target="_blank" rel="noopener"><i class="fab fa-bilibili"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">相遇即是缘。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-number">1.</span> <span class="toc-text">环境准备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85lvs%E7%AE%A1%E7%90%86%E8%BD%AF%E4%BB%B6"><span class="toc-number">1.1.</span> <span class="toc-text">安装lvs管理软件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LVS-DR-%E6%A8%A1%E5%BC%8F%E7%AE%80%E4%BB%8B"><span class="toc-number">2.</span> <span class="toc-text">LVS&#x2F;DR 模式简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E8%AF%B4%E6%98%8E"><span class="toc-number">3.</span> <span class="toc-text">实验说明</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%85%B3%E9%97%AD%E9%98%B2%E7%81%AB%E5%A2%99"><span class="toc-number">3.1.</span> <span class="toc-text">1. 关闭防火墙</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%99%A8%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-number">3.2.</span> <span class="toc-text">2. 负载均衡器的配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89LVS%E5%88%86%E5%8F%91%E7%AD%96%E7%95%A5"><span class="toc-number">3.2.1.</span> <span class="toc-text">定义LVS分发策略</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%85%8D%E7%BD%AERS%E5%90%8E%E7%AB%AF%E6%9C%BA%E5%99%A8"><span class="toc-number">3.3.</span> <span class="toc-text">3. 配置RS后端机器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%B5%8B%E8%AF%95"><span class="toc-number">3.4.</span> <span class="toc-text">4. 测试</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vercel部署Twikoo评论系统"/></a><div class="content"><a class="title" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统">Vercel部署Twikoo评论系统</a><time datetime="2026-02-04T05:49:39.000Z" title="发表于 2026-02-04 13:49:39">2026-02-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客"><img src="/img/picture/9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="docker 创建halo博客"/></a><div class="content"><a class="title" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客">docker 创建halo博客</a><time datetime="2025-11-06T13:17:32.000Z" title="发表于 2025-11-06 21:17:32">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置"><img src="/img/picture/5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Centos网卡配置"/></a><div class="content"><a class="title" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置">Centos网卡配置</a><time datetime="2025-11-06T13:16:51.000Z" title="发表于 2025-11-06 21:16:51">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp"><img src="/img/picture/20.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="shell添加用户，计算，vsftp"/></a><div class="content"><a class="title" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp">shell添加用户，计算，vsftp</a><time datetime="2025-11-06T13:13:49.000Z" title="发表于 2025-11-06 21:13:49">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="系统工具箱--脚本"/></a><div class="content"><a class="title" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本">系统工具箱--脚本</a><time datetime="2025-11-06T13:13:16.000Z" title="发表于 2025-11-06 21:13:16">2025-11-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">© 2025 - 2026 By <span class="copyright-author">Mr.xu</span></span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div><script src="/js/snow.js"></script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://hexoblogtwikoovercel.vercel.app',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://hexoblogtwikoovercel.vercel.app',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://cdn.jsdelivr.net/npm/twikoo@1.6.44/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><meting-js server="netease" type="playlist" id="570548381" fixed="true" autoplay="true" theme="#000000" loop="all" order="random" preload="auto" volume="0.7" muted="true" ></meting-js><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- 只保留这一行--><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></body></html>

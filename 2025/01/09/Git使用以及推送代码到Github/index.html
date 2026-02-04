@@ -1,0 +1,286 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Git使用以及推送代码到Github | Dong_Blog</title><meta name="author" content="Mr.xu"><meta name="copyright" content="Mr.xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="Git使用以及推送代码到GithubGIT使用创建Github账户。打开 https:&#x2F;&#x2F;github.com 并注册一个新账户。 1. 注册与安装安装Git。如果您的系统尚未安装Git，则需要先安装它。可以参考Git官方文档以获取更多详细信息。 配置Git用户名和电子邮件地址。在终端或命令提示符窗口中，运行以下命令以设置您的Git用户名和电子邮件地址： 安装git后需要设置github用户名以及">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git使用以及推送代码到Github">
+<meta property="og:url" content="http://example.com/2025/01/09/Git%E4%BD%BF%E7%94%A8%E4%BB%A5%E5%8F%8A%E6%8E%A8%E9%80%81%E4%BB%A3%E7%A0%81%E5%88%B0Github/index.html">
+<meta property="og:site_name" content="Dong_Blog">
+<meta property="og:description" content="Git使用以及推送代码到GithubGIT使用创建Github账户。打开 https:&#x2F;&#x2F;github.com 并注册一个新账户。 1. 注册与安装安装Git。如果您的系统尚未安装Git，则需要先安装它。可以参考Git官方文档以获取更多详细信息。 配置Git用户名和电子邮件地址。在终端或命令提示符窗口中，运行以下命令以设置您的Git用户名和电子邮件地址： 安装git后需要设置github用户名以及">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/picture/5.jpg">
+<meta property="article:published_time" content="2025-01-09T10:51:32.000Z">
+<meta property="article:modified_time" content="2026-02-04T10:20:38.843Z">
+<meta property="article:author" content="Mr.xu">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Git">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/picture/5.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Git使用以及推送代码到Github",
+  "url": "http://example.com/2025/01/09/Git%E4%BD%BF%E7%94%A8%E4%BB%A5%E5%8F%8A%E6%8E%A8%E9%80%81%E4%BB%A3%E7%A0%81%E5%88%B0Github/",
+  "image": "http://example.com/img/picture/5.jpg",
+  "datePublished": "2025-01-09T10:51:32.000Z",
+  "dateModified": "2026-02-04T10:20:38.843Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Mr.xu",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/dong.png"><link rel="canonical" href="http://example.com/2025/01/09/Git%E4%BD%BF%E7%94%A8%E4%BB%A5%E5%8F%8A%E6%8E%A8%E9%80%81%E4%BB%A3%E7%A0%81%E5%88%B0Github/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Git使用以及推送代码到Github',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/picture/5.jpg);"><nav id="nav"><span id="blog-info"><a id="site-name" href="/">🍀 <strong class="site-title-bold">东</strong></a><a class="nav-page-title" href="/"><span class="site-name">Git使用以及推送代码到Github</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Git使用以及推送代码到Github</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-01-09T10:51:32.000Z" title="发表于 2025-01-09 18:51:32">2025-01-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-04T10:20:38.843Z" title="更新于 2026-02-04 18:20:38">2026-02-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/operations/">operations</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Git使用以及推送代码到Github"><a href="#Git使用以及推送代码到Github" class="headerlink" title="Git使用以及推送代码到Github"></a>Git使用以及推送代码到Github</h1><p>GIT使用<br>创建Github账户。打开 <a target="_blank" rel="noopener" href="https://github.com/">https://github.com</a> 并注册一个新账户。</p>
+<h3 id="1-注册与安装"><a href="#1-注册与安装" class="headerlink" title="1. 注册与安装"></a>1. 注册与安装</h3><p>安装Git。如果您的系统尚未安装Git，则需要先安装它。可以参考Git官方文档以获取更多详细信息。</p>
+<p>配置Git用户名和电子邮件地址。在终端或命令提示符窗口中，运行以下命令以设置您的Git用户名和电子邮件地址：</p>
+<p>安装git后需要设置github用户名以及邮箱,内容替换成自己的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name &quot;Your Name&quot;</span><br><span class="line">git config --global user.email &quot;youremail@example.com&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="2-配置Git用户名和邮箱"><a href="#2-配置Git用户名和邮箱" class="headerlink" title="2. 配置Git用户名和邮箱"></a>2. 配置Git用户名和邮箱</h3><p>首先要有本地仓库</p>
+<p>在Github上创建一个新的代码仓库</p>
+<p>从终端命令行中进入本地代码仓库目录，并初始化仓库：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure>
+<h3 id="3-初始化本地仓库"><a href="#3-初始化本地仓库" class="headerlink" title="3. 初始化本地仓库"></a>3. 初始化本地仓库</h3><p>将您的代码添加到本地仓库缓冲区：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br></pre></td></tr></table></figure>
+<p>为Github分配一个远程仓库：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin https://github.com/username/repo.git</span><br></pre></td></tr></table></figure>
+<h3 id="4-分支管理"><a href="#4-分支管理" class="headerlink" title="4. 分支管理"></a>4. 分支管理</h3><p>查看本地分支</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch</span><br></pre></td></tr></table></figure>
+<p>该命令会列出当前本地仓库中存在的所有分支，并用星号标识当前所在的分支。例如，以下是一个示例输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">* main</span><br><span class="line">  feature-1</span><br><span class="line">  feature-2</span><br></pre></td></tr></table></figure>
+<p>查看远程分支：<br>查看远程分支</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -r</span><br></pre></td></tr></table></figure>
+<p>创建分支</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b new-branch</span><br></pre></td></tr></table></figure>
+<p>将本地仓库推送到 GitHub 上，需要使用 git push 命令，并指定远程仓库的名称和分支名称。具体命令如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git push origin master:master      #例如，将本地的 master 分支推送到 GitHub 上的 origin 仓库的 master 分支</span><br><span class="line">git push &lt;远程仓库名称&gt; &lt;本地分支名称&gt;:&lt;远程分支名称&gt;</span><br></pre></td></tr></table></figure>
+<p>设置仓库名称</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add &lt;远程仓库名称&gt; &lt;远程仓库 URL&gt;</span><br></pre></td></tr></table></figure>
+<p>例如，如果你想要将一个 GitHub 仓库添加到本地仓库，并将其命名为 myrepo，可以使用以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add myrepo https://github.com/username/myrepo.git</span><br></pre></td></tr></table></figure>
+<p>添加完成后，你就可以使用 git push 命令将本地分支推送到该远程仓库，命令如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push myrepo &lt;本地分支名称&gt;:&lt;远程分支名称&gt;</span><br></pre></td></tr></table></figure>
+<p>删除分支</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -d &lt;branch-name&gt;</span><br></pre></td></tr></table></figure>
+<p>其中，branch-name是要删除的分支名称。需要注意的是，如果该分支包含未合并的更改，则删除分支时会出现错误。这时需要使用“-D”选项强制删除分支。</p>
+<p>删除远程分支</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin --delete test</span><br></pre></td></tr></table></figure>
+<p>切换分支</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout &lt;branch-name&gt; #其中，“&lt;branch-name&gt;”是要切换到的分支名称。</span><br></pre></td></tr></table></figure>
+<p>创建新分支并切换到该分支</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b new-feature</span><br></pre></td></tr></table></figure>
+<p>分支合并<br>首先，需要切换到要合并的目标分支上，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout target-branch</span><br></pre></td></tr></table></figure>
+<p>然后，使用 git merge 命令将源分支合并到目标分支上，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge source-branch</span><br></pre></td></tr></table></figure>
+<p>查看git状态</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git status</span><br></pre></td></tr></table></figure>
+<p>比较文件的不同，即暂存区和工作区的差异。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git diff</span><br></pre></td></tr></table></figure>
+<p>连接远程仓库并且命名<br>您可以使用以下命令在 Git 中为仓库设置名称：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add &lt;remote name&gt; &lt;remote repository URL&gt;</span><br></pre></td></tr></table></figure>
+<p>请将 <remote name> 替换为您想要设置的名称，<remote repository URL> 替换为您的远程仓库的 URL。例如，如果您想将远程仓库的名称设置为 origin，则可以使用以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin &lt;remote repository URL&gt;</span><br></pre></td></tr></table></figure>
+<p>**请注意，这只是将远程仓库的名称设置为 origin，您可以将其替换为您想要的任何名称</p>
+<p>重新命名仓库<br>您可以使用以下命令在 Git 中为仓库重命名</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote rename &lt;old name&gt; &lt;new name&gt;</span><br></pre></td></tr></table></figure>
+<p>请将 <old name> 替换为您想要重命名的旧名称，<new name> 替换为您想要设置的新名称。例如，如果您想将远程仓库的名称从 origin 改为 new-origin，则可以使用以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote rename origin new-origin</span><br></pre></td></tr></table></figure>
+<p>请注意，这只是将远程仓库的名称从 origin 改为 new-origin，您可以将其替换为您想要的任何名称。</p>
+<p>推送到GITHUB<br>提交你的更改</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -m &quot;your commit message&quot;</span><br></pre></td></tr></table></figure>
+<p>拉取远程仓库中最新的更改：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull origin main</span><br></pre></td></tr></table></figure>
+<p>推送代码更改到Github仓库：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin main    #main是分支，更改到你需要提交的分支也行</span><br></pre></td></tr></table></figure>
+<p>提交到hero并且对更改进行描述</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -m &quot;描述&quot;</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Mr.xu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/01/09/Git%E4%BD%BF%E7%94%A8%E4%BB%A5%E5%8F%8A%E6%8E%A8%E9%80%81%E4%BB%A3%E7%A0%81%E5%88%B0Github/">http://example.com/2025/01/09/Git%E4%BD%BF%E7%94%A8%E4%BB%A5%E5%8F%8A%E6%8E%A8%E9%80%81%E4%BB%A3%E7%A0%81%E5%88%B0Github/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">Dong_Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/Git/">Git</a></div><div class="post-share"><div class="social-share" data-image="/img/picture/5.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/01/09/%E5%AE%89%E8%A3%85MySQL/" title="安装MySQL"><img class="cover" src="/img/picture/16.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">安装MySQL</div></div><div class="info-2"><div class="info-item-1">1、yum安装MySQL#关闭防火墙 12systemctl stop firewalldsetenforce 0  清理环境1234yum erase mariadb mariadb-server mariadb-libs mariadb-devel -yuserdel -r mysqlrm -rf /etc/my*         //配置文件rm -rf /var/lib/mysql   //初始化生成密码的路径目录  编辑yum文件1234567[root@localhost yum.repos.d]# vim mysql.repo[mysql]name=mysqlbaseurl=https://mirrors.tuna.tsinghua.edu.cn/mysql/yum/mysql-5.7-community-el7-x86_64/gpgcheck=1enabled=1gpgkey=https://mirrors.ustc.edu.cn/mysql-repo/RPM-GPG-KEY-mysql  安装软件12345# yum repolist enabled | gre...</div></div></div></a><a class="pagination-related" href="/2025/01/09/%E7%94%A8%E6%88%B7%E7%99%BB%E5%85%A5%E5%B7%A5%E5%85%B7%E7%AE%B1%EF%BC%8C%E6%B3%A8%E5%86%8C/" title="用户登入工具箱，注册"><img class="cover" src="/img/picture/25.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">用户登入工具箱，注册</div></div><div class="info-2"><div class="info-item-1">本脚本用于用户登入工具箱，注册123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133134135136137138139140141142# !/bin/bash#菜单函数caidan()&#123;cat &lt;&lt; EOF===========菜单===========||	  1.登入	||||	  2.注册	||||	  3.退出	||==========================EOF# 定义选项read -p &quot;请你输出你要的选...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/11/06/gitee-%E4%BB%93%E5%BA%93%E5%88%9B%E5%BB%BA%E5%8F%8A%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6/" title="gitee 仓库创建及上传文件"><img class="cover" src="/img/picture/16.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">gitee 仓库创建及上传文件</div></div><div class="info-2"><div class="info-item-1">首先由个gitee的账号git 全局设置12git config --global user.name&quot;名字&quot;git config --global user.email &quot;邮箱&quot;  创建git仓库12345678mkdir qingfengcd qingfenggit inittouch README.mdgit add README.mdgit commit -m &quot;first commit&quot;git remote add origin https://gitee.com/xbd666/qingfeng.gitgit push -u origin &quot;master&quot; 备注：也可以在搜索栏那里直接拉取，就不需要终端命令设置了 已有仓库的123cd existing_git_repogit remote add origin https://gitee.com/xbd666/qingfeng.gitgit push -u origin &quot;master&quot;  拉取1git pull ori...</div></div></div></a><a class="pagination-related" href="/2025/11/06/gitee-%E9%83%A8%E7%BD%B2%E5%8F%8A%E6%93%8D%E4%BD%9C%E6%AD%A5%E9%AA%A4/" title="gitee 部署及操作步骤"><img class="cover" src="/img/picture/14.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">gitee 部署及操作步骤</div></div><div class="info-2"><div class="info-item-1">gitee 部署及操作步骤 配置密钥客户端12# 获取密钥[root@git-client ~]#ssh-keygen  配置gitee密钥1234567# 配置gitee密钥[root@git-client ~]#cat .ssh/id_rsa.pubssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDMKR4f2AfwFMbd7YtOHPzOHcIuMY5OjQbt5jnx8BRm8xDAdFDG5XHNW39APOrXxc5AAD6YOoAvIxxw+lLxDrvbR6KKKllZb6Y7XJn1Y7G4r8+beBkz0jQpK1haG39pJwCAcZenwRhwy0xa9Z7PzKmTPBblf9kmR7PTuT6ndxuWx8ekIqLil0eT1BbXc3sO7zRTyIJPiLsWn4VlLdgZkU6UDw4R0iMlSdpEL3f9NfxztWNjp/8vdG6tq5DXmEKcIjI0grl9KNRcRc+PdfaUXaUPjf1MS5zCmuECg0T+1dcKS1q8KQUOIYaG3vyFZ4GqZKxn2OcuWYanr4...</div></div></div></a><a class="pagination-related" href="/2025/11/06/K8S%E9%83%A8%E7%BD%B2nginx/" title="K8S部署nginx"><img class="cover" src="/img/picture/8.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">K8S部署nginx</div></div><div class="info-2"><div class="info-item-1">创建目录1mkdir /opt/k8s/nginx-yaml  创建名称空间1kubectl create namespace nginx  创建deployment12345678910111213141516171819202122232425262728293031323334353637vim nginx-deploy.yamlapiVersion: apps/v1kind: Deploymentmetadata:  name: nginx-deployment  namespace: nginxspec:  selector:    matchLabels:      app: nginx  replicas: 3  template:    metadata:      labels:        app: nginx    spec:      containers:      - name: nginx        image: nginx:alpine        ports:        - containerPort: 80        volum...</div></div></div></a><a class="pagination-related" href="/2025/01/09/%E5%AE%89%E8%A3%85MySQL/" title="安装MySQL"><img class="cover" src="/img/picture/16.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-09</div><div class="info-item-2">安装MySQL</div></div><div class="info-2"><div class="info-item-1">1、yum安装MySQL#关闭防火墙 12systemctl stop firewalldsetenforce 0  清理环境1234yum erase mariadb mariadb-server mariadb-libs mariadb-devel -yuserdel -r mysqlrm -rf /etc/my*         //配置文件rm -rf /var/lib/mysql   //初始化生成密码的路径目录  编辑yum文件1234567[root@localhost yum.repos.d]# vim mysql.repo[mysql]name=mysqlbaseurl=https://mirrors.tuna.tsinghua.edu.cn/mysql/yum/mysql-5.7-community-el7-x86_64/gpgcheck=1enabled=1gpgkey=https://mirrors.ustc.edu.cn/mysql-repo/RPM-GPG-KEY-mysql  安装软件12345# yum repolist enabled | gre...</div></div></div></a><a class="pagination-related" href="/2025/11/06/RabbiMQ%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" title="RabbiMQ集群部署"><img class="cover" src="/img/picture/20.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">RabbiMQ集群部署</div></div><div class="info-2"><div class="info-item-1">普通集群准备环境注意，这⾥三台服务器都关闭防火墙和selinux 123192.168.50.138 	rabbitmq-1192.168.50.139	rabbitmq-2192.168.50.140	rabbitmq-3  三台机器都操作: 1、配置hosts⽂件更改三台MQ节点的计算机名分别为rabbitmq-1、rabbitmq-2 和rabbitmq-3，然后修改hosts配置⽂件 1234567891011[root@rabbitmq-1 ~]# vim /etc/hosts127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4::1         localhost localhost.localdomain localhost6 localhost6.localdomain6192.168.50.138 rabbitmq-1192.168.50.139 rabbitmq-2192.168.50.140 rabbitmq-3# 主机的名字也要改了，不然后面命令匹配...</div></div></div></a><a class="pagination-related" href="/2025/01/06/%E6%B8%85%E9%A3%8E%E5%B7%A5%E5%85%B7%E7%AE%B1/" title="清风工具箱"><img class="cover" src="/img/picture/14.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-06</div><div class="info-item-2">清风工具箱</div></div><div class="info-2"><div class="info-item-1">本文介绍如何使用脚本快速的一键部署服务（工具箱一键脚本、添加swap分区、安装前&#x2F;后端软件包一键脚本）   工具箱一键脚本1bash &lt;(curl -sSL https://gitee.com/xbd666/qingfeng/raw/master/toolbox.sh) 1bash &lt;(curl -sSL https://gitee.com/xbd666/kunlun/raw/master/kunlun_tool.sh)  脚本一键安装MySQL&#x2F;mariadb,并更改密码1bash &lt;(curl -sSL https://gitee.com/xbd666/qingfeng/raw/master/MySQL_install.sh)  添加swap分区–调用gitee仓库1bash &lt;(curl -sSL https://gitee.com/xbd666/qingfeng/raw/master/swap.sh)  安装前&#x2F;后端软件包一键脚本1bash &lt;(curl -sSL https://gitee.com/xbd666...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Mr.xu</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xubaodong0511"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-author-social"><a href="https://github.com/xubaodong0511" target="_blank" rel="noopener"><i class="fab fa-github"></i></a><a href="https://gitee.com/xbd666" target="_blank" rel="noopener"><i class="fab fa-gitee"></i></a><a href="https://www.bilibili.com/" target="_blank" rel="noopener"><i class="fab fa-bilibili"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">相遇即是缘。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Git%E4%BD%BF%E7%94%A8%E4%BB%A5%E5%8F%8A%E6%8E%A8%E9%80%81%E4%BB%A3%E7%A0%81%E5%88%B0Github"><span class="toc-number">1.</span> <span class="toc-text">Git使用以及推送代码到Github</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%B3%A8%E5%86%8C%E4%B8%8E%E5%AE%89%E8%A3%85"><span class="toc-number">1.0.1.</span> <span class="toc-text">1. 注册与安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AEGit%E7%94%A8%E6%88%B7%E5%90%8D%E5%92%8C%E9%82%AE%E7%AE%B1"><span class="toc-number">1.0.2.</span> <span class="toc-text">2. 配置Git用户名和邮箱</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%88%9D%E5%A7%8B%E5%8C%96%E6%9C%AC%E5%9C%B0%E4%BB%93%E5%BA%93"><span class="toc-number">1.0.3.</span> <span class="toc-text">3. 初始化本地仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%88%86%E6%94%AF%E7%AE%A1%E7%90%86"><span class="toc-number">1.0.4.</span> <span class="toc-text">4. 分支管理</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vercel部署Twikoo评论系统"/></a><div class="content"><a class="title" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统">Vercel部署Twikoo评论系统</a><time datetime="2026-02-04T05:49:39.000Z" title="发表于 2026-02-04 13:49:39">2026-02-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客"><img src="/img/picture/9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="docker 创建halo博客"/></a><div class="content"><a class="title" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客">docker 创建halo博客</a><time datetime="2025-11-06T13:17:32.000Z" title="发表于 2025-11-06 21:17:32">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置"><img src="/img/picture/5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Centos网卡配置"/></a><div class="content"><a class="title" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置">Centos网卡配置</a><time datetime="2025-11-06T13:16:51.000Z" title="发表于 2025-11-06 21:16:51">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp"><img src="/img/picture/20.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="shell添加用户，计算，vsftp"/></a><div class="content"><a class="title" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp">shell添加用户，计算，vsftp</a><time datetime="2025-11-06T13:13:49.000Z" title="发表于 2025-11-06 21:13:49">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="系统工具箱--脚本"/></a><div class="content"><a class="title" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本">系统工具箱--脚本</a><time datetime="2025-11-06T13:13:16.000Z" title="发表于 2025-11-06 21:13:16">2025-11-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">© 2025 - 2026 By <span class="copyright-author">Mr.xu</span></span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div><script src="/js/snow.js"></script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://hexoblogtwikoovercel.vercel.app',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://hexoblogtwikoovercel.vercel.app',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://cdn.jsdelivr.net/npm/twikoo@1.6.44/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><meting-js server="netease" type="playlist" id="570548381" fixed="true" autoplay="true" theme="#000000" loop="all" order="random" preload="auto" volume="0.7" muted="true" ></meting-js><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- 只保留这一行--><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></body></html>

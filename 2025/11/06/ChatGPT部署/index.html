@@ -1,0 +1,284 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>ChatGPT部署 | Dong_Blog</title><meta name="author" content="Mr.xu"><meta name="copyright" content="Mr.xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="免费使用ChatGPT，网页版部署 API官网：https:&#x2F;&#x2F;api1.chenjianming.fun GitHub官网：https:&#x2F;&#x2F;github.com  vercel官网：https:&#x2F;&#x2F;vercel.com  登入github，点击搜索chat，点第二个项目https:&#x2F;&#x2F;github.com&#x2F;xubaodong0511&#x2F;ChatGPT-Next-Web 点击Fork到自己仓库htt">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ChatGPT部署">
+<meta property="og:url" content="http://example.com/2025/11/06/ChatGPT%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:site_name" content="Dong_Blog">
+<meta property="og:description" content="免费使用ChatGPT，网页版部署 API官网：https:&#x2F;&#x2F;api1.chenjianming.fun GitHub官网：https:&#x2F;&#x2F;github.com  vercel官网：https:&#x2F;&#x2F;vercel.com  登入github，点击搜索chat，点第二个项目https:&#x2F;&#x2F;github.com&#x2F;xubaodong0511&#x2F;ChatGPT-Next-Web 点击Fork到自己仓库htt">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/picture/8.jpg">
+<meta property="article:published_time" content="2025-11-06T12:47:53.000Z">
+<meta property="article:modified_time" content="2026-02-04T10:20:38.843Z">
+<meta property="article:author" content="Mr.xu">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="ChatGPT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/picture/8.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "ChatGPT部署",
+  "url": "http://example.com/2025/11/06/ChatGPT%E9%83%A8%E7%BD%B2/",
+  "image": "http://example.com/img/picture/8.jpg",
+  "datePublished": "2025-11-06T12:47:53.000Z",
+  "dateModified": "2026-02-04T10:20:38.843Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Mr.xu",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/dong.png"><link rel="canonical" href="http://example.com/2025/11/06/ChatGPT%E9%83%A8%E7%BD%B2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'ChatGPT部署',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/picture/8.jpg);"><nav id="nav"><span id="blog-info"><a id="site-name" href="/">🍀 <strong class="site-title-bold">东</strong></a><a class="nav-page-title" href="/"><span class="site-name">ChatGPT部署</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">ChatGPT部署</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-06T12:47:53.000Z" title="发表于 2025-11-06 20:47:53">2025-11-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-04T10:20:38.843Z" title="更新于 2026-02-04 18:20:38">2026-02-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/operations/">operations</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="免费使用ChatGPT，网页版部署"><a href="#免费使用ChatGPT，网页版部署" class="headerlink" title="免费使用ChatGPT，网页版部署"></a>免费使用ChatGPT，网页版部署</h1><ul>
+<li>API官网：<a target="_blank" rel="noopener" href="https://api1.chenjianming.fun/">https://api1.chenjianming.fun</a></li>
+<li>GitHub官网：<a target="_blank" rel="noopener" href="https://github.com/">https://github.com</a> </li>
+<li>vercel官网：<a target="_blank" rel="noopener" href="https://vercel.com/">https://vercel.com</a></li>
+</ul>
+<h1 id="登入github，点击搜索chat，点第二个项目"><a href="#登入github，点击搜索chat，点第二个项目" class="headerlink" title="登入github，点击搜索chat，点第二个项目"></a>登入github，点击搜索chat，点第二个项目</h1><p><a target="_blank" rel="noopener" href="https://github.com/xubaodong0511/ChatGPT-Next-Web">https://github.com/xubaodong0511/ChatGPT-Next-Web</a></p>
+<h1 id="点击Fork到自己仓库"><a href="#点击Fork到自己仓库" class="headerlink" title="点击Fork到自己仓库"></a>点击Fork到自己仓库</h1><p><a target="_blank" rel="noopener" href="https://vercel.com/new/xubaodong0511s-projects">https://vercel.com/new/xubaodong0511s-projects</a></p>
+<h1 id="打开网站vercel-com"><a href="#打开网站vercel-com" class="headerlink" title="打开网站vercel.com"></a>打开网站vercel.com</h1><ul>
+<li>点击新建项目</li>
+<li>可以看到刚刚Fork的仓库</li>
+<li>点击import导入</li>
+<li>重新构建一个项目名字，不然不会分配免费的域名</li>
+<li>点击Environment Variables</li>
+</ul>
+<h1 id="Environment-Variables-环境变量-步骤—直接复制下面内容"><a href="#Environment-Variables-环境变量-步骤—直接复制下面内容" class="headerlink" title="Environment Variables(环境变量)步骤—直接复制下面内容"></a>Environment Variables(环境变量)步骤—直接复制下面内容</h1><ul>
+<li>BASE_URL</li>
+<li><a target="_blank" rel="noopener" href="https://api1.chenjianming.fun/">https://api1.chenjianming.fun</a></li>
+<li>点击add</li>
+</ul>
+<h1 id="创建令牌密钥步骤"><a href="#创建令牌密钥步骤" class="headerlink" title="创建令牌密钥步骤"></a>创建令牌密钥步骤</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://api1.chenjianming.fun/">https://api1.chenjianming.fun</a></li>
+<li>点击密钥，创建—-设置名称，永不过期，设为无限额度</li>
+<li>提交</li>
+<li>回到Environment Variables步骤</li>
+<li>OPENAI_API_KEY</li>
+<li>添加刚刚创建的令牌密钥</li>
+<li>点击add</li>
+</ul>
+<h1 id="CODE添加密码步骤（可选）"><a href="#CODE添加密码步骤（可选）" class="headerlink" title="CODE添加密码步骤（可选）"></a>CODE添加密码步骤（可选）</h1><ul>
+<li>CODE</li>
+<li>自己设置一个密码</li>
+<li>add</li>
+</ul>
+<p>以上步骤完成点击Deploy构建（大概需要3分钟）</p>
+<h1 id="构建成功后会自动跳转"><a href="#构建成功后会自动跳转" class="headerlink" title="构建成功后会自动跳转"></a>构建成功后会自动跳转</h1><ul>
+<li>点击头像</li>
+<li>点击港创建的项目</li>
+<li>点击Visit(可以访问了)</li>
+</ul>
+<h1 id="仓库地址"><a href="#仓库地址" class="headerlink" title="仓库地址"></a>仓库地址</h1><p><a target="_blank" rel="noopener" href="https://vercel.com/xubaodong0511s-projects/qingfeng">https://vercel.com/xubaodong0511s-projects/qingfeng</a></p>
+<h1 id="GPT地址"><a href="#GPT地址" class="headerlink" title="GPT地址"></a>GPT地址</h1><p><a target="_blank" rel="noopener" href="https://qingfeng-sepia.vercel.app/">https://qingfeng-sepia.vercel.app/</a></p>
+<h1 id="备注"><a href="#备注" class="headerlink" title="备注"></a>备注</h1><p>如果不能访问解决方案</p>
+<ul>
+<li><p>点击Settings(设置)</p>
+</li>
+<li><p>点击Domains(域名)</p>
+</li>
+<li><p>添加自己的域名</p>
+</li>
+<li><p>add—-需要添加两条记录</p>
+</li>
+<li><p>TXT记录</p>
+<ul>
+<li>在chenjianming.fun—-记录—-添加—-选择类型（TXT）—-名称（_vercel）—-内容（vc-domain-verify&#x3D;test.chenjianming.fun,0327a7d9f3fa0d8d135e）</li>
+</ul>
+</li>
+<li><p>name记录</p>
+<ul>
+<li>类型（CNAME）—-名称（自己添加的域名名字）—-目标（cname.vercel-dns.com）</li>
+</ul>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Mr.xu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/11/06/ChatGPT%E9%83%A8%E7%BD%B2/">http://example.com/2025/11/06/ChatGPT%E9%83%A8%E7%BD%B2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">Dong_Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/ChatGPT/">ChatGPT</a></div><div class="post-share"><div class="social-share" data-image="/img/picture/8.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/11/06/rustdesk%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6-%E9%83%A8%E7%BD%B2/" title="rustdesk远程控制 部署"><img class="cover" src="/img/picture/5.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">rustdesk远程控制 部署</div></div><div class="info-2"><div class="info-item-1">rustdesk官网 配置rustdesk配置yaml文件1mkdir rustdesk &amp;&amp; cd rustdesk 1vim docker-compose.yaml 123456789101112131415161718192021222324version: &#x27;3&#x27;services:  hbbs:    container_name: hbbs    image: rustdesk/rustdesk-server:1.0    command: hbbs    volumes:      - ./data:/root    network_mode: &quot;host&quot;    depends_on:      - hbbr    restart: unless-stopped  hbbr:    container_name: hbbr    image: rustdesk/rustdesk-server:1.0    command: hbbr    volumes:      - ./data:/root    netw...</div></div></div></a><a class="pagination-related" href="/2025/11/06/k8s-web%E5%B9%B3%E5%8F%B0%E9%83%A8%E7%BD%B2/" title="k8s--web平台部署"><img class="cover" src="/img/picture/16.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">k8s--web平台部署</div></div><div class="info-2"><div class="info-item-1">查看集群有没有启动正常123[root@k8s-1 k8s]# kubectl get node[root@k8s-1 k8s]# kubectl get pod -A    创建目录1mkdir k8s &amp;&amp;  cd k8s    下载官方yaml文件1wget https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml    查看并创建123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/11/06/ELK-kafka-filebeat-%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" title="ELK+kafka+filebeat 集群部署"><img class="cover" src="/img/picture/13.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">ELK+kafka+filebeat 集群部署</div></div><div class="info-2"><div class="info-item-1">版本说明123456Elasticsearch: 7.13.2 #wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.13.2-linux-x86_64.tar.gzLogstash: 7.13.2 #wget https://artifacts.elastic.co/downloads/logstash/logstash-7.13.2-linux-x86_64.tar.gzKibana: 7.13.2 #wget https://artifacts.elastic.co/downloads/kibana/kibana-7.13.2-linux-x86_64.tar.gzKafka: 2.11-2.1  #wget https://archive.apache.org/dist/kafka/2.1.0/kafka_2.11-2.1.0.tgzFilebeat: 7.13.2相应的版本最好下载对应的插件  相关地址： 官网地址：https://www.elastic.co 官网搭建：ht...</div></div></div></a><a class="pagination-related" href="/2025/11/06/gitee-%E4%BB%93%E5%BA%93%E5%88%9B%E5%BB%BA%E5%8F%8A%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6/" title="gitee 仓库创建及上传文件"><img class="cover" src="/img/picture/16.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">gitee 仓库创建及上传文件</div></div><div class="info-2"><div class="info-item-1">首先由个gitee的账号git 全局设置12git config --global user.name&quot;名字&quot;git config --global user.email &quot;邮箱&quot;  创建git仓库12345678mkdir qingfengcd qingfenggit inittouch README.mdgit add README.mdgit commit -m &quot;first commit&quot;git remote add origin https://gitee.com/xbd666/qingfeng.gitgit push -u origin &quot;master&quot; 备注：也可以在搜索栏那里直接拉取，就不需要终端命令设置了 已有仓库的123cd existing_git_repogit remote add origin https://gitee.com/xbd666/qingfeng.gitgit push -u origin &quot;master&quot;  拉取1git pull ori...</div></div></div></a><a class="pagination-related" href="/2025/11/06/K8S%E9%83%A8%E7%BD%B2gitlab-redis/" title="K8S部署gitlab-redis"><img class="cover" src="/img/picture/25.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">K8S部署gitlab-redis</div></div><div class="info-2"><div class="info-item-1">文章目录一、概述二、持久化存储安装–ebs三、创建命名空间四、创建文件夹，及账号密码五、Postgresql部署六、Redis部署七、GitLab部署八、命令总结九、访问GitLab 一、概述在k8s中部署gitlab，然后使用gitlab来实现代码打包到打镜像再到使用镜像自动生成容器服务的过程用到了reids、postgresql、gitlab，将三个应用配置好之后启动即可安装gitlab 二、持久化存储安装–ebs安装持久化存储工具，可以使用nfs或ebs 以ebs为例（使用起来好像简单些） 1. 安装ebs1kubectl apply -f https://openebs.github.io/charts/openebs-operator.yaml  2. 查看ebs集群服务查看集群的StorageClass 1kubectl get sc  3. 设置ebs为默认设置openobs-hostpath为default 1kubectl patch storageclass openebs-hostpath -p &#x27;&#123;&quot;metadata&quot...</div></div></div></a><a class="pagination-related" href="/2025/11/06/Nginx-%E7%9A%84localtion%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3/" title="Nginx 的localtion指令详解"><img class="cover" src="/img/picture/6.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">Nginx 的localtion指令详解</div></div><div class="info-2"><div class="info-item-1">nginx的localtion指令详解Nginx 的 HTTP 配置主要包括三个区块，结构如下： 1234567891011121314http &#123; 						# 这个是协议级别　　include mime.types;　　default_type application/octet-stream;　　keepalive_timeout 65;　　gzip on;　　　　server &#123;			 # 这个是服务器级别　　　　　　listen 80;　　　　　　server_name localhost;　　　　　　　　location / &#123;  # 这个是请求级别　　　　　　　　　　root html;　　　　　　　　　　index index.html index.htm;　　　　　　　　&#125;　　　　　　&#125;&#125;  一个HTTP模块里可以有多个server模块 一个server模块里可以有多个location模块 location 前缀含义12345678=    表示精确匹配，优先级也是最高的 ^~   表示uri以某个常...</div></div></div></a><a class="pagination-related" href="/2025/11/06/k8s-web%E5%B9%B3%E5%8F%B0%E9%83%A8%E7%BD%B2/" title="k8s--web平台部署"><img class="cover" src="/img/picture/16.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">k8s--web平台部署</div></div><div class="info-2"><div class="info-item-1">查看集群有没有启动正常123[root@k8s-1 k8s]# kubectl get node[root@k8s-1 k8s]# kubectl get pod -A    创建目录1mkdir k8s &amp;&amp;  cd k8s    下载官方yaml文件1wget https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml    查看并创建123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122...</div></div></div></a><a class="pagination-related" href="/2025/11/06/k8s-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="k8s 常用命令"><img class="cover" src="/img/picture/23.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">k8s 常用命令</div></div><div class="info-2"><div class="info-item-1">k8s常用命令查看ststem命名空间中pod的信息123kubectl get pods --namespace kube-systemkubectl get pods -n kube-system  查看k8s中的服务信息1kubectl get service  查看k8s中kube-dns的服务信息1kubectl get svc --namespace kube-system  查看所有节点1kubectl get nodes  查看node节点详细信息1kubectl describe node node-1  查看所有名称空间内的资源1kubectl get pods --all-namespaces  同时查看多种资源信息1kubectl get pod,svc -n kube-system  查看apiserver信息1kubectl cluster-info  api查询1kubectl api-versions  创建yml文件时用来查看帮助的命令12kubectl explain 类型名例如：kubectl explain namespace.spec  ...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Mr.xu</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xubaodong0511"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-author-social"><a href="https://github.com/xubaodong0511" target="_blank" rel="noopener"><i class="fab fa-github"></i></a><a href="https://gitee.com/xbd666" target="_blank" rel="noopener"><i class="fab fa-gitee"></i></a><a href="https://www.bilibili.com/" target="_blank" rel="noopener"><i class="fab fa-bilibili"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">相遇即是缘。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%8D%E8%B4%B9%E4%BD%BF%E7%94%A8ChatGPT%EF%BC%8C%E7%BD%91%E9%A1%B5%E7%89%88%E9%83%A8%E7%BD%B2"><span class="toc-number">1.</span> <span class="toc-text">免费使用ChatGPT，网页版部署</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%99%BB%E5%85%A5github%EF%BC%8C%E7%82%B9%E5%87%BB%E6%90%9C%E7%B4%A2chat%EF%BC%8C%E7%82%B9%E7%AC%AC%E4%BA%8C%E4%B8%AA%E9%A1%B9%E7%9B%AE"><span class="toc-number">2.</span> <span class="toc-text">登入github，点击搜索chat，点第二个项目</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%82%B9%E5%87%BBFork%E5%88%B0%E8%87%AA%E5%B7%B1%E4%BB%93%E5%BA%93"><span class="toc-number">3.</span> <span class="toc-text">点击Fork到自己仓库</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%89%93%E5%BC%80%E7%BD%91%E7%AB%99vercel-com"><span class="toc-number">4.</span> <span class="toc-text">打开网站vercel.com</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Environment-Variables-%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F-%E6%AD%A5%E9%AA%A4%E2%80%94%E7%9B%B4%E6%8E%A5%E5%A4%8D%E5%88%B6%E4%B8%8B%E9%9D%A2%E5%86%85%E5%AE%B9"><span class="toc-number">5.</span> <span class="toc-text">Environment Variables(环境变量)步骤—直接复制下面内容</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%BB%A4%E7%89%8C%E5%AF%86%E9%92%A5%E6%AD%A5%E9%AA%A4"><span class="toc-number">6.</span> <span class="toc-text">创建令牌密钥步骤</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CODE%E6%B7%BB%E5%8A%A0%E5%AF%86%E7%A0%81%E6%AD%A5%E9%AA%A4%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"><span class="toc-number">7.</span> <span class="toc-text">CODE添加密码步骤（可选）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA%E6%88%90%E5%8A%9F%E5%90%8E%E4%BC%9A%E8%87%AA%E5%8A%A8%E8%B7%B3%E8%BD%AC"><span class="toc-number">8.</span> <span class="toc-text">构建成功后会自动跳转</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%93%E5%BA%93%E5%9C%B0%E5%9D%80"><span class="toc-number">9.</span> <span class="toc-text">仓库地址</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#GPT%E5%9C%B0%E5%9D%80"><span class="toc-number">10.</span> <span class="toc-text">GPT地址</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%87%E6%B3%A8"><span class="toc-number">11.</span> <span class="toc-text">备注</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vercel部署Twikoo评论系统"/></a><div class="content"><a class="title" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统">Vercel部署Twikoo评论系统</a><time datetime="2026-02-04T05:49:39.000Z" title="发表于 2026-02-04 13:49:39">2026-02-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客"><img src="/img/picture/9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="docker 创建halo博客"/></a><div class="content"><a class="title" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客">docker 创建halo博客</a><time datetime="2025-11-06T13:17:32.000Z" title="发表于 2025-11-06 21:17:32">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置"><img src="/img/picture/5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Centos网卡配置"/></a><div class="content"><a class="title" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置">Centos网卡配置</a><time datetime="2025-11-06T13:16:51.000Z" title="发表于 2025-11-06 21:16:51">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp"><img src="/img/picture/20.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="shell添加用户，计算，vsftp"/></a><div class="content"><a class="title" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp">shell添加用户，计算，vsftp</a><time datetime="2025-11-06T13:13:49.000Z" title="发表于 2025-11-06 21:13:49">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="系统工具箱--脚本"/></a><div class="content"><a class="title" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本">系统工具箱--脚本</a><time datetime="2025-11-06T13:13:16.000Z" title="发表于 2025-11-06 21:13:16">2025-11-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">© 2025 - 2026 By <span class="copyright-author">Mr.xu</span></span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div><script src="/js/snow.js"></script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://hexoblogtwikoovercel.vercel.app',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://hexoblogtwikoovercel.vercel.app',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://cdn.jsdelivr.net/npm/twikoo@1.6.44/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><meting-js server="netease" type="playlist" id="570548381" fixed="true" autoplay="true" theme="#000000" loop="all" order="random" preload="auto" volume="0.7" muted="true" ></meting-js><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- 只保留这一行--><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></body></html>

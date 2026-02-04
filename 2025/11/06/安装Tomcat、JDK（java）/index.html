@@ -1,0 +1,236 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>安装Tomcat、JDK（java）实验 | Dong_Blog</title><meta name="author" content="Mr.xu"><meta name="copyright" content="Mr.xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="1、安装JDK上传jdk1.8到服务器，安装jdk 123[root@java-tomcat1 ~]# tar xzf jdk-8u191-linux-x64.tar.gz -C &#x2F;usr&#x2F;local&#x2F;[root@java-tomcat1 ~]# cd &#x2F;usr&#x2F;local&#x2F;[root@java-tomcat1 local]# mv jdk1.8.0_191&#x2F; java 设置环境变量: 1234[">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安装Tomcat、JDK（java）实验">
+<meta property="og:url" content="http://example.com/2025/11/06/%E5%AE%89%E8%A3%85Tomcat%E3%80%81JDK%EF%BC%88java%EF%BC%89/index.html">
+<meta property="og:site_name" content="Dong_Blog">
+<meta property="og:description" content="1、安装JDK上传jdk1.8到服务器，安装jdk 123[root@java-tomcat1 ~]# tar xzf jdk-8u191-linux-x64.tar.gz -C &#x2F;usr&#x2F;local&#x2F;[root@java-tomcat1 ~]# cd &#x2F;usr&#x2F;local&#x2F;[root@java-tomcat1 local]# mv jdk1.8.0_191&#x2F; java 设置环境变量: 1234[">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/picture/3.jpg">
+<meta property="article:published_time" content="2025-11-06T13:05:40.000Z">
+<meta property="article:modified_time" content="2026-02-04T10:20:38.850Z">
+<meta property="article:author" content="Mr.xu">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Tomcat">
+<meta property="article:tag" content="JDK">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/picture/3.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "安装Tomcat、JDK（java）实验",
+  "url": "http://example.com/2025/11/06/%E5%AE%89%E8%A3%85Tomcat%E3%80%81JDK%EF%BC%88java%EF%BC%89/",
+  "image": "http://example.com/img/picture/3.jpg",
+  "datePublished": "2025-11-06T13:05:40.000Z",
+  "dateModified": "2026-02-04T10:20:38.850Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Mr.xu",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/dong.png"><link rel="canonical" href="http://example.com/2025/11/06/%E5%AE%89%E8%A3%85Tomcat%E3%80%81JDK%EF%BC%88java%EF%BC%89/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '安装Tomcat、JDK（java）实验',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/picture/3.jpg);"><nav id="nav"><span id="blog-info"><a id="site-name" href="/">🍀 <strong class="site-title-bold">东</strong></a><a class="nav-page-title" href="/"><span class="site-name">安装Tomcat、JDK（java）实验</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">安装Tomcat、JDK（java）实验</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-06T13:05:40.000Z" title="发表于 2025-11-06 21:05:40">2025-11-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-04T10:20:38.850Z" title="更新于 2026-02-04 18:20:38">2026-02-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/operations/">operations</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h3 id="1、安装JDK"><a href="#1、安装JDK" class="headerlink" title="1、安装JDK"></a>1、安装JDK</h3><p>上传jdk1.8到服务器，安装jdk</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@java-tomcat1 ~]# tar xzf jdk-8u191-linux-x64.tar.gz -C /usr/local/</span><br><span class="line">[root@java-tomcat1 ~]# cd /usr/local/</span><br><span class="line">[root@java-tomcat1 local]# mv jdk1.8.0_191/ java</span><br></pre></td></tr></table></figure>
+<p>设置环境变量:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@java-tomcat1 local]# vim /etc/profile</span><br><span class="line">JAVA_HOME=/usr/local/java #指定java安装目录</span><br><span class="line">PATH=$JAVA_HOME/bin:$PATH #用于指定java系统查找命令的路径</span><br><span class="line">export JAVA_HOME PATH #类的路径，在编译运行java程序时，如果有调用到其他类的时候，在classpath中寻找需要的类。</span><br></pre></td></tr></table></figure>
+<p>检测JDK是否安装成功:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@java-tomcat1 local]# source /etc/profile</span><br><span class="line">[root@java-tomcat1 local]# java -version </span><br><span class="line">java version &quot;1.8.0_191&quot;</span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_191-b12)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.191-b12, mixed mode)</span><br></pre></td></tr></table></figure>
+
+<h4 id="安装Tomcat"><a href="#安装Tomcat" class="headerlink" title="安装Tomcat"></a>安装Tomcat</h4><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[root@java-tomcat1 ~]</span><span class="comment"># mkdir /data/application -p</span></span><br><span class="line"><span class="section">[root@java-tomcat1 ~]</span><span class="comment"># cd /usr/src/</span></span><br><span class="line"><span class="section">[root@java-tomcat1 src]</span><span class="comment"># wget http://mirrors.tuna.tsinghua.edu.cn/apache/tomcat/tomcat-8/v8.5.42/bin/apache-tomcat-8.5.42.tar.gz</span></span><br><span class="line"><span class="section">[root@java-tomcat1 src]</span><span class="comment"># tar xzf apache-tomcat-8.5.42.tar.gz -C /data/application/</span></span><br><span class="line"><span class="section">[root@java-tomcat1 src]</span><span class="comment"># cd /data/application/</span></span><br><span class="line"><span class="section">[root@java-tomcat1 application]</span><span class="comment"># mv apache-tomcat-8.5.42/ tomcat</span></span><br></pre></td></tr></table></figure>
+<p>设置环境变量:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@java-tomcat1 application]# vim /etc/profile</span><br><span class="line">export TOMCAT_HOME=/data/application/tomcat   #指定tomcat的安装目录</span><br><span class="line">[root@java-tomcat1 application]# source  /etc/profile</span><br></pre></td></tr></table></figure>
+<p>查看tomcat是否安装成功:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@java-tomcat1 tomcat]# /data/application/tomcat/bin/startup.sh或 /data/application/tomcat/bin/version.sh</span><br><span class="line">Using CATALINA_BASE:   /data/application/tomcat</span><br><span class="line">Using CATALINA_HOME:   /data/application/tomcat</span><br><span class="line">Using CATALINA_TMPDIR: /data/application/tomcat/temp</span><br><span class="line">Using JRE_HOME:        /usr/local/java</span><br><span class="line">Using CLASSPATH:       /data/application/tomcat/bin/bootstrap.jar:/data/application/tomcat/bin/tomcat-juli.jar</span><br><span class="line">Server version: Apache Tomcat/8.5.42</span><br><span class="line">Server built:   Jun 4 2019 20:29:04 UTC</span><br><span class="line">Server number:  8.5.42.0</span><br><span class="line">OS Name:        Linux</span><br><span class="line">OS Version:     3.10.0-693.el7.x86_64</span><br><span class="line">Architecture:   amd64</span><br><span class="line">JVM Version:    1.8.0_191-b12</span><br><span class="line">JVM Vendor:     Oracle Corporation</span><br></pre></td></tr></table></figure>
+<p>测试<br><code>游览器输入IP地址，出现Tomcat测试页面代表完成</code></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Mr.xu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/11/06/%E5%AE%89%E8%A3%85Tomcat%E3%80%81JDK%EF%BC%88java%EF%BC%89/">http://example.com/2025/11/06/%E5%AE%89%E8%A3%85Tomcat%E3%80%81JDK%EF%BC%88java%EF%BC%89/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">Dong_Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/Tomcat/">Tomcat</a><a class="post-meta__tags" href="/tags/JDK/">JDK</a></div><div class="post-share"><div class="social-share" data-image="/img/picture/3.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/11/06/Nginx-%E7%9B%91%E6%8E%A7%E6%8E%A7%E5%88%B6/" title="Nginx 监控控制实验"><img class="cover" src="/img/picture/16.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Nginx 监控控制实验</div></div><div class="info-2"><div class="info-item-1">Nginx 监控nginx 提供了 ngx_http_stub_status_module.这个模块提供了基本的监控功能 nginx的基础监控12- 进程监控- 端口监控  监控的指标1Accepts（接受）、Handled（已处理）、Requests（请求数）是一直在增加的计数器。Active（活跃）、Waiting（等待）、Reading（读）、Writing（写）随着请求量而增减  nginx Stub Status 监控模块安装先使用命令查看是否已经安装这个模块123# -V大写会显示版本号和模块等信息、v小写仅显示版本信息[root@localhost ~]# nginx -V  如果没有此模块，需要重新安装，编译命令如下123# 添加--with-http_stub_status_module模块./configure --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib64/nginx/modules --conf-path=/etc/nginx/nginx.conf --er...</div></div></div></a><a class="pagination-related" href="/2025/11/06/4%E5%B1%82-DR%E6%A8%A1%E5%BC%8F-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" title="4层--DR模式--负载均衡实验"><img class="cover" src="/img/picture/25.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">4层--DR模式--负载均衡实验</div></div><div class="info-2"><div class="info-item-1">环境准备准备3台纯洁的虚拟机，2台web服务器 安装lvs管理软件1yum -y install ipvsadm  1234567程序包：ipvsadm（LVS管理工具）主程序：/usr/sbin/ipvsadm规则保存工具：/usr/sbin/ipvsadm-save  &gt; /path/to/file配置文件：/etc/sysconfig/ipvsadm-config   LVS&#x2F;DR 模式简介1DR模式的组网要求LVS和Real server在同一网段二层互通。因为LVS DR模式在负载均衡转发报文时，只修改目的mac为real server的mac，lvs要能将报文转发给real server，就必须满足LVS和real server是同网段二层互通。   实验说明 网络使用NAT模式 DR模式要求Director DIP 和所有RealServer RIP必须在同一个网段及广播域  1. 关闭防火墙12[root@lvs-server ~]# systemctl stop firewalld[root@lvs-server ~]# setenforce 0...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/11/06/%E5%B8%B8%E7%94%A8%E8%84%9A%E6%9C%AC/" title="常用脚本"><img class="cover" src="/img/picture/12.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">常用脚本</div></div><div class="info-2"><div class="info-item-1">IP质量检测1bash &lt;(curl -Ls IP.Check.Place)  融合怪1curl -L https://gitlab.com/spiritysdx/za/-/raw/main/ecs.sh -o ecs.sh &amp;&amp; chmod +x ecs.sh &amp;&amp; bash ecs.sh  线路测试1curl https://raw.githubusercontent.com/zhucaidan/mtr_trace/main/mtr_trace.sh|bash  # 检测回程脚本  综合工具箱1wget -O box.sh https://raw.githubusercontent.com/BlueSkyXN/SKY-BOX/main/box.sh &amp;&amp; chmod +x box.sh &amp;&amp; clear &amp;&amp; ./box.sh++  VPS工具箱1curl -fsSL https://raw.githubusercontent.com/eooce/ssh_tool/main/ssh_tool...</div></div></div></a><a class="pagination-related" href="/2025/01/09/%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE/" title="域名配置"><img class="cover" src="/img/picture/6.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-09</div><div class="info-item-2">域名配置</div></div><div class="info-2"><div class="info-item-1">一、使用子域名（方案一）1234567891011121314151617181920212223242526server &#123;    listen 80;    server_name service1.example.com;    location / &#123;        proxy_pass http://localhost:3000;        proxy_set_header Host $host;        proxy_set_header X-Real-IP $remote_addr;        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;        proxy_set_header X-Forwarded-Proto $scheme;    &#125;&#125;server &#123;    listen 80;    server_name service2.example.com;    location / &#123;        prox...</div></div></div></a><a class="pagination-related" href="/2025/11/06/Nginx-%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6/" title="Nginx 访问控制实验"><img class="cover" src="/img/picture/17.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">Nginx 访问控制实验</div></div><div class="info-2"><div class="info-item-1">Nginx 访问控制nginx 访问控制模块 12（1）基于IP的访问控制：http_access_module（2）基于用户的信任登录：http_auth_basic_module  1、基于IP的访问控制 12345678910111213# 语法Syntax：allow address | all;default：默认无Context：http，server，locationSyntax：deny address | all;default：默认无Context：http，server，location===================================================allow    允许     //ip或者网段deny    拒绝     //ip或者网段  示例一 12345678910111213141516171819# 拒绝192.168.1.8登入，允许其他所有[root@192 ~]# vim /etc/nginx/conf.d/access_mod.confserver &#123;        listen 80; ...</div></div></div></a><a class="pagination-related" href="/2025/11/05/%E9%A1%B9%E7%9B%AE%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87/" title="项目前期准备"><img class="cover" src="/img/picture/10.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">项目前期准备</div></div><div class="info-2"><div class="info-item-1">前期环境准备环境基于ansible剧本主要作用 配置管理： Ansible 可以自动化地配置和管理服务器的状态，包括安装软件包、配置文件管理、用户和权限设置等。   应用程序部署： Ansible 可以自动化地部署应用程序，从代码库的拉取、依赖安装到应用程序的启动和配置，简化了复杂的部署过程。   任务自动化： Ansible 可以自动化日常运维任务，如备份、日志轮转、监控配置等，减少人为错误，提高工作效率。   多平台支持： Ansible 支持多种操作系统和云平台，包括 Linux、Windows、macOS，以及 AWS、Azure、GCP 等云服务提供商。   无代理架构： Ansible 通过 SSH 连接到目标节点，无需在目标节点上安装任何代理软件，简化了管理和维护。   编排： Ansible 可以编排复杂的 IT 任务，跨多个系统和环境执行一系列步骤，确保任务按顺序执行并保持一致性。    安装12yum -y install epel*yum -y install ansible  免密作用 日志和审计： 一致的时间戳对于日志记录和审计是至关重要的。不同服务器上...</div></div></div></a><a class="pagination-related" href="/2025/11/06/MongoDB%E9%83%A8%E7%BD%B2/" title="MongoDB部署"><img class="cover" src="/img/picture/15.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">MongoDB部署</div></div><div class="info-2"><div class="info-item-1">MongoDB作用MongoDB 是一种开源的文档型 NoSQL 数据库，采用 BSON（二进制 JSON）格式存储数据。以下是 MongoDB 的主要作用和用途：  灵活的数据模型:  MongoDB 使用文档存储数据，文档之间可以有不同的结构。这种灵活性使得 MongoDB 非常适合处理不规则和变化频繁的数据。   大数据和实时分析:  MongoDB 的高性能和扩展性使其适合处理大数据和实时分析应用。它能够快速存储和查询大量数据，并支持实时数据处理。   内容管理和目录服务:  MongoDB 常用于内容管理系统（CMS）和目录服务，适合存储和管理大量的文档、图像、视频等非结构化数据。   物联网（IoT）和传感器数据:  由于 MongoDB 可以高效地存储和处理大量的时间序列数据，它非常适合物联网应用中的传感器数据存储和分析。   移动应用和社交网络:  MongoDB 的灵活性和高性能使其成为移动应用和社交网络的理想选择，能够处理用户生成的内容、用户个人资料、消息和活动流等数据。   电子商务:  在电子商务平台中，MongoDB 可以用于存储产品目录、用户数据、订单...</div></div></div></a><a class="pagination-related" href="/2025/11/05/%E9%83%A8%E7%BD%B2prometheus/" title="部署prometheus"><img class="cover" src="/img/picture/7.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">部署prometheus</div></div><div class="info-2"><div class="info-item-1">部署prometheus一、准备环境   主机名 IP 配置    client 10.100.40.185    agent 10.100.40.171    agent     二、部署prometheus1、下载地址1234wget prometheus-2.47.2.linux-amd64.tar.gz官网地址https://prometheus.io/download/  2、创建目录1mkdir -pv /data/pormetheus/&#123;data,soft,lag&#125;  3、解压安装包1tar xzf prometheus-2.47.2.linux-amd64.tar.gz -C /data/prometheus/soft  做个软连接，方便操作12cd /data/prometheus/softln -sv prometheus-2.47.2.linux-amd64 prometheus  三、启动12在/data/prometheus/soft/prometfeus目录下启动nohup ./prometheus &amp;  四、检查，并查看1...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Mr.xu</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xubaodong0511"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-author-social"><a href="https://github.com/xubaodong0511" target="_blank" rel="noopener"><i class="fab fa-github"></i></a><a href="https://gitee.com/xbd666" target="_blank" rel="noopener"><i class="fab fa-gitee"></i></a><a href="https://www.bilibili.com/" target="_blank" rel="noopener"><i class="fab fa-bilibili"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">相遇即是缘。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%AE%89%E8%A3%85JDK"><span class="toc-number">1.</span> <span class="toc-text">1、安装JDK</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Tomcat"><span class="toc-number">1.1.</span> <span class="toc-text">安装Tomcat</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vercel部署Twikoo评论系统"/></a><div class="content"><a class="title" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统">Vercel部署Twikoo评论系统</a><time datetime="2026-02-04T05:49:39.000Z" title="发表于 2026-02-04 13:49:39">2026-02-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客"><img src="/img/picture/9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="docker 创建halo博客"/></a><div class="content"><a class="title" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客">docker 创建halo博客</a><time datetime="2025-11-06T13:17:32.000Z" title="发表于 2025-11-06 21:17:32">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置"><img src="/img/picture/5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Centos网卡配置"/></a><div class="content"><a class="title" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置">Centos网卡配置</a><time datetime="2025-11-06T13:16:51.000Z" title="发表于 2025-11-06 21:16:51">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp"><img src="/img/picture/20.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="shell添加用户，计算，vsftp"/></a><div class="content"><a class="title" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp">shell添加用户，计算，vsftp</a><time datetime="2025-11-06T13:13:49.000Z" title="发表于 2025-11-06 21:13:49">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="系统工具箱--脚本"/></a><div class="content"><a class="title" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本">系统工具箱--脚本</a><time datetime="2025-11-06T13:13:16.000Z" title="发表于 2025-11-06 21:13:16">2025-11-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">© 2025 - 2026 By <span class="copyright-author">Mr.xu</span></span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div><script src="/js/snow.js"></script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://hexoblogtwikoovercel.vercel.app',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://hexoblogtwikoovercel.vercel.app',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://cdn.jsdelivr.net/npm/twikoo@1.6.44/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><meting-js server="netease" type="playlist" id="570548381" fixed="true" autoplay="true" theme="#000000" loop="all" order="random" preload="auto" volume="0.7" muted="true" ></meting-js><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- 只保留这一行--><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></body></html>

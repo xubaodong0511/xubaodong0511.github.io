@@ -1,0 +1,232 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>syncTV远程共享视频网站部署 | Dong_Blog</title><meta name="author" content="Mr.xu"><meta name="copyright" content="Mr.xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="syncTV远程同步观看web部署官网地址点这里 一、docker安装docker官网点这里 docker一键脚本安装1bash &lt;(curl -sSL https:&#x2F;&#x2F;gitee.com&#x2F;xbd666&#x2F;qingfeng&#x2F;raw&#x2F;master&#x2F;toolbox.sh) 二、可以直接用命令运行synctv，但是建议用下面yaml文件方式运行synctv1docker run --name syn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="syncTV远程共享视频网站部署">
+<meta property="og:url" content="http://example.com/2025/11/06/syncTV%E8%BF%9C%E7%A8%8B%E5%85%B1%E4%BA%AB%E8%A7%86%E9%A2%91%E7%BD%91%E7%AB%99%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:site_name" content="Dong_Blog">
+<meta property="og:description" content="syncTV远程同步观看web部署官网地址点这里 一、docker安装docker官网点这里 docker一键脚本安装1bash &lt;(curl -sSL https:&#x2F;&#x2F;gitee.com&#x2F;xbd666&#x2F;qingfeng&#x2F;raw&#x2F;master&#x2F;toolbox.sh) 二、可以直接用命令运行synctv，但是建议用下面yaml文件方式运行synctv1docker run --name syn">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/picture/30.jpg">
+<meta property="article:published_time" content="2025-11-06T12:48:59.000Z">
+<meta property="article:modified_time" content="2026-02-04T10:20:38.849Z">
+<meta property="article:author" content="Mr.xu">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="SyncTV">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/picture/30.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "syncTV远程共享视频网站部署",
+  "url": "http://example.com/2025/11/06/syncTV%E8%BF%9C%E7%A8%8B%E5%85%B1%E4%BA%AB%E8%A7%86%E9%A2%91%E7%BD%91%E7%AB%99%E9%83%A8%E7%BD%B2/",
+  "image": "http://example.com/img/picture/30.jpg",
+  "datePublished": "2025-11-06T12:48:59.000Z",
+  "dateModified": "2026-02-04T10:20:38.849Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Mr.xu",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/dong.png"><link rel="canonical" href="http://example.com/2025/11/06/syncTV%E8%BF%9C%E7%A8%8B%E5%85%B1%E4%BA%AB%E8%A7%86%E9%A2%91%E7%BD%91%E7%AB%99%E9%83%A8%E7%BD%B2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'syncTV远程共享视频网站部署',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/picture/30.jpg);"><nav id="nav"><span id="blog-info"><a id="site-name" href="/">🍀 <strong class="site-title-bold">东</strong></a><a class="nav-page-title" href="/"><span class="site-name">syncTV远程共享视频网站部署</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">syncTV远程共享视频网站部署</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-06T12:48:59.000Z" title="发表于 2025-11-06 20:48:59">2025-11-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-04T10:20:38.849Z" title="更新于 2026-02-04 18:20:38">2026-02-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/operations/">operations</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="syncTV远程同步观看web部署"><a href="#syncTV远程同步观看web部署" class="headerlink" title="syncTV远程同步观看web部署"></a>syncTV远程同步观看web部署</h1><p><a target="_blank" rel="noopener" href="https://synctv.wiki/#/quickstart?id=docker">官网地址点这里</a></p>
+<h1 id="一、docker安装"><a href="#一、docker安装" class="headerlink" title="一、docker安装"></a>一、docker安装</h1><p><a target="_blank" rel="noopener" href="https://docs.docker.com/engine/install/centos/https://docs.docker.com/engine/install/centos/">docker官网点这里</a></p>
+<h1 id="docker一键脚本安装"><a href="#docker一键脚本安装" class="headerlink" title="docker一键脚本安装"></a>docker一键脚本安装</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash &lt;(curl -sSL https://gitee.com/xbd666/qingfeng/raw/master/toolbox.sh)</span><br></pre></td></tr></table></figure>
+<h1 id="二、可以直接用命令运行synctv，但是建议用下面yaml文件方式运行synctv"><a href="#二、可以直接用命令运行synctv，但是建议用下面yaml文件方式运行synctv" class="headerlink" title="二、可以直接用命令运行synctv，但是建议用下面yaml文件方式运行synctv"></a>二、可以直接用命令运行synctv，但是建议用下面yaml文件方式运行synctv</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name synctv -d -p 8080:8080 synctvorg/synctv:latest</span><br></pre></td></tr></table></figure>
+
+<h1 id="三、创建docker-compose-yaml文件"><a href="#三、创建docker-compose-yaml文件" class="headerlink" title="三、创建docker-compose.yaml文件"></a>三、创建docker-compose.yaml文件</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir synctv &amp;&amp; cd synctv      #创建一个目录，并进入此目录</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim docker-compose.yaml</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">version: &quot;3.3&quot;    #这是docker-compose文件版本的声明</span><br><span class="line">services:</span><br><span class="line"> synctv:       #服务的别名，可以自定义</span><br><span class="line">  container_name: synctv     #容器名，可以自定义</span><br><span class="line">  ports:</span><br><span class="line">  - &#x27;8080:8080&#x27;   #端口，左侧的8080可以自定义，映射到容器内部，右侧是容器内部端口</span><br><span class="line">  environment:</span><br><span class="line">  - PUID=0    # 用户ID，在终端输入id可以查看到当前用户的id</span><br><span class="line">  - PGID=0    # 组ID同上</span><br><span class="line">  - TZ=Asia/Shanghai   # 时区，可以自定义</span><br><span class="line">  restart: always      # 开启自启动其他选项看以下备注</span><br><span class="line">  volumes:</span><br><span class="line">  - &#x27;./data:/root/.synctv&#x27;   # 数据持久目录映射</span><br><span class="line">  image: synctvorg/synctv    # 镜像名，一般都是使用的哪个镜像就写哪个镜像</span><br></pre></td></tr></table></figure>
+<h1 id="查看容器有没有起来"><a href="#查看容器有没有起来" class="headerlink" title="查看容器有没有起来"></a>查看容器有没有起来</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br><span class="line">或</span><br><span class="line">docker-compose ps</span><br></pre></td></tr></table></figure>
+<h1 id="默认账户密码"><a href="#默认账户密码" class="headerlink" title="默认账户密码"></a>默认账户密码</h1><p><code>账户：root 密码：root</code></p>
+<h1 id="四、网站更新"><a href="#四、网站更新" class="headerlink" title="四、网站更新"></a>四、网站更新</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd synctv    # 进入目录</span><br><span class="line">docker-compose down     # 停止容器</span><br><span class="line">docker-compose pull     # 拉取最新镜像</span><br><span class="line">docekr-compose up -d    # 重新启动容器</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Mr.xu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/11/06/syncTV%E8%BF%9C%E7%A8%8B%E5%85%B1%E4%BA%AB%E8%A7%86%E9%A2%91%E7%BD%91%E7%AB%99%E9%83%A8%E7%BD%B2/">http://example.com/2025/11/06/syncTV%E8%BF%9C%E7%A8%8B%E5%85%B1%E4%BA%AB%E8%A7%86%E9%A2%91%E7%BD%91%E7%AB%99%E9%83%A8%E7%BD%B2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">Dong_Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/SyncTV/">SyncTV</a></div><div class="post-share"><div class="social-share" data-image="/img/picture/30.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/11/06/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%8B%E8%BD%BD-php%E7%89%88%E6%9C%AC/" title="自定义下载--php版本"><img class="cover" src="/img/picture/17.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">自定义下载--php版本</div></div><div class="info-2"><div class="info-item-1">下载官网php123# wget http://rpms.remirepo.net/enterprise/remi-release-7.9.rpm# -Uvh带有下载更新的作用,会有多个版本rpm -Uvh http://rpms.remirepo.net/enterprise/remi-release-7.rpm 会在&#x2F;etc&#x2F;yum.repos.d目录生成许多remi的仓库，其中包含不同版本的php仓库123456[root@server ~]# cd /etc/yum.repos.d/[root@server yum.repos.d]# lsCentOS-Base.repo   remi-modular.repo  remi-php72.repo  remi-php81.repo  remi-safe.repoepel.repo          remi-php54.repo    remi-php73.repo  remi-php82.repoepel.repo.rpmnew   remi-php70.repo    remi-php74.repo ...</div></div></div></a><a class="pagination-related" href="/2025/11/06/rustdesk%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6-%E9%83%A8%E7%BD%B2/" title="rustdesk远程控制 部署"><img class="cover" src="/img/picture/5.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">rustdesk远程控制 部署</div></div><div class="info-2"><div class="info-item-1">rustdesk官网 配置rustdesk配置yaml文件1mkdir rustdesk &amp;&amp; cd rustdesk 1vim docker-compose.yaml 123456789101112131415161718192021222324version: &#x27;3&#x27;services:  hbbs:    container_name: hbbs    image: rustdesk/rustdesk-server:1.0    command: hbbs    volumes:      - ./data:/root    network_mode: &quot;host&quot;    depends_on:      - hbbr    restart: unless-stopped  hbbr:    container_name: hbbr    image: rustdesk/rustdesk-server:1.0    command: hbbr    volumes:      - ./data:/root    netw...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/11/05/ansible%E9%83%A8%E7%BD%B2mysql%E4%B8%BB%E4%BB%8E/" title="ansible部署mysql主从"><img class="cover" src="/img/picture/26.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">ansible部署mysql主从</div></div><div class="info-2"><div class="info-item-1">MySQL主从作用：MySQL 是一种开源的关系数据库管理系统（RDBMS），广泛用于各种应用场景。以下是 MySQL 的主要作用和用途：  数据存储和管理:  MySQL 用于存储和管理大量结构化数据。它支持多种数据类型和复杂的查询操作，适合处理各种业务数据。   Web 应用程序:  MySQL 是许多 Web 应用程序的后端数据库，尤其是与 PHP 结合使用。常见的内容管理系统（CMS）如 WordPress、Joomla 和 Drupal 都依赖 MySQL。   电子商务:  电子商务平台如 Magento、WooCommerce 和 Shopify 使用 MySQL 来管理产品信息、订单、客户数据等。   数据分析:  MySQL 可以用于数据分析和商业智能（BI），通过与工具如 Tableau、Power BI 和 Excel 集成，帮助企业做出数据驱动的决策。   企业应用:  企业资源计划（ERP）、客户关系管理（CRM）和其他企业级应用程序常常使用 MySQL 作为其数据库后端。   高可用性和扩展性:  MySQL 支持复制和集群功能，可以实现高可用性和扩展...</div></div></div></a><a class="pagination-related" href="/2025/11/06/K8S%E9%83%A8%E7%BD%B2nexus/" title="K8S部署nexus"><img class="cover" src="/img/picture/21.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">K8S部署nexus</div></div><div class="info-2"><div class="info-item-1">环境准备1234服务器	  IP地址master	192.168.0.173node1	192.168.0.253node2	192.168.0.233  安装nfs安装nfs123456789101112131415161718192021# master节点yum -y install  nfs-utils rpcbind# 创建共享目录mkdir /var/nfs/nexus# 授予权限chmod 777 /var/nfs/nexus# 启动nfs服务systemctl start nfs-serversystemctl enabled nfs-serversystemctl start rpcbindsystemctl enabled rpcbind# node节点yum -y install  nfs-utils rpcbindsystemctl start nfs-serversystemctl enabled nfs-serversystemctl start rpcbindsystemctl enabled rpcbind  挂载NFS12345678910111...</div></div></div></a><a class="pagination-related" href="/2025/01/09/%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE/" title="域名配置"><img class="cover" src="/img/picture/6.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-09</div><div class="info-item-2">域名配置</div></div><div class="info-2"><div class="info-item-1">一、使用子域名（方案一）1234567891011121314151617181920212223242526server &#123;    listen 80;    server_name service1.example.com;    location / &#123;        proxy_pass http://localhost:3000;        proxy_set_header Host $host;        proxy_set_header X-Real-IP $remote_addr;        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;        proxy_set_header X-Forwarded-Proto $scheme;    &#125;&#125;server &#123;    listen 80;    server_name service2.example.com;    location / &#123;        prox...</div></div></div></a><a class="pagination-related" href="/2025/11/06/%E5%B8%B8%E7%94%A8%E7%9A%84linux%E5%91%BD%E4%BB%A4/" title="常用的linux命令"><img class="cover" src="/img/picture/2.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">常用的linux命令</div></div><div class="info-2"><div class="info-item-1">清理linux系统中的缓存(生产环境慎用!)1echo 3 &gt; /proc/sys/vm/drop_caches drop_caches 文件允许三个不同的值： 1: 只清空页面缓存。 2: 只清空目录项和inode。 3: 清空页面缓存、目录项和inode。 比较文件内容差异123diff a.txt b.txt     #正常比较diff -c a.txt b.txt    #以上下文方式比较diff -u a.txt b.txt    #联合方式比较  查看操作系统版本信息1cat /etc/redhat-release  统计出现相同行的次数1uniq -c  标准错误重定向到标准输出的位置2 是标准错误的文件描述符，1 是标准输出的文件描述符。而 &gt;&amp; 表示将一个文件描述符重定向到另一个文件描述符，1 表示标准输出。因此，2&gt;&amp;1 就表示将标准错误重定向到标准输出的位置 要在Linux系统中添加一个HTTP代理，可以按照以下步骤进行操作：12345678910#代理先在Clash上开启Allow LAN,并设置代理端口8888# 在终端...</div></div></div></a><a class="pagination-related" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp"><img class="cover" src="/img/picture/20.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">shell添加用户，计算，vsftp</div></div><div class="info-2"><div class="info-item-1">vim user.sh（添加用户） 123456789#!/bin/bash#该脚本为添加用户zhangsan，并给他设置密码#date：2023-11-14#author：xubaodong#创建用户useradd zhangsan#变量name=zhangsanecho &quot;qianfeng@123&quot; | passwd --stdin $name &amp;&amp; echo &quot;密码设置完成&quot; vim compute.sh（计算） 1234567#!/bin/bash#该脚本用于计算#date：2023-11-14#author：xubaodongread -p &quot;请输入第一个数字&quot; num1read -p &quot;请输入第二个数字&quot; num2echo $[num1 + num2] &amp;&amp; echo $[num1 - num2] &amp;&amp; echo $[num1 * num2] &amp;&amp; echo $[num1 / num2] vsftp_client.sh（客户端...</div></div></div></a><a class="pagination-related" href="/2025/11/06/%E6%97%A5%E5%B8%B8%E5%B7%A5%E4%BD%9C%EF%BC%88%E6%9B%B4%E6%96%B0%E4%B8%AD%EF%BC%89/" title="日常工作（更新中）"><img class="cover" src="/img/picture/29.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">日常工作（更新中）</div></div><div class="info-2"><div class="info-item-1">日常工作中常用的磁盘、内存清理命令和数据备份脚本整理如下。 磁盘&#x2F;内存 清理1234567891011121314151617181920212223242526# 查看磁盘大小df -Th# 查看每个目录下的文件大小du -sh /*du -sh /*/*# 查看目录文件大小du -h# 数字化服务器占磁盘大的目录rm -rf /docker/zentao/www/zentaopms/tmprm -rf /usr/tmprm -rf /var/log# 查看内存使用率free -m# 清理缓存echo 3 &gt; /proc/sys/vm/drop_caches# maven仓库地址/usr/local/repository/maven_repo/com# 查看java服务内存jps -ljmap -heap PID号# top里的RES: 进程使用的物理内存量 (Resident Memory)# RES的数值 / 1024 得出的结果就是服务使用的内存  数据备份12345678910111213141516171819202122232425262728293...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Mr.xu</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xubaodong0511"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-author-social"><a href="https://github.com/xubaodong0511" target="_blank" rel="noopener"><i class="fab fa-github"></i></a><a href="https://gitee.com/xbd666" target="_blank" rel="noopener"><i class="fab fa-gitee"></i></a><a href="https://www.bilibili.com/" target="_blank" rel="noopener"><i class="fab fa-bilibili"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">相遇即是缘。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#syncTV%E8%BF%9C%E7%A8%8B%E5%90%8C%E6%AD%A5%E8%A7%82%E7%9C%8Bweb%E9%83%A8%E7%BD%B2"><span class="toc-number">1.</span> <span class="toc-text">syncTV远程同步观看web部署</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81docker%E5%AE%89%E8%A3%85"><span class="toc-number">2.</span> <span class="toc-text">一、docker安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#docker%E4%B8%80%E9%94%AE%E8%84%9A%E6%9C%AC%E5%AE%89%E8%A3%85"><span class="toc-number">3.</span> <span class="toc-text">docker一键脚本安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%8F%AF%E4%BB%A5%E7%9B%B4%E6%8E%A5%E7%94%A8%E5%91%BD%E4%BB%A4%E8%BF%90%E8%A1%8Csynctv%EF%BC%8C%E4%BD%86%E6%98%AF%E5%BB%BA%E8%AE%AE%E7%94%A8%E4%B8%8B%E9%9D%A2yaml%E6%96%87%E4%BB%B6%E6%96%B9%E5%BC%8F%E8%BF%90%E8%A1%8Csynctv"><span class="toc-number">4.</span> <span class="toc-text">二、可以直接用命令运行synctv，但是建议用下面yaml文件方式运行synctv</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%88%9B%E5%BB%BAdocker-compose-yaml%E6%96%87%E4%BB%B6"><span class="toc-number">5.</span> <span class="toc-text">三、创建docker-compose.yaml文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%AE%B9%E5%99%A8%E6%9C%89%E6%B2%A1%E6%9C%89%E8%B5%B7%E6%9D%A5"><span class="toc-number">6.</span> <span class="toc-text">查看容器有没有起来</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%BB%98%E8%AE%A4%E8%B4%A6%E6%88%B7%E5%AF%86%E7%A0%81"><span class="toc-number">7.</span> <span class="toc-text">默认账户密码</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E7%BD%91%E7%AB%99%E6%9B%B4%E6%96%B0"><span class="toc-number">8.</span> <span class="toc-text">四、网站更新</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vercel部署Twikoo评论系统"/></a><div class="content"><a class="title" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统">Vercel部署Twikoo评论系统</a><time datetime="2026-02-04T05:49:39.000Z" title="发表于 2026-02-04 13:49:39">2026-02-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客"><img src="/img/picture/9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="docker 创建halo博客"/></a><div class="content"><a class="title" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客">docker 创建halo博客</a><time datetime="2025-11-06T13:17:32.000Z" title="发表于 2025-11-06 21:17:32">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置"><img src="/img/picture/5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Centos网卡配置"/></a><div class="content"><a class="title" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置">Centos网卡配置</a><time datetime="2025-11-06T13:16:51.000Z" title="发表于 2025-11-06 21:16:51">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp"><img src="/img/picture/20.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="shell添加用户，计算，vsftp"/></a><div class="content"><a class="title" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp">shell添加用户，计算，vsftp</a><time datetime="2025-11-06T13:13:49.000Z" title="发表于 2025-11-06 21:13:49">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="系统工具箱--脚本"/></a><div class="content"><a class="title" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本">系统工具箱--脚本</a><time datetime="2025-11-06T13:13:16.000Z" title="发表于 2025-11-06 21:13:16">2025-11-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">© 2025 - 2026 By <span class="copyright-author">Mr.xu</span></span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div><script src="/js/snow.js"></script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://hexoblogtwikoovercel.vercel.app',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://hexoblogtwikoovercel.vercel.app',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://cdn.jsdelivr.net/npm/twikoo@1.6.44/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><meting-js server="netease" type="playlist" id="570548381" fixed="true" autoplay="true" theme="#000000" loop="all" order="random" preload="auto" volume="0.7" muted="true" ></meting-js><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- 只保留这一行--><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></body></html>

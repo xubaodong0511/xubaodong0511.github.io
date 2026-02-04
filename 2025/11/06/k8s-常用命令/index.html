@@ -1,0 +1,271 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>k8s 常用命令 | Dong_Blog</title><meta name="author" content="Mr.xu"><meta name="copyright" content="Mr.xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="k8s常用命令查看ststem命名空间中pod的信息123kubectl get pods --namespace kube-systemkubectl get pods -n kube-system  查看k8s中的服务信息1kubectl get service  查看k8s中kube-dns的服务信息1kubectl get svc --namespace kube-system  查看所有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="k8s 常用命令">
+<meta property="og:url" content="http://example.com/2025/11/06/k8s-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:site_name" content="Dong_Blog">
+<meta property="og:description" content="k8s常用命令查看ststem命名空间中pod的信息123kubectl get pods --namespace kube-systemkubectl get pods -n kube-system  查看k8s中的服务信息1kubectl get service  查看k8s中kube-dns的服务信息1kubectl get svc --namespace kube-system  查看所有">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/picture/23.jpg">
+<meta property="article:published_time" content="2025-11-06T12:50:16.000Z">
+<meta property="article:modified_time" content="2026-02-04T10:20:38.848Z">
+<meta property="article:author" content="Mr.xu">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Kubernetes">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/picture/23.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "k8s 常用命令",
+  "url": "http://example.com/2025/11/06/k8s-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/",
+  "image": "http://example.com/img/picture/23.jpg",
+  "datePublished": "2025-11-06T12:50:16.000Z",
+  "dateModified": "2026-02-04T10:20:38.848Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Mr.xu",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/dong.png"><link rel="canonical" href="http://example.com/2025/11/06/k8s-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'k8s 常用命令',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/picture/23.jpg);"><nav id="nav"><span id="blog-info"><a id="site-name" href="/">🍀 <strong class="site-title-bold">东</strong></a><a class="nav-page-title" href="/"><span class="site-name">k8s 常用命令</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">k8s 常用命令</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-06T12:50:16.000Z" title="发表于 2025-11-06 20:50:16">2025-11-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-04T10:20:38.848Z" title="更新于 2026-02-04 18:20:38">2026-02-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/operations/">operations</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="k8s常用命令"><a href="#k8s常用命令" class="headerlink" title="k8s常用命令"></a>k8s常用命令</h1><h1 id="查看ststem命名空间中pod的信息"><a href="#查看ststem命名空间中pod的信息" class="headerlink" title="查看ststem命名空间中pod的信息"></a>查看ststem命名空间中pod的信息</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl get pods --namespace kube-system</span><br><span class="line"></span><br><span class="line">kubectl get pods -n kube-system</span><br></pre></td></tr></table></figure>
+
+<h1 id="查看k8s中的服务信息"><a href="#查看k8s中的服务信息" class="headerlink" title="查看k8s中的服务信息"></a>查看k8s中的服务信息</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl get service</span><br></pre></td></tr></table></figure>
+
+<h1 id="查看k8s中kube-dns的服务信息"><a href="#查看k8s中kube-dns的服务信息" class="headerlink" title="查看k8s中kube-dns的服务信息"></a>查看k8s中kube-dns的服务信息</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl get svc --namespace kube-system</span><br></pre></td></tr></table></figure>
+
+<h1 id="查看所有节点"><a href="#查看所有节点" class="headerlink" title="查看所有节点"></a>查看所有节点</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl get nodes</span><br></pre></td></tr></table></figure>
+
+<h1 id="查看node节点详细信息"><a href="#查看node节点详细信息" class="headerlink" title="查看node节点详细信息"></a>查看node节点详细信息</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl describe node node-1</span><br></pre></td></tr></table></figure>
+
+<h1 id="查看所有名称空间内的资源"><a href="#查看所有名称空间内的资源" class="headerlink" title="查看所有名称空间内的资源"></a>查看所有名称空间内的资源</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl get pods --all-namespaces</span><br></pre></td></tr></table></figure>
+
+<h1 id="同时查看多种资源信息"><a href="#同时查看多种资源信息" class="headerlink" title="同时查看多种资源信息"></a>同时查看多种资源信息</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl get pod,svc -n kube-system</span><br></pre></td></tr></table></figure>
+
+<h1 id="查看apiserver信息"><a href="#查看apiserver信息" class="headerlink" title="查看apiserver信息"></a>查看apiserver信息</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl cluster-info</span><br></pre></td></tr></table></figure>
+
+<h1 id="api查询"><a href="#api查询" class="headerlink" title="api查询"></a>api查询</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl api-versions</span><br></pre></td></tr></table></figure>
+
+<h1 id="创建yml文件时用来查看帮助的命令"><a href="#创建yml文件时用来查看帮助的命令" class="headerlink" title="创建yml文件时用来查看帮助的命令"></a>创建yml文件时用来查看帮助的命令</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl explain 类型名</span><br><span class="line">例如：kubectl explain namespace.spec</span><br></pre></td></tr></table></figure>
+
+<h1 id="创建yml文件资源的命令"><a href="#创建yml文件资源的命令" class="headerlink" title="创建yml文件资源的命令"></a>创建yml文件资源的命令</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f  yml文件名字</span><br></pre></td></tr></table></figure>
+
+<h1 id="查看某一个namespace"><a href="#查看某一个namespace" class="headerlink" title="查看某一个namespace"></a>查看某一个namespace</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl get namespace 名称空间的名字</span><br></pre></td></tr></table></figure>
+
+<h1 id="查看某个namespace的详细信息"><a href="#查看某个namespace的详细信息" class="headerlink" title="查看某个namespace的详细信息"></a>查看某个namespace的详细信息</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl describe namespace 名称空间的名字</span><br></pre></td></tr></table></figure>
+<h1 id="查看在哪个node节点"><a href="#查看在哪个node节点" class="headerlink" title="查看在哪个node节点"></a>查看在哪个node节点</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl get po -n qingfeng -o wide</span><br></pre></td></tr></table></figure>
+
+<h1 id="创建名称空间"><a href="#创建名称空间" class="headerlink" title="创建名称空间"></a>创建名称空间</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create namespace qingfeng</span><br></pre></td></tr></table></figure>
+
+<h1 id="查看默认命名空间信息"><a href="#查看默认命名空间信息" class="headerlink" title="查看默认命名空间信息"></a>查看默认命名空间信息</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl describe namespaces default </span><br></pre></td></tr></table></figure>
+
+<h1 id="删除默认空间资源限制"><a href="#删除默认空间资源限制" class="headerlink" title="删除默认空间资源限制"></a>删除默认空间资源限制</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl delete resourcequotas limit-qianfeng </span><br></pre></td></tr></table></figure>
+
+<h1 id="查看所有命名空间"><a href="#查看所有命名空间" class="headerlink" title="查看所有命名空间"></a>查看所有命名空间</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl get pod -A</span><br></pre></td></tr></table></figure>
+
+<h1 id="查看pod详细信息"><a href="#查看pod详细信息" class="headerlink" title="查看pod详细信息"></a>查看pod详细信息</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl describe pod pod-1</span><br></pre></td></tr></table></figure>
+
+<h1 id="在-master机器上进入容器"><a href="#在-master机器上进入容器" class="headerlink" title="在 master机器上进入容器"></a>在 master机器上进入容器</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl exec -it 元数据名字 -c 容器名字 -- bash</span><br><span class="line">kubectl exec -it pod-1 -c centos -- bash</span><br></pre></td></tr></table></figure>
+
+<h1 id="删除定义的容器"><a href="#删除定义的容器" class="headerlink" title="删除定义的容器"></a>删除定义的容器</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl delete -f yml名字 </span><br><span class="line">kubectl delete -f app.yml </span><br></pre></td></tr></table></figure>
+
+<h1 id="删除节点"><a href="#删除节点" class="headerlink" title="删除节点"></a>删除节点</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl delete node 节点名</span><br></pre></td></tr></table></figure>
+
+<h1 id="重置节点"><a href="#重置节点" class="headerlink" title="重置节点"></a>重置节点</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kubeadm reset</span><br><span class="line"></span><br><span class="line">注2：master上在reset之后需要删除如下文件</span><br><span class="line"><span class="comment"># rm -rf /var/lib/cni/ $HOME/.kube/config</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="命令补全"><a href="#命令补全" class="headerlink" title="命令补全"></a>命令补全</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum -y install bash-completion</span><br><span class="line">source /usr/share/bash-completion/bash_completion</span><br><span class="line">source &lt;(kubectl completion bash)</span><br><span class="line">echo &quot;source &lt;(kubectl completion bash)&quot; &gt;&gt; ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+<h1 id="重新生成token"><a href="#重新生成token" class="headerlink" title="重新生成token"></a>重新生成token</h1><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">重新生成方法：</span><br><span class="line">1. 重新生成新的token:</span><br><span class="line"><span class="section">[root@kub-k8s-master]</span><span class="comment"># kubeadm  token create</span></span><br><span class="line">kiyfhw.xiacqbch8o8fa8qj</span><br><span class="line"><span class="section">[root@kub-k8s-master]</span><span class="comment"># kubeadm  token list</span></span><br><span class="line">TOKEN                     TTL         EXPIRES                     USAGES                   DESCRIPTION   EXTRA GROUPS</span><br><span class="line">gvvqwk.hn56nlsgsv11mik6   &lt;invalid&gt;   2018-10-25T14:16:06+08:00   authentication,signing   &lt;none&gt;        system:bootstrappers:kubeadm:default-node-token</span><br><span class="line">kiyfhw.xiacqbch8o8fa8qj   23h         2018-10-27T06:39:24+08:00   authentication,signing   &lt;none&gt;        system:bootstrappers:kubeadm:default-node-token</span><br><span class="line"></span><br><span class="line">2. 获取ca证书sha256编码hash值:</span><br><span class="line"><span class="section">[root@kub-k8s-master]</span><span class="comment"># openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2&gt;/dev/null | openssl dgst -sha256 -hex | sed &#x27;s/^.* //&#x27;</span></span><br><span class="line">5417eb1b68bd4e7a4c82aded83abc55ec91bd601e45734d6aba85de8b1ebb057</span><br><span class="line"></span><br><span class="line">3. 节点加入集群:</span><br><span class="line">  kubeadm join 18.16.202.35:6443 --token kiyfhw.xiacqbch8o8fa8qj --discovery-token-ca-cert-hash sha256:5417eb1b68bd4e7a4c82aded83abc55ec91bd601e45734d6aba85de8b1ebb057</span><br><span class="line">几秒钟后，您应该注意到kubectl get nodes在主服务器上运行时输出中的此节点。</span><br><span class="line"></span><br><span class="line">上面的方法比较繁琐，一步到位：</span><br><span class="line"><span class="section">[root@kub-k8s-master ~]</span><span class="comment"># kubeadm token create --print-join-command</span></span><br><span class="line"></span><br><span class="line">第二种方法：</span><br><span class="line"><span class="section">[root@kub-k8s-master ~]</span><span class="comment"># token=$(kubeadm token generate)</span></span><br><span class="line">kubeadm token create $token --print-join-command <span class="attr">--ttl</span>=<span class="number">0</span></span><br><span class="line"></span><br><span class="line">然后在node节点执行</span><br><span class="line"><span class="section">[root@kub-k8s-node1 ~]</span><span class="comment"># kubeadm reset</span></span><br><span class="line"><span class="section">[root@kub-k8s-node1 ~]</span><span class="comment"># 执行生成得token</span></span><br></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Mr.xu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/11/06/k8s-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">http://example.com/2025/11/06/k8s-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">Dong_Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/Kubernetes/">Kubernetes</a></div><div class="post-share"><div class="social-share" data-image="/img/picture/23.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/11/06/kubeadm%E6%96%B9%E5%BC%8F%E9%83%A8%E7%BD%B2k8s%E9%9B%86%E7%BE%A4/" title="kubeadm方式部署k8s集群"><img class="cover" src="/img/picture/8.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">kubeadm方式部署k8s集群</div></div><div class="info-2"><div class="info-item-1">k8s集群部署 下载k8s谷歌镜像123456789docker pull k8s.gcr.io/kube-apiserver:v1.16.1docker pull k8s.gcr.io/kube-proxy:v1.16.1docker pull k8s.gcr.io/kube-controller-manager:v1.16.1docker pull k8s.gcr.io/kube-scheduler:v1.16.1docker pull k8s.gcr.io/etcd:3.3.15docker pull k8s.gcr.io/pause:3.1docker pull k8s.gcr.io/coredns:1.6.2谷歌的k8s镜像库下载不下来  特别说明 所有机器都必须有镜像 每次部署都会有版本更新，具体版本要求，运行初始化过程失败会有版本提示 kubeadm的版本和镜像的版本必须是对应的  准备环境123456789101112131415161718192021222324本地解析[root@master ~]# vim /etc/hosts10.31.162.133	k...</div></div></div></a><a class="pagination-related" href="/2025/11/06/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%8B%E8%BD%BD-php%E7%89%88%E6%9C%AC/" title="自定义下载--php版本"><img class="cover" src="/img/picture/17.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">自定义下载--php版本</div></div><div class="info-2"><div class="info-item-1">下载官网php123# wget http://rpms.remirepo.net/enterprise/remi-release-7.9.rpm# -Uvh带有下载更新的作用,会有多个版本rpm -Uvh http://rpms.remirepo.net/enterprise/remi-release-7.rpm 会在&#x2F;etc&#x2F;yum.repos.d目录生成许多remi的仓库，其中包含不同版本的php仓库123456[root@server ~]# cd /etc/yum.repos.d/[root@server yum.repos.d]# lsCentOS-Base.repo   remi-modular.repo  remi-php72.repo  remi-php81.repo  remi-safe.repoepel.repo          remi-php54.repo    remi-php73.repo  remi-php82.repoepel.repo.rpmnew   remi-php70.repo    remi-php74.repo ...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/11/06/K8s-%E5%85%AC%E7%BD%91%E9%83%A8%E7%BD%B2%EF%BC%88%E9%94%99%E8%AF%AF%E4%BF%AE%E6%94%B9%EF%BC%89/" title="K8s 公网部署（错误修改）"><img class="cover" src="/img/picture/7.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">K8s 公网部署（错误修改）</div></div><div class="info-2"><div class="info-item-1">k8s公网部署翻新之前的文章写的很乱的，多种安装方式  本次实验使用三台机器在不同地区进行部署，实验环境使用到香港服务器和杭州阿里云服务器，公网环境部署网络稳定性不能得到保证，本文部署方式仅供参考。  环境准备环境    软件 软件版本    Docker 20.0.1   Kubernetes 1.23.6   服务器规划    服务器主机名 服务器公网IP    master 149.104.23.134   node1 121.41.53.83   node2 116.62.32.149    解析hosts 12345cat &gt;&gt; /etc/hosts &lt;&lt; EOF149.104.23.134 master121.41.53.83 node1116.62.32.149 node2EOF  执行初始化脚本 1bash &lt;(curl -sSl https://git.7boe.top/root/Shell/-/raw/af8fc85f5d15181942fc791305dc64e94c32c36e/k8s.sh?inline=false)  Do...</div></div></div></a><a class="pagination-related" href="/2025/11/06/k8s-web%E5%B9%B3%E5%8F%B0%E9%83%A8%E7%BD%B2/" title="k8s--web平台部署"><img class="cover" src="/img/picture/16.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">k8s--web平台部署</div></div><div class="info-2"><div class="info-item-1">查看集群有没有启动正常123[root@k8s-1 k8s]# kubectl get node[root@k8s-1 k8s]# kubectl get pod -A    创建目录1mkdir k8s &amp;&amp;  cd k8s    下载官方yaml文件1wget https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml    查看并创建123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122...</div></div></div></a><a class="pagination-related" href="/2025/11/06/kubeadm%E6%96%B9%E5%BC%8F%E9%83%A8%E7%BD%B2k8s%E9%9B%86%E7%BE%A4/" title="kubeadm方式部署k8s集群"><img class="cover" src="/img/picture/8.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">kubeadm方式部署k8s集群</div></div><div class="info-2"><div class="info-item-1">k8s集群部署 下载k8s谷歌镜像123456789docker pull k8s.gcr.io/kube-apiserver:v1.16.1docker pull k8s.gcr.io/kube-proxy:v1.16.1docker pull k8s.gcr.io/kube-controller-manager:v1.16.1docker pull k8s.gcr.io/kube-scheduler:v1.16.1docker pull k8s.gcr.io/etcd:3.3.15docker pull k8s.gcr.io/pause:3.1docker pull k8s.gcr.io/coredns:1.6.2谷歌的k8s镜像库下载不下来  特别说明 所有机器都必须有镜像 每次部署都会有版本更新，具体版本要求，运行初始化过程失败会有版本提示 kubeadm的版本和镜像的版本必须是对应的  准备环境123456789101112131415161718192021222324本地解析[root@master ~]# vim /etc/hosts10.31.162.133	k...</div></div></div></a><a class="pagination-related" href="/2025/11/06/K8S%E9%83%A8%E7%BD%B2nginx/" title="K8S部署nginx"><img class="cover" src="/img/picture/8.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">K8S部署nginx</div></div><div class="info-2"><div class="info-item-1">创建目录1mkdir /opt/k8s/nginx-yaml  创建名称空间1kubectl create namespace nginx  创建deployment12345678910111213141516171819202122232425262728293031323334353637vim nginx-deploy.yamlapiVersion: apps/v1kind: Deploymentmetadata:  name: nginx-deployment  namespace: nginxspec:  selector:    matchLabels:      app: nginx  replicas: 3  template:    metadata:      labels:        app: nginx    spec:      containers:      - name: nginx        image: nginx:alpine        ports:        - containerPort: 80        volum...</div></div></div></a><a class="pagination-related" href="/2025/11/06/K8S%E9%83%A8%E7%BD%B2zentao/" title="K8S部署zentao"><img class="cover" src="/img/picture/19.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">K8S部署zentao</div></div><div class="info-2"><div class="info-item-1">环境准备1234服务器	  IP地址master	192.168.0.173node1	192.168.0.253node2	192.168.0.233  安装nfs安装nfs12345678910111213141516171819# master节点yum -y install  nfs-utils rpcbind# 创建共享目录mkdir -p /data/zentao# 启动nfs服务systemctl restart nfs-serversystemctl enabled nfs-serversystemctl restart rpcbindsystemctl enabled rpcbind# node节点yum -y install  nfs-utils rpcbindsystemctl restart nfs-serversystemctl enabled nfs-serversystemctl restart rpcbindsystemctl enabled rpcbind  挂载NFS123456789101112131415161718192021# 配置共享...</div></div></div></a><a class="pagination-related" href="/2025/11/06/K8S%E9%83%A8%E7%BD%B2gitlab-redis/" title="K8S部署gitlab-redis"><img class="cover" src="/img/picture/25.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">K8S部署gitlab-redis</div></div><div class="info-2"><div class="info-item-1">文章目录一、概述二、持久化存储安装–ebs三、创建命名空间四、创建文件夹，及账号密码五、Postgresql部署六、Redis部署七、GitLab部署八、命令总结九、访问GitLab 一、概述在k8s中部署gitlab，然后使用gitlab来实现代码打包到打镜像再到使用镜像自动生成容器服务的过程用到了reids、postgresql、gitlab，将三个应用配置好之后启动即可安装gitlab 二、持久化存储安装–ebs安装持久化存储工具，可以使用nfs或ebs 以ebs为例（使用起来好像简单些） 1. 安装ebs1kubectl apply -f https://openebs.github.io/charts/openebs-operator.yaml  2. 查看ebs集群服务查看集群的StorageClass 1kubectl get sc  3. 设置ebs为默认设置openobs-hostpath为default 1kubectl patch storageclass openebs-hostpath -p &#x27;&#123;&quot;metadata&quot...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Mr.xu</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xubaodong0511"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-author-social"><a href="https://github.com/xubaodong0511" target="_blank" rel="noopener"><i class="fab fa-github"></i></a><a href="https://gitee.com/xbd666" target="_blank" rel="noopener"><i class="fab fa-gitee"></i></a><a href="https://www.bilibili.com/" target="_blank" rel="noopener"><i class="fab fa-bilibili"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">相遇即是缘。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#k8s%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.</span> <span class="toc-text">k8s常用命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8Bststem%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E4%B8%ADpod%E7%9A%84%E4%BF%A1%E6%81%AF"><span class="toc-number">2.</span> <span class="toc-text">查看ststem命名空间中pod的信息</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8Bk8s%E4%B8%AD%E7%9A%84%E6%9C%8D%E5%8A%A1%E4%BF%A1%E6%81%AF"><span class="toc-number">3.</span> <span class="toc-text">查看k8s中的服务信息</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8Bk8s%E4%B8%ADkube-dns%E7%9A%84%E6%9C%8D%E5%8A%A1%E4%BF%A1%E6%81%AF"><span class="toc-number">4.</span> <span class="toc-text">查看k8s中kube-dns的服务信息</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9"><span class="toc-number">5.</span> <span class="toc-text">查看所有节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8Bnode%E8%8A%82%E7%82%B9%E8%AF%A6%E7%BB%86%E4%BF%A1%E6%81%AF"><span class="toc-number">6.</span> <span class="toc-text">查看node节点详细信息</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%89%80%E6%9C%89%E5%90%8D%E7%A7%B0%E7%A9%BA%E9%97%B4%E5%86%85%E7%9A%84%E8%B5%84%E6%BA%90"><span class="toc-number">7.</span> <span class="toc-text">查看所有名称空间内的资源</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%90%8C%E6%97%B6%E6%9F%A5%E7%9C%8B%E5%A4%9A%E7%A7%8D%E8%B5%84%E6%BA%90%E4%BF%A1%E6%81%AF"><span class="toc-number">8.</span> <span class="toc-text">同时查看多种资源信息</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8Bapiserver%E4%BF%A1%E6%81%AF"><span class="toc-number">9.</span> <span class="toc-text">查看apiserver信息</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#api%E6%9F%A5%E8%AF%A2"><span class="toc-number">10.</span> <span class="toc-text">api查询</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAyml%E6%96%87%E4%BB%B6%E6%97%B6%E7%94%A8%E6%9D%A5%E6%9F%A5%E7%9C%8B%E5%B8%AE%E5%8A%A9%E7%9A%84%E5%91%BD%E4%BB%A4"><span class="toc-number">11.</span> <span class="toc-text">创建yml文件时用来查看帮助的命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAyml%E6%96%87%E4%BB%B6%E8%B5%84%E6%BA%90%E7%9A%84%E5%91%BD%E4%BB%A4"><span class="toc-number">12.</span> <span class="toc-text">创建yml文件资源的命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%9F%90%E4%B8%80%E4%B8%AAnamespace"><span class="toc-number">13.</span> <span class="toc-text">查看某一个namespace</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%9F%90%E4%B8%AAnamespace%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BF%A1%E6%81%AF"><span class="toc-number">14.</span> <span class="toc-text">查看某个namespace的详细信息</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%9C%A8%E5%93%AA%E4%B8%AAnode%E8%8A%82%E7%82%B9"><span class="toc-number">15.</span> <span class="toc-text">查看在哪个node节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%90%8D%E7%A7%B0%E7%A9%BA%E9%97%B4"><span class="toc-number">16.</span> <span class="toc-text">创建名称空间</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E9%BB%98%E8%AE%A4%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E4%BF%A1%E6%81%AF"><span class="toc-number">17.</span> <span class="toc-text">查看默认命名空间信息</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E9%BB%98%E8%AE%A4%E7%A9%BA%E9%97%B4%E8%B5%84%E6%BA%90%E9%99%90%E5%88%B6"><span class="toc-number">18.</span> <span class="toc-text">删除默认空间资源限制</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%89%80%E6%9C%89%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4"><span class="toc-number">19.</span> <span class="toc-text">查看所有命名空间</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8Bpod%E8%AF%A6%E7%BB%86%E4%BF%A1%E6%81%AF"><span class="toc-number">20.</span> <span class="toc-text">查看pod详细信息</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9C%A8-master%E6%9C%BA%E5%99%A8%E4%B8%8A%E8%BF%9B%E5%85%A5%E5%AE%B9%E5%99%A8"><span class="toc-number">21.</span> <span class="toc-text">在 master机器上进入容器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E5%AE%9A%E4%B9%89%E7%9A%84%E5%AE%B9%E5%99%A8"><span class="toc-number">22.</span> <span class="toc-text">删除定义的容器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E8%8A%82%E7%82%B9"><span class="toc-number">23.</span> <span class="toc-text">删除节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%8D%E7%BD%AE%E8%8A%82%E7%82%B9"><span class="toc-number">24.</span> <span class="toc-text">重置节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E8%A1%A5%E5%85%A8"><span class="toc-number">25.</span> <span class="toc-text">命令补全</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%8D%E6%96%B0%E7%94%9F%E6%88%90token"><span class="toc-number">26.</span> <span class="toc-text">重新生成token</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vercel部署Twikoo评论系统"/></a><div class="content"><a class="title" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统">Vercel部署Twikoo评论系统</a><time datetime="2026-02-04T05:49:39.000Z" title="发表于 2026-02-04 13:49:39">2026-02-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客"><img src="/img/picture/9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="docker 创建halo博客"/></a><div class="content"><a class="title" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客">docker 创建halo博客</a><time datetime="2025-11-06T13:17:32.000Z" title="发表于 2025-11-06 21:17:32">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置"><img src="/img/picture/5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Centos网卡配置"/></a><div class="content"><a class="title" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置">Centos网卡配置</a><time datetime="2025-11-06T13:16:51.000Z" title="发表于 2025-11-06 21:16:51">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp"><img src="/img/picture/20.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="shell添加用户，计算，vsftp"/></a><div class="content"><a class="title" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp">shell添加用户，计算，vsftp</a><time datetime="2025-11-06T13:13:49.000Z" title="发表于 2025-11-06 21:13:49">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="系统工具箱--脚本"/></a><div class="content"><a class="title" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本">系统工具箱--脚本</a><time datetime="2025-11-06T13:13:16.000Z" title="发表于 2025-11-06 21:13:16">2025-11-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">© 2025 - 2026 By <span class="copyright-author">Mr.xu</span></span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div><script src="/js/snow.js"></script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://hexoblogtwikoovercel.vercel.app',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://hexoblogtwikoovercel.vercel.app',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://cdn.jsdelivr.net/npm/twikoo@1.6.44/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><meting-js server="netease" type="playlist" id="570548381" fixed="true" autoplay="true" theme="#000000" loop="all" order="random" preload="auto" volume="0.7" muted="true" ></meting-js><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- 只保留这一行--><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></body></html>

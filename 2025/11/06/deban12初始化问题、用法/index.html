@@ -1,0 +1,240 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>deban12初始化问题、用法 | Dong_Blog</title><meta name="author" content="Mr.xu"><meta name="copyright" content="Mr.xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="debian和ubuntu本身的vi编辑器是不支持用退格键删除和用上下左右键的所以要 1234567vi &#x2F;etc&#x2F;vim&#x2F;vimrc.tiny把 set compatible修改改为：set nocompatible加入一句：set backspace&#x3D;2 还有debian和ubuntu用不了ll命令直接分别到普通用户的家目录和root用户的家目录 有个隐藏文件.bashrc在他们的家目录下，r">
+<meta property="og:type" content="article">
+<meta property="og:title" content="deban12初始化问题、用法">
+<meta property="og:url" content="http://example.com/2025/11/06/deban12%E5%88%9D%E5%A7%8B%E5%8C%96%E9%97%AE%E9%A2%98%E3%80%81%E7%94%A8%E6%B3%95/index.html">
+<meta property="og:site_name" content="Dong_Blog">
+<meta property="og:description" content="debian和ubuntu本身的vi编辑器是不支持用退格键删除和用上下左右键的所以要 1234567vi &#x2F;etc&#x2F;vim&#x2F;vimrc.tiny把 set compatible修改改为：set nocompatible加入一句：set backspace&#x3D;2 还有debian和ubuntu用不了ll命令直接分别到普通用户的家目录和root用户的家目录 有个隐藏文件.bashrc在他们的家目录下，r">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/picture/7.jpg">
+<meta property="article:published_time" content="2025-11-06T13:03:38.000Z">
+<meta property="article:modified_time" content="2026-02-04T10:20:38.847Z">
+<meta property="article:author" content="Mr.xu">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Deban">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/picture/7.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "deban12初始化问题、用法",
+  "url": "http://example.com/2025/11/06/deban12%E5%88%9D%E5%A7%8B%E5%8C%96%E9%97%AE%E9%A2%98%E3%80%81%E7%94%A8%E6%B3%95/",
+  "image": "http://example.com/img/picture/7.jpg",
+  "datePublished": "2025-11-06T13:03:38.000Z",
+  "dateModified": "2026-02-04T10:20:38.847Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Mr.xu",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/dong.png"><link rel="canonical" href="http://example.com/2025/11/06/deban12%E5%88%9D%E5%A7%8B%E5%8C%96%E9%97%AE%E9%A2%98%E3%80%81%E7%94%A8%E6%B3%95/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'deban12初始化问题、用法',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/picture/7.jpg);"><nav id="nav"><span id="blog-info"><a id="site-name" href="/">🍀 <strong class="site-title-bold">东</strong></a><a class="nav-page-title" href="/"><span class="site-name">deban12初始化问题、用法</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">deban12初始化问题、用法</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-06T13:03:38.000Z" title="发表于 2025-11-06 21:03:38">2025-11-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-04T10:20:38.847Z" title="更新于 2026-02-04 18:20:38">2026-02-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/operations/">operations</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="debian和ubuntu本身的vi编辑器是不支持用退格键删除和用上下左右键的"><a href="#debian和ubuntu本身的vi编辑器是不支持用退格键删除和用上下左右键的" class="headerlink" title="debian和ubuntu本身的vi编辑器是不支持用退格键删除和用上下左右键的"></a>debian和ubuntu本身的vi编辑器是不支持用退格键删除和用上下左右键的</h1><p>所以要</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/vim/vimrc.tiny</span><br><span class="line"></span><br><span class="line">把 set compatible</span><br><span class="line"></span><br><span class="line">修改改为：set nocompatible</span><br><span class="line"></span><br><span class="line">加入一句：set backspace=2</span><br></pre></td></tr></table></figure>
+<h1 id="还有debian和ubuntu用不了ll命令"><a href="#还有debian和ubuntu用不了ll命令" class="headerlink" title="还有debian和ubuntu用不了ll命令"></a>还有debian和ubuntu用不了ll命令</h1><p>直接分别到普通用户的家目录和root用户的家目录</p>
+<p>有个隐藏文件<code>.bashrc</code>在他们的家目录下，root和用户的都要改，因为root和每个普通用户的家目录下都有一个 <code>.bashrc</code>的文件你改那个用户就生效那个</p>
+<p><code>vim  ~/.bashrc </code></p>
+<p>在打开的文件里面加入(你想让什么命令变成什么命令就像这样写就行，而为这里的root用户本身是文件夹不显示颜色的，容易一定要加下面那个让文件夹显示颜色的命令。要添加的命令最好是想要转化成的命令的本身是这个系统没有的;</p>
+<p>比如:debian本身没有ll这个命令的简写那就可以像这样添加)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">alias ll=&#x27;ls -l&#x27;</span><br><span class="line">alias tailf=&#x27;tail -f&#x27;</span><br><span class="line">alias dir=&#x27;dir --color=auto&#x27;（让文件夹显示颜色，这个在linux也可以用你但是这个命令其实是 Windows 系统下的命令别名设置，将 `dir` 命令设置为带颜色输出的别名。但是在 Linux 和 Unix 系统中，也可以使用这个别名命令，因为 Linux 和 Unix 系统的 Bash Shell 也支持 Windows 下的一些命令）</span><br><span class="line">alias ls=&#x27;ls --color=auto&#x27;   （让ls命令直接变成 ls --color命令,也是让文件夹显示颜色，但是linux下最好用这个）</span><br></pre></td></tr></table></figure>
+
+<p>！！！但是有个很重要的问题是改完一定要记得用命令 <code>source  ~/.bashrc</code>来重新加载<code>.bashrc</code>这个文件！！！</p>
+<h1 id="时间问题"><a href="#时间问题" class="headerlink" title="时间问题"></a>时间问题</h1><p>当发现桌面时间是对的时候，但是终端里文件时间不对，说明终端时间和系统默认时间不同，需要修改终端时间</p>
+<p>那么 先 输命令  <code>timedatectl</code>  查看当前终端的时间和时区对不对</p>
+<h1 id="如何取消vim选中文本自动进入可视化模式"><a href="#如何取消vim选中文本自动进入可视化模式" class="headerlink" title="如何取消vim选中文本自动进入可视化模式"></a>如何取消vim选中文本自动进入可视化模式</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd  /usr/share/vim/vim90   进入此目录</span><br><span class="line"></span><br><span class="line">vim defaults.vim   /mouse 查找此单词</span><br><span class="line"></span><br><span class="line">修改set mouse-=a</span><br></pre></td></tr></table></figure>
+<h1 id="查看版本及内核"><a href="#查看版本及内核" class="headerlink" title="查看版本及内核"></a>查看版本及内核</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/os-release </span><br><span class="line">或 uname -a</span><br></pre></td></tr></table></figure>
+
+<h1 id="查看apt的源"><a href="#查看apt的源" class="headerlink" title="查看apt的源"></a>查看apt的源</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/apt/sources.list</span><br><span class="line">或 vim /etc/apt/sources.list.d/</span><br></pre></td></tr></table></figure>
+
+<h1 id="apt下载源的指令"><a href="#apt下载源的指令" class="headerlink" title="apt下载源的指令"></a>apt下载源的指令</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">wget https://dev.mysql.com/get/mysql-apt-config_0.8.29-1_all.deb</span><br><span class="line">#下载dpkg的依赖</span><br><span class="line">apt install gnupg</span><br><span class="line">#需要用dpkg指令下载源</span><br><span class="line">dpkg -i mysql-apt-config_0.8.29-1_all.deb </span><br><span class="line">#下载好源需要用update指令更新西</span><br><span class="line">apt update</span><br><span class="line">#更新好后源就自动生效了，此时可以下载服务了</span><br><span class="line">apt install -y mysql-server</span><br><span class="line">#debian系统服务下安装后不需要启动，会自动启动，直接查看状态即可</span><br><span class="line">systemctl status mysql</span><br></pre></td></tr></table></figure>
+<h1 id="centos系统直接更改为debian系统"><a href="#centos系统直接更改为debian系统" class="headerlink" title="centos系统直接更改为debian系统"></a>centos系统直接更改为debian系统</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 下载的github网地址</span><br><span class="line">https://github.com/leitbogioro/Tools</span><br><span class="line"># 下载</span><br><span class="line">wget --no-check-certificate -qO InstallNET.sh &#x27;https://gitee.com/mb9e8j2/Tools/raw/master/Linux_reinstall/InstallNET.sh&#x27; &amp;&amp; chmod a+x InstallNET.sh</span><br><span class="line"># 指定版本、指定登入密码</span><br><span class="line">bash InstallNET.sh -debian 12 -passwd &quot;12345&quot;</span><br><span class="line"># 默认密码</span><br><span class="line">默认密码</span><br><span class="line">对于 Linux：LeitboGi0ro</span><br><span class="line">对于 Windows：Teddysun.com</span><br><span class="line">也可等直接进入系统后更改密码：passwd 用户名</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Mr.xu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/11/06/deban12%E5%88%9D%E5%A7%8B%E5%8C%96%E9%97%AE%E9%A2%98%E3%80%81%E7%94%A8%E6%B3%95/">http://example.com/2025/11/06/deban12%E5%88%9D%E5%A7%8B%E5%8C%96%E9%97%AE%E9%A2%98%E3%80%81%E7%94%A8%E6%B3%95/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">Dong_Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/Deban/">Deban</a></div><div class="post-share"><div class="social-share" data-image="/img/picture/7.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/11/06/%E8%B4%9F%E8%BD%BD%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E9%AA%8C/" title="负载高可用实验"><img class="cover" src="/img/picture/13.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">负载高可用实验</div></div><div class="info-2"><div class="info-item-1">清风 关闭防火墙123systemctl stop firewalldsystemctl disable firewalldsetenforce 0 配置环境1234567[root@localhost ~]# vim /etc/hosts192.168.116.121	 tomcat  安装tomcat192.168.116.122	 php     安装php-fpm、nginx192.168.116.131	 nginx1  安装nginx192.168.116.132	 nginx2  安装nginx192.168.116.111	 master  安装lvs、keepalived192.168.116.156	 backup  安装lvs、keepalived`` 1、安装tomcat步骤–192.168.116.12112345678910111213141516171819202122232425261、安装 JDK（java）1.上传jdk到服务器中，安装jdk[root@localhost ~]# mkdir /application   #创建工作目录[roo...</div></div></div></a><a class="pagination-related" href="/2025/11/06/docker-%E4%B8%8B%E8%BD%BD%E5%8F%8A%E9%85%8D%E7%BD%AE%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E5%99%A8/" title="docker 下载及配置镜像加速器"><img class="cover" src="/img/picture/22.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">docker 下载及配置镜像加速器</div></div><div class="info-2"><div class="info-item-1">docker下载安装卸载旧版本12345678yum remove docker \                  docker-client \                  docker-client-latest \                  docker-common \                  docker-latest \                  docker-latest-logrotate \                  docker-logrotate \                  docker-engine 安装依赖包1sudo yum install -y yum-utils 设置镜像仓库1234# 1）官方镜像源sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo# 2）阿里云镜像源sudo yum-config-manager --add-repo https://mirrors...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/11/06/gitee-%E4%BB%93%E5%BA%93%E5%88%9B%E5%BB%BA%E5%8F%8A%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6/" title="gitee 仓库创建及上传文件"><img class="cover" src="/img/picture/16.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">gitee 仓库创建及上传文件</div></div><div class="info-2"><div class="info-item-1">首先由个gitee的账号git 全局设置12git config --global user.name&quot;名字&quot;git config --global user.email &quot;邮箱&quot;  创建git仓库12345678mkdir qingfengcd qingfenggit inittouch README.mdgit add README.mdgit commit -m &quot;first commit&quot;git remote add origin https://gitee.com/xbd666/qingfeng.gitgit push -u origin &quot;master&quot; 备注：也可以在搜索栏那里直接拉取，就不需要终端命令设置了 已有仓库的123cd existing_git_repogit remote add origin https://gitee.com/xbd666/qingfeng.gitgit push -u origin &quot;master&quot;  拉取1git pull ori...</div></div></div></a><a class="pagination-related" href="/2025/11/06/docker-%E5%81%8C%E4%BE%9D-%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2/" title="docker-偌依 项目部署"><img class="cover" src="/img/picture/21.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">docker-偌依 项目部署</div></div><div class="info-2"><div class="info-item-1">配置环境12345678配置jenkins与前端服务器与git连接10.31.162.25	nginx-server10.31.162.32	java-server10.31.162.35	jenkinx-server10.31.162.39	mysql-redis-server10.31.162.124	haobor-server10.31.162.125	git-server  安装前端服务器12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959610.31.162.25	nginx-server安装docker[root@nginx-server ~]# yum install -y yum-utils device-mapper-persistent-data lvm...</div></div></div></a><a class="pagination-related" href="/2025/11/06/K8S%E9%83%A8%E7%BD%B2gitlab-redis/" title="K8S部署gitlab-redis"><img class="cover" src="/img/picture/25.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">K8S部署gitlab-redis</div></div><div class="info-2"><div class="info-item-1">文章目录一、概述二、持久化存储安装–ebs三、创建命名空间四、创建文件夹，及账号密码五、Postgresql部署六、Redis部署七、GitLab部署八、命令总结九、访问GitLab 一、概述在k8s中部署gitlab，然后使用gitlab来实现代码打包到打镜像再到使用镜像自动生成容器服务的过程用到了reids、postgresql、gitlab，将三个应用配置好之后启动即可安装gitlab 二、持久化存储安装–ebs安装持久化存储工具，可以使用nfs或ebs 以ebs为例（使用起来好像简单些） 1. 安装ebs1kubectl apply -f https://openebs.github.io/charts/openebs-operator.yaml  2. 查看ebs集群服务查看集群的StorageClass 1kubectl get sc  3. 设置ebs为默认设置openobs-hostpath为default 1kubectl patch storageclass openebs-hostpath -p &#x27;&#123;&quot;metadata&quot...</div></div></div></a><a class="pagination-related" href="/2025/11/06/gitee-%E9%83%A8%E7%BD%B2%E5%8F%8A%E6%93%8D%E4%BD%9C%E6%AD%A5%E9%AA%A4/" title="gitee 部署及操作步骤"><img class="cover" src="/img/picture/14.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">gitee 部署及操作步骤</div></div><div class="info-2"><div class="info-item-1">gitee 部署及操作步骤 配置密钥客户端12# 获取密钥[root@git-client ~]#ssh-keygen  配置gitee密钥1234567# 配置gitee密钥[root@git-client ~]#cat .ssh/id_rsa.pubssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDMKR4f2AfwFMbd7YtOHPzOHcIuMY5OjQbt5jnx8BRm8xDAdFDG5XHNW39APOrXxc5AAD6YOoAvIxxw+lLxDrvbR6KKKllZb6Y7XJn1Y7G4r8+beBkz0jQpK1haG39pJwCAcZenwRhwy0xa9Z7PzKmTPBblf9kmR7PTuT6ndxuWx8ekIqLil0eT1BbXc3sO7zRTyIJPiLsWn4VlLdgZkU6UDw4R0iMlSdpEL3f9NfxztWNjp/8vdG6tq5DXmEKcIjI0grl9KNRcRc+PdfaUXaUPjf1MS5zCmuECg0T+1dcKS1q8KQUOIYaG3vyFZ4GqZKxn2OcuWYanr4...</div></div></div></a><a class="pagination-related" href="/2025/11/05/EMQX%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" title="EMQX集群部署"><img class="cover" src="/img/picture/27.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">EMQX集群部署</div></div><div class="info-2"><div class="info-item-1">emqx–集群作用EMQX（Erlang MQTT Broker）是一个高性能、可扩展的开源 MQTT 消息代理服务器。它基于 Erlang&#x2F;OTP 开发，专为大规模物联网（IoT）应用设计。EMQX 的核心作用和功能如下：  消息代理：EMQX 作为 MQTT 消息代理，负责在发布者和订阅者之间路由消息。它支持 MQTT 协议的所有功能，包括 QoS（Quality of Service）级别、持久会话和遗嘱消息等。 设备连接管理：EMQX 可以管理大量 IoT 设备的连接，支持数百万级别的并发连接，适用于大规模的物联网应用。 数据分发：EMQX 能够高效地分发数据，确保消息在发布者和订阅者之间的快速传递，支持多种消息格式和传输协议。 扩展性：EMQX 支持插件机制，用户可以根据需求扩展其功能，如数据持久化、规则引擎、认证和授权等。  主要功能  支持多种协议  MQTT&#x2F;MQTT-SN：原生支持 MQTT 3.1.1 和 MQTT 5.0 协议。 HTTP&#x2F;HTTPS：支持通过 HTTP&#x2F;HTTPS 协议进行消息发布和订阅。 CoAP：...</div></div></div></a><a class="pagination-related" href="/2025/11/06/%E5%B8%B8%E7%94%A8%E8%84%9A%E6%9C%AC/" title="常用脚本"><img class="cover" src="/img/picture/12.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">常用脚本</div></div><div class="info-2"><div class="info-item-1">IP质量检测1bash &lt;(curl -Ls IP.Check.Place)  融合怪1curl -L https://gitlab.com/spiritysdx/za/-/raw/main/ecs.sh -o ecs.sh &amp;&amp; chmod +x ecs.sh &amp;&amp; bash ecs.sh  线路测试1curl https://raw.githubusercontent.com/zhucaidan/mtr_trace/main/mtr_trace.sh|bash  # 检测回程脚本  综合工具箱1wget -O box.sh https://raw.githubusercontent.com/BlueSkyXN/SKY-BOX/main/box.sh &amp;&amp; chmod +x box.sh &amp;&amp; clear &amp;&amp; ./box.sh++  VPS工具箱1curl -fsSL https://raw.githubusercontent.com/eooce/ssh_tool/main/ssh_tool...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Mr.xu</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xubaodong0511"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-author-social"><a href="https://github.com/xubaodong0511" target="_blank" rel="noopener"><i class="fab fa-github"></i></a><a href="https://gitee.com/xbd666" target="_blank" rel="noopener"><i class="fab fa-gitee"></i></a><a href="https://www.bilibili.com/" target="_blank" rel="noopener"><i class="fab fa-bilibili"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">相遇即是缘。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#debian%E5%92%8Cubuntu%E6%9C%AC%E8%BA%AB%E7%9A%84vi%E7%BC%96%E8%BE%91%E5%99%A8%E6%98%AF%E4%B8%8D%E6%94%AF%E6%8C%81%E7%94%A8%E9%80%80%E6%A0%BC%E9%94%AE%E5%88%A0%E9%99%A4%E5%92%8C%E7%94%A8%E4%B8%8A%E4%B8%8B%E5%B7%A6%E5%8F%B3%E9%94%AE%E7%9A%84"><span class="toc-number">1.</span> <span class="toc-text">debian和ubuntu本身的vi编辑器是不支持用退格键删除和用上下左右键的</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%98%E6%9C%89debian%E5%92%8Cubuntu%E7%94%A8%E4%B8%8D%E4%BA%86ll%E5%91%BD%E4%BB%A4"><span class="toc-number">2.</span> <span class="toc-text">还有debian和ubuntu用不了ll命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E9%97%AE%E9%A2%98"><span class="toc-number">3.</span> <span class="toc-text">时间问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%8F%96%E6%B6%88vim%E9%80%89%E4%B8%AD%E6%96%87%E6%9C%AC%E8%87%AA%E5%8A%A8%E8%BF%9B%E5%85%A5%E5%8F%AF%E8%A7%86%E5%8C%96%E6%A8%A1%E5%BC%8F"><span class="toc-number">4.</span> <span class="toc-text">如何取消vim选中文本自动进入可视化模式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%89%88%E6%9C%AC%E5%8F%8A%E5%86%85%E6%A0%B8"><span class="toc-number">5.</span> <span class="toc-text">查看版本及内核</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8Bapt%E7%9A%84%E6%BA%90"><span class="toc-number">6.</span> <span class="toc-text">查看apt的源</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#apt%E4%B8%8B%E8%BD%BD%E6%BA%90%E7%9A%84%E6%8C%87%E4%BB%A4"><span class="toc-number">7.</span> <span class="toc-text">apt下载源的指令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#centos%E7%B3%BB%E7%BB%9F%E7%9B%B4%E6%8E%A5%E6%9B%B4%E6%94%B9%E4%B8%BAdebian%E7%B3%BB%E7%BB%9F"><span class="toc-number">8.</span> <span class="toc-text">centos系统直接更改为debian系统</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vercel部署Twikoo评论系统"/></a><div class="content"><a class="title" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统">Vercel部署Twikoo评论系统</a><time datetime="2026-02-04T05:49:39.000Z" title="发表于 2026-02-04 13:49:39">2026-02-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客"><img src="/img/picture/9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="docker 创建halo博客"/></a><div class="content"><a class="title" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客">docker 创建halo博客</a><time datetime="2025-11-06T13:17:32.000Z" title="发表于 2025-11-06 21:17:32">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置"><img src="/img/picture/5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Centos网卡配置"/></a><div class="content"><a class="title" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置">Centos网卡配置</a><time datetime="2025-11-06T13:16:51.000Z" title="发表于 2025-11-06 21:16:51">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp"><img src="/img/picture/20.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="shell添加用户，计算，vsftp"/></a><div class="content"><a class="title" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp">shell添加用户，计算，vsftp</a><time datetime="2025-11-06T13:13:49.000Z" title="发表于 2025-11-06 21:13:49">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="系统工具箱--脚本"/></a><div class="content"><a class="title" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本">系统工具箱--脚本</a><time datetime="2025-11-06T13:13:16.000Z" title="发表于 2025-11-06 21:13:16">2025-11-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">© 2025 - 2026 By <span class="copyright-author">Mr.xu</span></span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div><script src="/js/snow.js"></script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://hexoblogtwikoovercel.vercel.app',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://hexoblogtwikoovercel.vercel.app',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://cdn.jsdelivr.net/npm/twikoo@1.6.44/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><meting-js server="netease" type="playlist" id="570548381" fixed="true" autoplay="true" theme="#000000" loop="all" order="random" preload="auto" volume="0.7" muted="true" ></meting-js><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- 只保留这一行--><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></body></html>

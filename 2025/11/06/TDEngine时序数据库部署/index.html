@@ -1,0 +1,397 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TDEngine时序数据库部署 | Dong_Blog</title><meta name="author" content="Mr.xu"><meta name="copyright" content="Mr.xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="TDEngine–集群作用TDEngine 是一种高性能、分布式、时间序列数据库（TSDB），专门为物联网（IoT）、工业互联网、车联网、金融、IT 运维监控等领域设计。它具有高效的数据写入和查询性能，适合处理大规模的时间序列数据。以下是 TDEngine 的主要作用和用途：  物联网（IoT）数据存储和分析:  TDEngine 能够高效地存储和处理来自各种 IoT 设备和传感器的大量时间序列数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TDEngine时序数据库部署">
+<meta property="og:url" content="http://example.com/2025/11/06/TDEngine%E6%97%B6%E5%BA%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:site_name" content="Dong_Blog">
+<meta property="og:description" content="TDEngine–集群作用TDEngine 是一种高性能、分布式、时间序列数据库（TSDB），专门为物联网（IoT）、工业互联网、车联网、金融、IT 运维监控等领域设计。它具有高效的数据写入和查询性能，适合处理大规模的时间序列数据。以下是 TDEngine 的主要作用和用途：  物联网（IoT）数据存储和分析:  TDEngine 能够高效地存储和处理来自各种 IoT 设备和传感器的大量时间序列数">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/picture/16.jpg">
+<meta property="article:published_time" content="2025-11-06T08:11:01.000Z">
+<meta property="article:modified_time" content="2026-02-04T10:20:38.846Z">
+<meta property="article:author" content="Mr.xu">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="TDengine">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/picture/16.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "TDEngine时序数据库部署",
+  "url": "http://example.com/2025/11/06/TDEngine%E6%97%B6%E5%BA%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/",
+  "image": "http://example.com/img/picture/16.jpg",
+  "datePublished": "2025-11-06T08:11:01.000Z",
+  "dateModified": "2026-02-04T10:20:38.846Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Mr.xu",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/dong.png"><link rel="canonical" href="http://example.com/2025/11/06/TDEngine%E6%97%B6%E5%BA%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'TDEngine时序数据库部署',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/picture/16.jpg);"><nav id="nav"><span id="blog-info"><a id="site-name" href="/">🍀 <strong class="site-title-bold">东</strong></a><a class="nav-page-title" href="/"><span class="site-name">TDEngine时序数据库部署</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">TDEngine时序数据库部署</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-06T08:11:01.000Z" title="发表于 2025-11-06 16:11:01">2025-11-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-04T10:20:38.846Z" title="更新于 2026-02-04 18:20:38">2026-02-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/operations/">operations</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h3 id="TDEngine–集群"><a href="#TDEngine–集群" class="headerlink" title="TDEngine–集群"></a>TDEngine–集群</h3><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>TDEngine 是一种高性能、分布式、时间序列数据库（TSDB），专门为物联网（IoT）、工业互联网、车联网、金融、IT 运维监控等领域设计。它具有高效的数据写入和查询性能，适合处理大规模的时间序列数据。以下是 TDEngine 的主要作用和用途：</p>
+<ol>
+<li><p><strong>物联网（IoT）数据存储和分析</strong>:</p>
+<ul>
+<li>TDEngine 能够高效地存储和处理来自各种 IoT 设备和传感器的大量时间序列数据，支持实时数据写入和复杂查询。</li>
+</ul>
+</li>
+<li><p><strong>工业互联网</strong>:</p>
+<ul>
+<li>在工业互联网应用中，TDEngine 可以用于存储和分析工业设备的运行数据、传感器数据、生产线数据等，帮助进行设备监控、预测性维护和优化生产流程。</li>
+</ul>
+</li>
+<li><p><strong>车联网</strong>:</p>
+<ul>
+<li>TDEngine 能够存储和处理车辆的运行数据、位置数据、传感器数据等，支持实时数据分析和查询，适用于车联网应用中的数据管理和分析。</li>
+</ul>
+</li>
+<li><p><strong>金融数据分析</strong>:</p>
+<ul>
+<li>在金融领域，TDEngine 可以用于存储和分析股票、期货、外汇等金融市场的时间序列数据，支持高频交易数据的存储和实时查询分析。</li>
+</ul>
+</li>
+<li><p><strong>IT 运维监控</strong>:</p>
+<ul>
+<li>TDEngine 适用于 IT 运维监控场景，可以存储和分析服务器性能数据、应用程序日志、网络流量数据等，帮助运维人员进行系统监控和故障排除。</li>
+</ul>
+</li>
+<li><p><strong>高效的数据写入和查询</strong>:</p>
+<ul>
+<li>TDEngine 具有高效的数据写入和查询性能，能够处理每秒数百万条数据的写入和查询操作，适合大规模时间序列数据的存储和分析。</li>
+</ul>
+</li>
+<li><p><strong>分布式架构</strong>:</p>
+<ul>
+<li>TDEngine 采用分布式架构，支持数据的水平扩展和高可用性，能够处理海量数据并保证系统的稳定性和可靠性。</li>
+</ul>
+</li>
+<li><p><strong>内置计算能力</strong>:</p>
+<ul>
+<li>TDEngine 提供了丰富的内置计算能力，包括聚合计算、统计分析、数据过滤等，支持复杂的查询和数据分析操作。</li>
+</ul>
+</li>
+<li><p><strong>低存储成本</strong>:</p>
+<ul>
+<li>TDEngine 采用高效的数据压缩算法，能够显著降低存储成本，同时保证数据的高效查询和分析。</li>
+</ul>
+</li>
+<li><p><strong>支持多种数据接口</strong>:</p>
+<ul>
+<li>TDEngine 支持多种数据接口和协议，包括 SQL、RESTful API、MQTT 等，方便与各种应用和系统进行集成。</li>
+</ul>
+</li>
+<li><p><strong>实时流处理</strong>:</p>
+<ul>
+<li>TDEngine 支持实时流处理，可以对流数据进行实时计算和分析，适用于需要实时数据处理的应用场景。</li>
+</ul>
+</li>
+</ol>
+<p>综上所述，TDEngine 是一种专门为时间序列数据设计的高性能数据库，适合处理大规模、高频率的时间序列数据，广泛应用于物联网、工业互联网、车联网、金融、IT 运维监控等领域。</p>
+<h4 id="资源需求"><a href="#资源需求" class="headerlink" title="资源需求"></a>资源需求</h4><ul>
+<li><strong>CPU</strong>: 4 核 </li>
+<li><strong>内存</strong>:  8 GB </li>
+<li><strong>存储</strong>: 1T</li>
+<li><strong>节点</strong>：2</li>
+</ul>
+<h4 id="网络端口"><a href="#网络端口" class="headerlink" title="网络端口"></a>网络端口</h4><ul>
+<li><p><strong>客户端连接端口</strong></p>
+<ul>
+<li><p><strong>默认端口</strong>: 6030</p>
+</li>
+<li><p><strong>用途</strong>: 客户端（如应用程序、用户）通过该端口连接到 TDEngine 进行数据查询和写入操作。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>管理端口</strong></p>
+<ul>
+<li><strong>默认端口</strong>: 6041</li>
+<li><strong>用途</strong>: 用于 TDEngine 管理工具（如 taos）连接到服务器进行管理操作。</li>
+</ul>
+</li>
+<li><p><strong>数据传输端口</strong></p>
+<ul>
+<li><strong>默认端口</strong>: 6042</li>
+<li><strong>用途</strong>: 用于集群内部节点之间的数据传输和同步。</li>
+</ul>
+</li>
+<li><p><strong>RESTful API 端口</strong></p>
+<ul>
+<li><strong>默认端口</strong>: 6043</li>
+<li><strong>用途</strong>: 提供 RESTful API 服务，允许通过 HTTP 协议进行数据操作。</li>
+</ul>
+</li>
+<li><p><strong>MQTT 端口</strong></p>
+<ul>
+<li><strong>默认端口</strong>: 6044</li>
+<li><strong>用途</strong>: 支持 MQTT 协议，用于物联网设备的数据接入。</li>
+</ul>
+</li>
+</ul>
+<h4 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h4><pre><code>#下载地址
+https://docs.taosdata.com/get-started/package/#!
+从列表中下载获得 tar.gz 安装包；
+TDengine-server-3.1.1.0-Linux-x64.tar.gz (126.7 M)      # Linux客户端下载
+# 创建目录
+mkdir -p /data/tasosi
+# 解压到指定目录
+tar xzf TDengine-server-3.1.1.0-Linux-x64.tar.gz -C /data/tasosi/
+# 切换目录
+cd /data/tasosi/TDengine-server-3.1.1.0/
+# 启动
+./install.sh -e no
+# install.sh 安装脚本在执行过程中，会通过命令行交互界面询问一些配置信息。如果希望采取无交互安装方式，那么可以运行 ./install.sh -e no。运行 ./install.sh -h 指令可以查看所有参数的详细说明信息。
+# 安装是交互式操作
+1、提供机器的 IP 地址：#填写本机的IP
+2、当安装第一个节点时，出现 Enter FQDN: 提示的时候，不需要输入任何内容。只有当安装第二个或以后更多的节点时，才需要输入已有集群中任何一个可用节点的 FQDN，支持该新节点加入集群。当然也可以不输入，而是在新节点启动前，配置到新节点的配置文件中：#直接回车
+3、选择是否输入电子邮件地址，选择跳过： #直接回车
+
+# 先不要启动--添加好集群再启动-单节点直接启动
+vim  /etc/taos/taos.cfg    # 此文件下可以修改端口，增加节点，修改数据、日记的存储目录
+# firstEp     hostname:6030  改为  firstEp       10.100.40.171:6030
+fqdn          10.100.40.171  改为  写本机的IP地址
+logDir                    /data/tasosi/log
+dataDir                   /data/tasosi/data
+
+#创建目录并赋予权限
+mkdir -p /data/tasosi/data
+mkdir -p /data/tasosi/log
+chown -R taos:taos /data/tasosi/data
+chown -R taos:taos /data/tasosi/log
+chmod -R 755 /data/tasosi/*
+# 复制原有数据--如果是有数据的前提下
+# cp -r /var/lib/taos /data/tasosi/data
+# 所有集群的配置文件都改好后-从节点一按顺序启动
+systemctl start taosd
+# 所有的启动后在（主节点）上添加集群
+taos
+show dnodes;
+create dnode &quot;10.100.40.172&quot;;  #若有多个添加多次IP，从节点的IP 
+# 验证
+show dnodes;   # 此时就可以看到多台集群信息了
+
+# 删除节点
+DROP DNODE &quot;fqdn:port&quot;;
+或
+DROP DNODE dnodeId;
+
+扩展：
+# 启动命令分为
+systemctl start taosd
+systemctl start taosadapter
+systemctl start taoskeeper
+systemctl start taos-explorer
+
+systemctl stop taosd
+systemctl restart taosd
+systemctl status taosd
+如果系统中不支持 systemd，也可以用手动运行 /usr/local/taos/bin/taosd 方式启动 TDengine 服务
+# 进入命令
+taos
+# 在 TDengine CLI 中，用户可以通过 SQL 命令来创建/删除数据库、表等，并进行数据库（Database）插入查询操作。在终端中运行的 SQL 语句需要以分号（;）结束来运行。示例：
+CREATE DATABASE demo;
+USE demo;
+CREATE TABLE t (ts TIMESTAMP, speed INT);
+INSERT INTO t VALUES (&#39;2019-07-15 00:00:00&#39;, 10);
+INSERT INTO t VALUES (&#39;2019-07-15 01:00:00&#39;, 20);
+SELECT * FROM t;
+           ts            |    speed    |
+========================================
+ 2019-07-15 00:00:00.000 |          10 |
+ 2019-07-15 01:00:00.000 |          20 |
+Query OK, 2 row(s) in set (0.003128s)
+# 修改端口号
+vim /etc/taos/taos.cfg
+# 此文件下可以修改端口，增加节点，修改数据、日记的存储目录
+</code></pre>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Mr.xu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/11/06/TDEngine%E6%97%B6%E5%BA%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/">http://example.com/2025/11/06/TDEngine%E6%97%B6%E5%BA%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E7%BD%B2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">Dong_Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/TDengine/">TDengine</a></div><div class="post-share"><div class="social-share" data-image="/img/picture/16.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/11/06/MongoDB%E9%83%A8%E7%BD%B2/" title="MongoDB部署"><img class="cover" src="/img/picture/15.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">MongoDB部署</div></div><div class="info-2"><div class="info-item-1">MongoDB作用MongoDB 是一种开源的文档型 NoSQL 数据库，采用 BSON（二进制 JSON）格式存储数据。以下是 MongoDB 的主要作用和用途：  灵活的数据模型:  MongoDB 使用文档存储数据，文档之间可以有不同的结构。这种灵活性使得 MongoDB 非常适合处理不规则和变化频繁的数据。   大数据和实时分析:  MongoDB 的高性能和扩展性使其适合处理大数据和实时分析应用。它能够快速存储和查询大量数据，并支持实时数据处理。   内容管理和目录服务:  MongoDB 常用于内容管理系统（CMS）和目录服务，适合存储和管理大量的文档、图像、视频等非结构化数据。   物联网（IoT）和传感器数据:  由于 MongoDB 可以高效地存储和处理大量的时间序列数据，它非常适合物联网应用中的传感器数据存储和分析。   移动应用和社交网络:  MongoDB 的灵活性和高性能使其成为移动应用和社交网络的理想选择，能够处理用户生成的内容、用户个人资料、消息和活动流等数据。   电子商务:  在电子商务平台中，MongoDB 可以用于存储产品目录、用户数据、订单...</div></div></div></a><a class="pagination-related" href="/2025/11/06/Nacos%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" title="Nacos集群部署"><img class="cover" src="/img/picture/21.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Nacos集群部署</div></div><div class="info-2"><div class="info-item-1">Nacos–集群作用Nacos（Dynamic Naming and Configuration Service）是阿里巴巴开源的一个动态服务发现、配置管理和服务管理平台。它主要用于微服务架构中的服务注册与发现、分布式配置管理和动态 DNS 服务。Nacos 的核心功能和作用如下：  服务发现和注册   服务注册：Nacos 允许服务实例在启动时向 Nacos 注册自己的信息（如 IP 地址、端口、服务名称等），从而使其他服务能够发现它们。 服务发现：服务消费者可以通过 Nacos 查询到所需服务的实例信息，从而实现服务间的调用。Nacos 支持多种服务发现机制，如 DNS 和 HTTP。   分布式配置管理   配置管理：Nacos 提供了集中化的配置管理功能，允许开发者将应用配置存储在 Nacos 服务器上。配置的变更可以实时推送到各个服务实例，避免了因配置变更而重启服务的需求。 动态配置：通过 Nacos，配置可以在运行时动态更新，服务实例会自动感知配置的变化并做出相应调整。   动态 DNS 服务   动态 DNS：Nacos 支持动态 DNS 服务，可以将服务名解析为服...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/11/06/%E8%B4%9F%E8%BD%BD%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E9%AA%8C/" title="负载高可用实验"><img class="cover" src="/img/picture/13.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">负载高可用实验</div></div><div class="info-2"><div class="info-item-1">清风 关闭防火墙123systemctl stop firewalldsystemctl disable firewalldsetenforce 0 配置环境1234567[root@localhost ~]# vim /etc/hosts192.168.116.121	 tomcat  安装tomcat192.168.116.122	 php     安装php-fpm、nginx192.168.116.131	 nginx1  安装nginx192.168.116.132	 nginx2  安装nginx192.168.116.111	 master  安装lvs、keepalived192.168.116.156	 backup  安装lvs、keepalived`` 1、安装tomcat步骤–192.168.116.12112345678910111213141516171819202122232425261、安装 JDK（java）1.上传jdk到服务器中，安装jdk[root@localhost ~]# mkdir /application   #创建工作目录[roo...</div></div></div></a><a class="pagination-related" href="/2025/11/06/K8S%E9%83%A8%E7%BD%B2gitlab-redis/" title="K8S部署gitlab-redis"><img class="cover" src="/img/picture/25.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">K8S部署gitlab-redis</div></div><div class="info-2"><div class="info-item-1">文章目录一、概述二、持久化存储安装–ebs三、创建命名空间四、创建文件夹，及账号密码五、Postgresql部署六、Redis部署七、GitLab部署八、命令总结九、访问GitLab 一、概述在k8s中部署gitlab，然后使用gitlab来实现代码打包到打镜像再到使用镜像自动生成容器服务的过程用到了reids、postgresql、gitlab，将三个应用配置好之后启动即可安装gitlab 二、持久化存储安装–ebs安装持久化存储工具，可以使用nfs或ebs 以ebs为例（使用起来好像简单些） 1. 安装ebs1kubectl apply -f https://openebs.github.io/charts/openebs-operator.yaml  2. 查看ebs集群服务查看集群的StorageClass 1kubectl get sc  3. 设置ebs为默认设置openobs-hostpath为default 1kubectl patch storageclass openebs-hostpath -p &#x27;&#123;&quot;metadata&quot...</div></div></div></a><a class="pagination-related" href="/2025/01/06/%E6%B8%85%E9%A3%8E%E5%B7%A5%E5%85%B7%E7%AE%B1/" title="清风工具箱"><img class="cover" src="/img/picture/14.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-06</div><div class="info-item-2">清风工具箱</div></div><div class="info-2"><div class="info-item-1">本文介绍如何使用脚本快速的一键部署服务（工具箱一键脚本、添加swap分区、安装前&#x2F;后端软件包一键脚本）   工具箱一键脚本1bash &lt;(curl -sSL https://gitee.com/xbd666/qingfeng/raw/master/toolbox.sh) 1bash &lt;(curl -sSL https://gitee.com/xbd666/kunlun/raw/master/kunlun_tool.sh)  脚本一键安装MySQL&#x2F;mariadb,并更改密码1bash &lt;(curl -sSL https://gitee.com/xbd666/qingfeng/raw/master/MySQL_install.sh)  添加swap分区–调用gitee仓库1bash &lt;(curl -sSL https://gitee.com/xbd666/qingfeng/raw/master/swap.sh)  安装前&#x2F;后端软件包一键脚本1bash &lt;(curl -sSL https://gitee.com/xbd666...</div></div></div></a><a class="pagination-related" href="/2025/11/06/%E5%81%8C%E4%BE%9D-%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2%E5%8F%8A%E4%B8%8A%E7%BA%BF%E6%AD%A5%E9%AA%A4/" title="偌依 项目部署及上线步骤"><img class="cover" src="/img/picture/21.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">偌依 项目部署及上线步骤</div></div><div class="info-2"><div class="info-item-1">准备实验环境，准备3台机器 1.作为前端服务器，mysql,redis服务器–同时临时作为代码打包服务器192.168.2.65	nginx-server  2.作为后端服务器192.168.2.66	java-server-1192.168.2.67	java-server-2   关闭防火墙，selinux 环境一键脚本1bash &lt;(curl -sSL https://gitee.com/xbd666/qingfeng/raw/master/toolbox.sh  安装nginx&#x2F;mysql123456789101112131415161718192021222324252627282930313233#安装nginx[root@web-nginx ~]# vim /etc/yum.repos.d/nginx.repo[nginx-stable]name=nginx stable repobaseurl=http://nginx.org/packages/centos/$releasever/$basearch/gpgcheck=0enabled=1[roo...</div></div></div></a><a class="pagination-related" href="/2025/01/09/%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE/" title="域名配置"><img class="cover" src="/img/picture/6.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-09</div><div class="info-item-2">域名配置</div></div><div class="info-2"><div class="info-item-1">一、使用子域名（方案一）1234567891011121314151617181920212223242526server &#123;    listen 80;    server_name service1.example.com;    location / &#123;        proxy_pass http://localhost:3000;        proxy_set_header Host $host;        proxy_set_header X-Real-IP $remote_addr;        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;        proxy_set_header X-Forwarded-Proto $scheme;    &#125;&#125;server &#123;    listen 80;    server_name service2.example.com;    location / &#123;        prox...</div></div></div></a><a class="pagination-related" href="/2025/11/05/EMQX%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" title="EMQX集群部署"><img class="cover" src="/img/picture/27.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">EMQX集群部署</div></div><div class="info-2"><div class="info-item-1">emqx–集群作用EMQX（Erlang MQTT Broker）是一个高性能、可扩展的开源 MQTT 消息代理服务器。它基于 Erlang&#x2F;OTP 开发，专为大规模物联网（IoT）应用设计。EMQX 的核心作用和功能如下：  消息代理：EMQX 作为 MQTT 消息代理，负责在发布者和订阅者之间路由消息。它支持 MQTT 协议的所有功能，包括 QoS（Quality of Service）级别、持久会话和遗嘱消息等。 设备连接管理：EMQX 可以管理大量 IoT 设备的连接，支持数百万级别的并发连接，适用于大规模的物联网应用。 数据分发：EMQX 能够高效地分发数据，确保消息在发布者和订阅者之间的快速传递，支持多种消息格式和传输协议。 扩展性：EMQX 支持插件机制，用户可以根据需求扩展其功能，如数据持久化、规则引擎、认证和授权等。  主要功能  支持多种协议  MQTT&#x2F;MQTT-SN：原生支持 MQTT 3.1.1 和 MQTT 5.0 协议。 HTTP&#x2F;HTTPS：支持通过 HTTP&#x2F;HTTPS 协议进行消息发布和订阅。 CoAP：...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Mr.xu</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xubaodong0511"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-author-social"><a href="https://github.com/xubaodong0511" target="_blank" rel="noopener"><i class="fab fa-github"></i></a><a href="https://gitee.com/xbd666" target="_blank" rel="noopener"><i class="fab fa-gitee"></i></a><a href="https://www.bilibili.com/" target="_blank" rel="noopener"><i class="fab fa-bilibili"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">相遇即是缘。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#TDEngine%E2%80%93%E9%9B%86%E7%BE%A4"><span class="toc-number">1.</span> <span class="toc-text">TDEngine–集群</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8"><span class="toc-number">1.1.</span> <span class="toc-text">作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E9%9C%80%E6%B1%82"><span class="toc-number">1.2.</span> <span class="toc-text">资源需求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E7%AB%AF%E5%8F%A3"><span class="toc-number">1.3.</span> <span class="toc-text">网络端口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2"><span class="toc-number">1.4.</span> <span class="toc-text">安装部署</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vercel部署Twikoo评论系统"/></a><div class="content"><a class="title" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统">Vercel部署Twikoo评论系统</a><time datetime="2026-02-04T05:49:39.000Z" title="发表于 2026-02-04 13:49:39">2026-02-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客"><img src="/img/picture/9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="docker 创建halo博客"/></a><div class="content"><a class="title" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客">docker 创建halo博客</a><time datetime="2025-11-06T13:17:32.000Z" title="发表于 2025-11-06 21:17:32">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置"><img src="/img/picture/5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Centos网卡配置"/></a><div class="content"><a class="title" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置">Centos网卡配置</a><time datetime="2025-11-06T13:16:51.000Z" title="发表于 2025-11-06 21:16:51">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp"><img src="/img/picture/20.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="shell添加用户，计算，vsftp"/></a><div class="content"><a class="title" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp">shell添加用户，计算，vsftp</a><time datetime="2025-11-06T13:13:49.000Z" title="发表于 2025-11-06 21:13:49">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="系统工具箱--脚本"/></a><div class="content"><a class="title" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本">系统工具箱--脚本</a><time datetime="2025-11-06T13:13:16.000Z" title="发表于 2025-11-06 21:13:16">2025-11-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">© 2025 - 2026 By <span class="copyright-author">Mr.xu</span></span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div><script src="/js/snow.js"></script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://hexoblogtwikoovercel.vercel.app',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://hexoblogtwikoovercel.vercel.app',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://cdn.jsdelivr.net/npm/twikoo@1.6.44/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><meting-js server="netease" type="playlist" id="570548381" fixed="true" autoplay="true" theme="#000000" loop="all" order="random" preload="auto" volume="0.7" muted="true" ></meting-js><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- 只保留这一行--><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></body></html>

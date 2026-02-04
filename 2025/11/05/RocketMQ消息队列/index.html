@@ -1,0 +1,482 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>RocketMQ消息队列 | Dong_Blog</title><meta name="author" content="Mr.xu"><meta name="copyright" content="Mr.xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="RocketMQ–集群作用Apache RocketMQ 是一个分布式消息中间件，主要用于消息的发布与订阅（Pub&#x2F;Sub）和消息队列（Message Queue）模式。它在高性能、高可靠性和高可扩展性方面有着显著的优势。以下是 RocketMQ 的主要作用和应用场景：  消息发布与订阅（Pub&#x2F;Sub）： RocketMQ 支持发布&#x2F;订阅模式，允许消息生产者将消息发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RocketMQ消息队列">
+<meta property="og:url" content="http://example.com/2025/11/05/RocketMQ%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/index.html">
+<meta property="og:site_name" content="Dong_Blog">
+<meta property="og:description" content="RocketMQ–集群作用Apache RocketMQ 是一个分布式消息中间件，主要用于消息的发布与订阅（Pub&#x2F;Sub）和消息队列（Message Queue）模式。它在高性能、高可靠性和高可扩展性方面有着显著的优势。以下是 RocketMQ 的主要作用和应用场景：  消息发布与订阅（Pub&#x2F;Sub）： RocketMQ 支持发布&#x2F;订阅模式，允许消息生产者将消息发">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/picture/29.jpg">
+<meta property="article:published_time" content="2025-11-05T14:13:50.000Z">
+<meta property="article:modified_time" content="2026-02-04T10:20:38.846Z">
+<meta property="article:author" content="Mr.xu">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="RockerMQ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/picture/29.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "RocketMQ消息队列",
+  "url": "http://example.com/2025/11/05/RocketMQ%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/",
+  "image": "http://example.com/img/picture/29.jpg",
+  "datePublished": "2025-11-05T14:13:50.000Z",
+  "dateModified": "2026-02-04T10:20:38.846Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Mr.xu",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/dong.png"><link rel="canonical" href="http://example.com/2025/11/05/RocketMQ%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'RocketMQ消息队列',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/picture/29.jpg);"><nav id="nav"><span id="blog-info"><a id="site-name" href="/">🍀 <strong class="site-title-bold">东</strong></a><a class="nav-page-title" href="/"><span class="site-name">RocketMQ消息队列</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">RocketMQ消息队列</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-05T14:13:50.000Z" title="发表于 2025-11-05 22:13:50">2025-11-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-04T10:20:38.846Z" title="更新于 2026-02-04 18:20:38">2026-02-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/operations/">operations</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h3 id="RocketMQ–集群"><a href="#RocketMQ–集群" class="headerlink" title="RocketMQ–集群"></a>RocketMQ–集群</h3><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>Apache RocketMQ 是一个分布式消息中间件，主要用于消息的发布与订阅（Pub&#x2F;Sub）和消息队列（Message Queue）模式。它在高性能、高可靠性和高可扩展性方面有着显著的优势。以下是 RocketMQ 的主要作用和应用场景：</p>
+<ol>
+<li><strong>消息发布与订阅（Pub&#x2F;Sub）</strong>：<ul>
+<li>RocketMQ 支持发布&#x2F;订阅模式，允许消息生产者将消息发布到一个主题（Topic），然后多个消费者可以订阅这个主题以接收消息。这种模式适用于广播消息和事件通知。</li>
+</ul>
+</li>
+<li><strong>消息队列（Message Queue）</strong>：<ul>
+<li>在消息队列模式下，消息生产者将消息发送到队列，消费者从队列中读取并处理消息。消息队列模式适用于任务分发和负载均衡。</li>
+</ul>
+</li>
+<li><strong>异步通信</strong>：<ul>
+<li>RocketMQ 支持异步消息传递，允许系统组件之间进行松耦合的通信，从而提高系统的响应速度和处理能力。</li>
+</ul>
+</li>
+<li><strong>削峰填谷</strong>：<ul>
+<li>在高并发场景下，RocketMQ 可以通过消息队列的缓冲作用来平滑流量，防止系统在短时间内被大量请求压垮。</li>
+</ul>
+</li>
+<li><strong>事件驱动架构</strong>：<ul>
+<li>RocketMQ 支持事件驱动架构，系统可以通过事件通知机制来触发后续操作，实现松耦合的系统设计。</li>
+</ul>
+</li>
+<li><strong>数据同步</strong>：<ul>
+<li>RocketMQ 可以用于分布式系统中的数据同步，确保不同系统或组件之间的数据一致性。</li>
+</ul>
+</li>
+</ol>
+<h4 id="资源需求"><a href="#资源需求" class="headerlink" title="资源需求"></a>资源需求</h4><ul>
+<li><strong>CPU</strong>: 4 核 </li>
+<li><strong>内存</strong>:  8 GB </li>
+<li><strong>存储</strong>: 100G</li>
+<li><strong>节点</strong>：2</li>
+</ul>
+<h4 id="网络端口"><a href="#网络端口" class="headerlink" title="网络端口"></a>网络端口</h4><ol>
+<li><strong>Nameserver 端口</strong>：<ul>
+<li>默认端口：9876</li>
+<li>用于 Nameserver 服务，负责管理和发现 Broker。</li>
+</ul>
+</li>
+<li><strong>Broker 端口</strong>：<ul>
+<li>默认端口：10911</li>
+<li>用于 Broker 服务，负责消息存储和转发。</li>
+</ul>
+</li>
+<li><strong>Broker HA 端口</strong>：<ul>
+<li>默认端口：10912</li>
+<li>用于 Broker 高可用（HA）复制。</li>
+</ul>
+</li>
+<li><strong>Console 端口</strong>（可选）：<ul>
+<li>默认端口：8080</li>
+<li>用于 RocketMQ 控制台管理界面。</li>
+</ul>
+</li>
+</ol>
+<h4 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h4><pre><code class="服务器">10.1.15.106
+10.1.11.103
+10.1.11.104
+
+3台机器都操作
+#下载安装包
+wget https://archive.apache.org/dist/rocketmq/4.8.0/rocketmq-all-4.8.0-bin-release.zip
+jdk 1.8
+
+
+mkdir -p /data/rocketmq
+chmod -R 755 /data/rocketmq
+
+#添加环境变量
+JAVA_HOME=/usr/local/java
+JRE_HOME=/usr/local/java/jre
+export CLASSPATH=.:\$JAVA_HOME/jre/lib:\$JAVA_HOME/lib:\$JAVA_HOME/lib/tools.jar
+ROCKETMQ_HOME=/data/rocketmq/rocketmq-4.8
+PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin:$ROCKETMQ_HOME/bin
+export JAVA_HOME JRE_HOME CLASS_PATH PATH ROCKETMQ_HOME
+
+
+#环境生效
+source /etc/porfile
+
+cd /data/rocketmq
+#解压
+upzip rocketmq-all-4.8.0-bin-release.zip
+#修改文件夹
+mv rocketmq-all-4.8.0-bin-release rocketmq-4.8
+#创建日志目录
+mkdir logs
+
+10.1.15.106--nameserver
+#编写脚本
+[root@minio rocketmq]# cat start.sh
+#!/bin/bash
+
+JAVA_HOME=/usr/local/java
+ROCKETMQ_HOME=/data/rocketmq/rocketmq-4.8
+JAVA_OPT=&quot;-server -Xms4g -Xmx4g -Xmn2g -XX:+UseConcMarkSweepGC&quot;
+
+# 将 lib 目录中的所有 JAR 文件添加到 CLASSPATH 中
+CLASSPATH=$(find $&#123;ROCKETMQ_HOME&#125;/lib -name &#39;*.jar&#39; | tr &#39;\n&#39; &#39;:&#39;)
+
+JAVA_OPT=&quot;$&#123;JAVA_OPT&#125; -classpath $&#123;CLASSPATH&#125;&quot;
+java $&#123;JAVA_OPT&#125; org.apache.rocketmq.namesrv.NamesrvStartup -n 10.1.15.106:9876
+
+
+#启动脚本
+chmod +x start.sh
+nohup ./start.sh &amp;
+
+
+
+10.1.11.103
+部署broker
+机器A配置
+#创建文件夹store,store-s（store-a：master数据存储文件夹，store-b-s:salve数据存储文件夹）
+mkdir /data/rocket/rocketmq-4.8/store-a
+
+#机器A上修改master的broker-a.properties配置文件
+cd /data/rocket/rocketmq-5.2/conf/2m-2s-async
+
+vim broker-a.properties
+配置内容如下面：
+# 集群名称,这里要master和slave保持一样
+brokerClusterName=cjsCluster
+# broker名字
+brokerName=broker-a
+#0 表示 Master，&gt;0 表示 Slave
+brokerId=0
+#删除文件时间点，默认凌晨 4点
+deleteWhen=04
+#文件保留时间，默认48小时，这里设置5天
+fileReservedTime=120
+#Broker 的角色 - ASYNC_MASTER 异步复制Master
+brokerRole=ASYNC_MASTER
+#刷盘方式 - ASYNC_FLUSH 异步刷盘
+flushDiskType=ASYNC_FLUSH
+#开启账号密码连接，需要配置plain_acl.yml文件里面的账号密码用于连接
+aclEnable=false
+ 
+# Broker 对外服务的监听端口
+listenPort=10911
+# nameserver地址，分号分割
+namesrvAddr=10.1.15.106:9876
+#在发送消息时，自动创建服务器不存在的topic，默认创建的队列数
+defaultTopicQueueNums=4
+#是否允许 Broker 自动创建Topic，建议线下开启，线上关闭
+autoCreateTopicEnable=true
+#是否允许 Broker 自动创建订阅组，建议线下开启，线上关闭
+autoCreateSubscriptionGroup=true
+#本机IP
+brokerIP1=10.1.11.103
+storePathRootDir=/data/rocketmq/rocketmq-4.8/store-a
+storePathCommitLog=/data/rocketmq/rocketmq-4.8/store-a/commitlog
+#消费队列存储路径存储路径
+storePathConsumerQueue=/data/rocketmq/rocketmq-4.8/store-a/consumequeue
+#消息索引存储路径
+storePathIndex=/data/rocketmq/rocketmq-4.8/store-a/index
+#checkpoint 文件存储路径
+storeCheckpoint=/data/rocketmq/rocketmq-4.8/store-a/checkpoint
+#abort文件存储路径
+abortFile=/data/rocketmq/rocketmq-4.8/store-a/abort
+# commitLog每个文件的大小默认1G
+mapedFileSizeCommitLog=1073741824
+#ConsumeQueue每个文件默认存30W条，根据业务情况调整
+mapedFileSizeConsumeQueue=300000
+
+
+
+10.1.11.104
+机器B上修改slave的broker-a-slave.properties配置文件
+mkdir -p /data/rocketmq/rocketmq-4.8/store-a-s
+
+cd /data/rocket/rocketmq-4.8/conf/2m-2s-async
+vim broker-a-s.properties
+配置内容如下：
+# 集群名称
+brokerClusterName=cjsCluster
+# broker名字
+brokerName=broker-a
+#0 表示 Master，&gt;0 表示 Slave
+brokerId=1
+#删除文件时间点，默认凌晨 4点
+deleteWhen=04
+#文件保留时间，默认 48 小时，这里设置5天
+fileReservedTime=120
+brokerRole=SLAVE
+flushDiskType=ASYNC_FLUSH
+#开启账号密码连接
+aclEnable=false
+ 
+# Broker 对外服务的监听端口
+listenPort=10922
+# nameserver地址，分号分割
+namesrvAddr=10.1.15.106:9876
+#在发送消息时，自动创建服务器不存在的topic，默认创建的队列数
+defaultTopicQueueNums=4
+#是否允许 Broker 自动创建Topic，建议线下开启，线上关闭
+autoCreateTopicEnable=true
+#是否允许 Broker 自动创建订阅组，建议线下开启，线上关闭
+autoCreateSubscriptionGroup=true
+#master的IP
+masterAddress=10.1.11.103
+storePathRootDir=/data/rocketmq/rocketmq-4.8/store-a-s
+storePathCommitLog=/data/rocketmq/rocketmq-4.8/store-a-s/commitlog
+#消费队列存储路径存储路径
+storePathConsumerQueue=/data/rocketmq/rocketmq-4.8/store-a-s/consumequeue
+#消息索引存储路径
+storePathIndex=/data/rocketmq/rocketmq-4.8/store-a-s/index
+#checkpoint 文件存储路径
+storeCheckpoint=/data/rocketmq/rocketmq-4.8/store-a-s/checkpoint
+#abort文件存储路径
+abortFile=/data/rocketmq/rocketmq-4.8/store-a-s/abort
+# commitLog每个文件的大小默认1G
+mapedFileSizeCommitLog=1073741824
+#ConsumeQueue每个文件默认存30W条，根据业务情况调整
+mapedFileSizeConsumeQueue=300000
+
+
+
+#机器A上编写启动文件  
+[root@rocketmq01 rocketmq]# cat mqbrokerStart-a.sh
+#!/bin/sh
+
+cd /data/rocketmq/rocketmq-4.8/bin
+
+nohup sh mqbroker -c /data/rocketmq/rocketmq-4.8/conf/2m-2s-async/broker-a.properties &gt; /data/rocketmq/logs/broker-a.log 2&gt;&amp;1 &amp;
+
+
+
+
+#slave启动文件mqbrokerStart-a-s.sh内容如下编写
+vim mqbrokerStart-a-s.sh
+#!/bin/sh
+ 
+cd /data/rocketmq/rocketmq-4.8/bin
+ 
+nohup sh mqbroker -c /data/rocketmq/rocketmq-4.8/conf/2m-2s-async/broker-a-s.properties &gt; /data/rocketmq/logs/broker-a-s.log 2&gt;&amp;1 &amp;
+ 
+exit
+
+
+#给与权限
+chmod +x mqbrokerStart-a.sh
+chmod +x mqbrokerStart-a-s.sh
+
+
+启动broker--按顺序启动
+机器A上启动master：broker-a
+cd /data/rocketmq
+./mqbrokerStart-a.sh
+
+
+机器B上启动slave：broker-a-s
+cd /data/rocketmq
+./mqbrokerStart-a-s.sh
+
+
+#验证机器信息
+cd /data/rocketmq/rocketmq-4.8/bin/
+./mqadmin clusterList -n 10.1.15.106:9876
+</code></pre>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Mr.xu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/11/05/RocketMQ%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">http://example.com/2025/11/05/RocketMQ%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">Dong_Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/RockerMQ/">RockerMQ</a></div><div class="post-share"><div class="social-share" data-image="/img/picture/29.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/11/05/kkFileview%E6%96%87%E4%BB%B6%E9%A2%84%E8%A7%88/" title="kkFileview文件预览"><img class="cover" src="/img/picture/11.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">kkFileview文件预览</div></div><div class="info-2"><div class="info-item-1">kkfileview–单节点作用 文档预览： 支持预览多种文档格式，如 Word（.doc、.docx）、Excel（.xls、.xlsx）、PowerPoint（.ppt、.pptx）、PDF、TXT、图片（.jpg、.png、.gif）等。 用户无需下载文件即可在浏览器中查看文档内容。   跨平台支持： 兼容多种操作系统和浏览器，用户可以在不同设备上进行文档预览。   集成简单： 提供 RESTful API，方便与其他系统集成，如文件管理系统、内容管理系统（CMS）、企业内部系统等。 通过简单的 HTTP 请求即可实现文档预览功能。   高性能： 采用高效的文档转换和渲染技术，确保文档预览的速度和质量。 支持缓存机制，提高文档预览的响应速度。   安全性： 提供多种安全配置选项，如访问控制、数据加密等，确保文档预览过程中的数据安全。 支持配置白名单，限制只有特定 IP 地址可以访问预览服务。   扩展性： 支持插件机制，用户可以根据需求扩展支持的文档格式和功能。 提供详细的文档和示例，方便用户进行二次开发和定制。    资源需求 CPU: 4 核  内存:  8 GB  存...</div></div></div></a><a class="pagination-related" href="/2025/11/05/ansible%E9%83%A8%E7%BD%B2mysql%E4%B8%BB%E4%BB%8E/" title="ansible部署mysql主从"><img class="cover" src="/img/picture/26.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">ansible部署mysql主从</div></div><div class="info-2"><div class="info-item-1">MySQL主从作用：MySQL 是一种开源的关系数据库管理系统（RDBMS），广泛用于各种应用场景。以下是 MySQL 的主要作用和用途：  数据存储和管理:  MySQL 用于存储和管理大量结构化数据。它支持多种数据类型和复杂的查询操作，适合处理各种业务数据。   Web 应用程序:  MySQL 是许多 Web 应用程序的后端数据库，尤其是与 PHP 结合使用。常见的内容管理系统（CMS）如 WordPress、Joomla 和 Drupal 都依赖 MySQL。   电子商务:  电子商务平台如 Magento、WooCommerce 和 Shopify 使用 MySQL 来管理产品信息、订单、客户数据等。   数据分析:  MySQL 可以用于数据分析和商业智能（BI），通过与工具如 Tableau、Power BI 和 Excel 集成，帮助企业做出数据驱动的决策。   企业应用:  企业资源计划（ERP）、客户关系管理（CRM）和其他企业级应用程序常常使用 MySQL 作为其数据库后端。   高可用性和扩展性:  MySQL 支持复制和集群功能，可以实现高可用性和扩展...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/11/06/%E5%AE%89%E8%A3%85Tomcat%E3%80%81JDK%EF%BC%88java%EF%BC%89/" title="安装Tomcat、JDK（java）实验"><img class="cover" src="/img/picture/3.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">安装Tomcat、JDK（java）实验</div></div><div class="info-2"><div class="info-item-1">1、安装JDK上传jdk1.8到服务器，安装jdk 123[root@java-tomcat1 ~]# tar xzf jdk-8u191-linux-x64.tar.gz -C /usr/local/[root@java-tomcat1 ~]# cd /usr/local/[root@java-tomcat1 local]# mv jdk1.8.0_191/ java 设置环境变量: 1234[root@java-tomcat1 local]# vim /etc/profileJAVA_HOME=/usr/local/java #指定java安装目录PATH=$JAVA_HOME/bin:$PATH #用于指定java系统查找命令的路径export JAVA_HOME PATH #类的路径，在编译运行java程序时，如果有调用到其他类的时候，在classpath中寻找需要的类。 检测JDK是否安装成功: 12345[root@java-tomcat1 local]# source /etc/profile[root@java-tomcat1 local]# java -vers...</div></div></div></a><a class="pagination-related" href="/2025/11/06/Nginx-%E4%BC%9A%E8%AF%9D%E4%BF%9D%E6%8C%81/" title="Nginx 会话保持"><img class="cover" src="/img/picture/25.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">Nginx 会话保持</div></div><div class="info-2"><div class="info-item-1">nginx 会话保持nginx会话保持主要有以下几种实现方式： 1、ip_hash 12345ip_hash使用源地址哈希算法，将同一客户端的请求总是发往同一个后端服务器，除非该服务器不可用。ip_hash简单易用，但有如下问题：当后端服务器宕机后，session会丢失；来自同一局域网的客户端会被转发到同一个后端服务器，可能导致负载失衡；  示例 123456upstream backend &#123;    ip_hash;    server backend1.example.com;    server backend2.example.com;    server backend3.example.com down;&#125;  2、sticky_cookie_insert—而是基于cookie实现 使用sticky_cookie_insert，这会让来自同一客户端的请求被传递到一组服务器的同一台服务器。与ip_hash不同之处在于，它不是基于IP来判断客户端的，而是基于cookie来判断。(需要引入第三方模块才能实现)—sticky模块。因此可以避免上述ip_has...</div></div></div></a><a class="pagination-related" href="/2025/01/09/%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE/" title="域名配置"><img class="cover" src="/img/picture/6.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-01-09</div><div class="info-item-2">域名配置</div></div><div class="info-2"><div class="info-item-1">一、使用子域名（方案一）1234567891011121314151617181920212223242526server &#123;    listen 80;    server_name service1.example.com;    location / &#123;        proxy_pass http://localhost:3000;        proxy_set_header Host $host;        proxy_set_header X-Real-IP $remote_addr;        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;        proxy_set_header X-Forwarded-Proto $scheme;    &#125;&#125;server &#123;    listen 80;    server_name service2.example.com;    location / &#123;        prox...</div></div></div></a><a class="pagination-related" href="/2025/11/05/%E9%83%A8%E7%BD%B2prometheus/" title="部署prometheus"><img class="cover" src="/img/picture/7.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">部署prometheus</div></div><div class="info-2"><div class="info-item-1">部署prometheus一、准备环境   主机名 IP 配置    client 10.100.40.185    agent 10.100.40.171    agent     二、部署prometheus1、下载地址1234wget prometheus-2.47.2.linux-amd64.tar.gz官网地址https://prometheus.io/download/  2、创建目录1mkdir -pv /data/pormetheus/&#123;data,soft,lag&#125;  3、解压安装包1tar xzf prometheus-2.47.2.linux-amd64.tar.gz -C /data/prometheus/soft  做个软连接，方便操作12cd /data/prometheus/softln -sv prometheus-2.47.2.linux-amd64 prometheus  三、启动12在/data/prometheus/soft/prometfeus目录下启动nohup ./prometheus &amp;  四、检查，并查看1...</div></div></div></a><a class="pagination-related" href="/2025/11/06/redis-cluster-%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" title="redis-cluster 集群部署"><img class="cover" src="/img/picture/23.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">redis-cluster 集群部署</div></div><div class="info-2"><div class="info-item-1">redis-cluster集群 准备环境 准备3台机器，关闭防火墙和selinux 12345678910111213# 注:规划架构两种方案，一种是单机多实例，这里我们采用多机器部署:三台机器，每台机器上面两个redis实例，一个master一个slave，第一列做主库，第二列做备库#记得选出控制节点[root@localhost ~]# vim /etc/hostsredis-cluster1 192.168.116.111 7000 7001redis-cluster2 192.168.116.131 7002 7003redis-cluster3 192.168.116.132 7004 7005# 修改主机名[root@localhost ~]# hostnamectl set-hostname redis-cluster1[root@localhost ~]# hostnamectl set-hostname redis-cluster2[root@localhost ~]# hostnamectl set-hostname redis-cluster3  三台机器相...</div></div></div></a><a class="pagination-related" href="/2025/11/06/gitee-%E4%BB%93%E5%BA%93%E5%88%9B%E5%BB%BA%E5%8F%8A%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6/" title="gitee 仓库创建及上传文件"><img class="cover" src="/img/picture/16.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-06</div><div class="info-item-2">gitee 仓库创建及上传文件</div></div><div class="info-2"><div class="info-item-1">首先由个gitee的账号git 全局设置12git config --global user.name&quot;名字&quot;git config --global user.email &quot;邮箱&quot;  创建git仓库12345678mkdir qingfengcd qingfenggit inittouch README.mdgit add README.mdgit commit -m &quot;first commit&quot;git remote add origin https://gitee.com/xbd666/qingfeng.gitgit push -u origin &quot;master&quot; 备注：也可以在搜索栏那里直接拉取，就不需要终端命令设置了 已有仓库的123cd existing_git_repogit remote add origin https://gitee.com/xbd666/qingfeng.gitgit push -u origin &quot;master&quot;  拉取1git pull ori...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Mr.xu</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xubaodong0511"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-author-social"><a href="https://github.com/xubaodong0511" target="_blank" rel="noopener"><i class="fab fa-github"></i></a><a href="https://gitee.com/xbd666" target="_blank" rel="noopener"><i class="fab fa-gitee"></i></a><a href="https://www.bilibili.com/" target="_blank" rel="noopener"><i class="fab fa-bilibili"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">相遇即是缘。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#RocketMQ%E2%80%93%E9%9B%86%E7%BE%A4"><span class="toc-number">1.</span> <span class="toc-text">RocketMQ–集群</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8"><span class="toc-number">1.1.</span> <span class="toc-text">作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E9%9C%80%E6%B1%82"><span class="toc-number">1.2.</span> <span class="toc-text">资源需求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E7%AB%AF%E5%8F%A3"><span class="toc-number">1.3.</span> <span class="toc-text">网络端口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2"><span class="toc-number">1.4.</span> <span class="toc-text">安装部署</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vercel部署Twikoo评论系统"/></a><div class="content"><a class="title" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统">Vercel部署Twikoo评论系统</a><time datetime="2026-02-04T05:49:39.000Z" title="发表于 2026-02-04 13:49:39">2026-02-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客"><img src="/img/picture/9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="docker 创建halo博客"/></a><div class="content"><a class="title" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客">docker 创建halo博客</a><time datetime="2025-11-06T13:17:32.000Z" title="发表于 2025-11-06 21:17:32">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置"><img src="/img/picture/5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Centos网卡配置"/></a><div class="content"><a class="title" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置">Centos网卡配置</a><time datetime="2025-11-06T13:16:51.000Z" title="发表于 2025-11-06 21:16:51">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp"><img src="/img/picture/20.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="shell添加用户，计算，vsftp"/></a><div class="content"><a class="title" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp">shell添加用户，计算，vsftp</a><time datetime="2025-11-06T13:13:49.000Z" title="发表于 2025-11-06 21:13:49">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="系统工具箱--脚本"/></a><div class="content"><a class="title" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本">系统工具箱--脚本</a><time datetime="2025-11-06T13:13:16.000Z" title="发表于 2025-11-06 21:13:16">2025-11-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">© 2025 - 2026 By <span class="copyright-author">Mr.xu</span></span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div><script src="/js/snow.js"></script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://hexoblogtwikoovercel.vercel.app',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://hexoblogtwikoovercel.vercel.app',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://cdn.jsdelivr.net/npm/twikoo@1.6.44/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><meting-js server="netease" type="playlist" id="570548381" fixed="true" autoplay="true" theme="#000000" loop="all" order="random" preload="auto" volume="0.7" muted="true" ></meting-js><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- 只保留这一行--><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></body></html>

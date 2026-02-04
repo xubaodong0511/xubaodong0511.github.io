@@ -1,0 +1,153 @@
+/* -----------------------------------文档标题颜色----------------------------------- */
+/* 首页文章标题为绿色 */
+.article-title {
+  color: #22c55e !important;
+}
+
+/* 导航栏主页和服务加粗 */
+#nav .menus_item a,
+#nav .menus_item span {
+  font-weight: 900 !important;
+}
+
+/* -----------------------------------文章时间颜色----------------------------------- */
+/* 首页文章时间图标为蓝色 */
+.post-meta-date .fa-calendar-alt {
+  color: #2563eb !important;
+}
+/* 首页文章时间和归档时间为黄色 */
+.post-meta-date,
+.archive-year,
+.archive-month,
+.archive-day {
+  color: #facc15 !important;
+}
+
+/* -----------------------------------operations颜色----------------------------------- */
+/* 首页文章分类图标为蓝色 */
+.article-meta .fa-inbox {
+  color: #2563eb !important;
+}
+/* 首页文章分类为黄色 */
+.article-meta a,
+.article-meta .category {
+  color: #facc15 !important;
+}
+
+/* -----------------------------------侧边栏相关设置----------------------------------- */
+/* 公告字体颜色 */
+/* .card-announcement .item-headline span {
+  color: #ffffff !important;
+} */
+
+/* 最新文章图标颜色 */
+.item-headline .fa-history {
+  color: #ff0000 !important;
+}
+
+/* 分类图标颜色 */
+.item-headline .fa-folder-open {
+  color: #ff9900 !important;
+}
+
+/* 标签图标颜色 */
+.item-headline .fa-tags {
+  color: #ffe600 !important;
+}
+
+/* 归档图标颜色 */
+.item-headline .fa-archive {
+  color: #0dff00 !important;
+}
+
+/* 网站信息图标颜色 */
+.item-headline .fa-chart-line {
+  color: #00ffb3 !important;
+}
+
+/* -----------------------------------标签颜色----------------------------------- */
+/* 标签数量统计 渐变色 */
+.tag-count {
+  font-size: 1.0em;
+  font-weight: bold;
+  background: linear-gradient(90deg, #f7971e, #ffd200, #21d4fd, #21d4fd, #21d4fd, #b721ff, #f1f0f2, #f1f0f2, #f1f0f2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 七彩标签云样式 */
+.card-tag-cloud a {
+  transition: color 0.3s, background 0.3s;
+  font-weight: bold;
+  border-radius: 4px;
+  padding: 2px 8px;
+  margin: 2px 4px;
+  display: inline-block;
+}
+
+/* 七彩标签云样式加强版，覆盖内联样式 */
+.card-tag-cloud a:nth-child(7n+1),
+.card-tag-cloud a:nth-child(7n+1):visited {
+  color: #e74c3c !important;
+}
+.card-tag-cloud a:nth-child(7n+2),
+.card-tag-cloud a:nth-child(7n+2):visited {
+  color: #f39c12 !important;
+}
+.card-tag-cloud a:nth-child(7n+3),
+.card-tag-cloud a:nth-child(7n+3):visited {
+  color: #f1c40f !important;
+}
+.card-tag-cloud a:nth-child(7n+4),
+.card-tag-cloud a:nth-child(7n+4):visited {
+  color: #2ecc71 !important;
+}
+.card-tag-cloud a:nth-child(7n+5),
+.card-tag-cloud a:nth-child(7n+5):visited {
+  color: #3498db !important;
+}
+.card-tag-cloud a:nth-child(7n+6),
+.card-tag-cloud a:nth-child(7n+6):visited {
+  color: #9b59b6 !important;
+}
+.card-tag-cloud a:nth-child(7n),
+.card-tag-cloud a:nth-child(7n):visited {
+  color: #e67e22 !important;
+}
+
+/* -----------------------------------页脚背景颜色----------------------------------- */
+/* 统计标签数量*/
+.card-tag-cloud a {
+  position: relative;
+  display: inline-block;
+}
+
+.card-tag-cloud .tag-sup {
+  position: absolute;
+  /* 数字高度 */
+  top: -0.1em;
+  /* 数字前后距离 */
+  right: -0.9em;
+  font-size: 0.65em;
+  color: #fff;
+  /* background: #ff5722; */
+  border-radius: 50%;
+  padding: 0 0.4em;
+  font-style: normal;
+  font-weight: bold;
+  pointer-events: none;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  line-height: 1;
+}
+
+/* -----------------------------------页脚背景颜色----------------------------------- */
+/* 页脚颜色 */
+#footer {
+  background-color: #0a0a0a !important;
+}
+
+/* 页脚Mr.xu名称颜色 */
+.copyright-author {
+  color: #ff0000 !important;
+}

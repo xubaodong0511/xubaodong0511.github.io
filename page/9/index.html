@@ -1,0 +1,186 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Dong_Blog</title><meta name="author" content="Mr.xu"><meta name="copyright" content="Mr.xu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta property="og:type" content="website">
+<meta property="og:title" content="Dong_Blog">
+<meta property="og:url" content="http://example.com/page/9/index.html">
+<meta property="og:site_name" content="Dong_Blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/dong.png">
+<meta property="article:author" content="Mr.xu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/dong.png"><script type="application/ld+json"></script><link rel="shortcut icon" href="/img/dong.png"><link rel="canonical" href="http://example.com/page/9/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Dong_Blog',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'home'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url(/img/muscle.jpg);"><nav id="nav"><span id="blog-info"><a id="site-name" href="/">🍀 <strong class="site-title-bold">东</strong></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-cogs"></i><span> 服务</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://cnb.cool/xubaodong/images/-/packages?type=docker&amp;ordering=last_push_at"><i class="fa-fw fas fa-docker"></i><span> 镜像</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="site-info"><h1 id="site-title">Meeting is fate</h1></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="post_cover left"><a href="/2025/01/07/MySQL%E5%85%A8%E9%87%8F%E5%A4%87%E4%BB%BD-%E5%A2%9E%E9%87%8F%E5%A4%87%E4%BB%BD%E8%84%9A%E6%9C%AC/" title="MySQL全量备份/增量备份脚本"><img class="post-bg" src="/img/picture/29.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="MySQL全量备份/增量备份脚本"></a></div><div class="recent-post-info"><a class="article-title" href="/2025/01/07/MySQL%E5%85%A8%E9%87%8F%E5%A4%87%E4%BB%BD-%E5%A2%9E%E9%87%8F%E5%A4%87%E4%BB%BD%E8%84%9A%E6%9C%AC/" title="MySQL全量备份/增量备份脚本">MySQL全量备份/增量备份脚本</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2025-01-07T12:49:48.000Z" title="发表于 2025-01-07 20:49:48">2025-01-07</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/operations/">operations</a></span></div><div class="content">#!&#x2F;bin&#x2F;bash mysql物理备份脚本每周日进行全量备份，周一到周六进行增量备份，7天为一个周期备份路径、日志路径123456backup_dir=&quot;/backup&quot;log_dir=&quot;/backup/log&quot;full_backup_dir=&quot;/backup/full&quot;inc_backup_dir=&quot;/backup/inc&quot;log_date=$(date &quot;+%F-%T&quot;) 数据库用户、密码12MY_USER=rootMY_PASS=P@ssword1 判断日志、备份路径是否存在1234[ -d $backup_dir ] || mkdir $backup_dir[ -d $log_dir ] || mkdir $log_dir[ -d $full_backup_dir ] || mkdir $full_backup_dir[ -d $inc_backup_dir ] || mkdir $inc_backup_dir 全量备份函数123456789full...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2025/01/06/docker%E9%83%A8%E7%BD%B2halo%E5%8D%9A%E5%AE%A2/" title="docker部署halo博客"><img class="post-bg" src="/img/picture/26.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="docker部署halo博客"></a></div><div class="recent-post-info"><a class="article-title" href="/2025/01/06/docker%E9%83%A8%E7%BD%B2halo%E5%8D%9A%E5%AE%A2/" title="docker部署halo博客">docker部署halo博客</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2025-01-06T14:28:57.000Z" title="发表于 2025-01-06 22:28:57">2025-01-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/operations/">operations</a></span></div><div class="content">docker博客创建编辑配置文件1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859vim /halo/docker-compose.yamlversion: &quot;3&quot;services:  halo    image: halohub/halo:2.11    container_name: halo    restart: on-failure:3    depends_on:      halodb:        condition: service_healthy    networks:      halo_network:    volumes:   - ./halo2:/root/.halo2     rts:        - &quot;8090:8090&quot;          althcheck:                test: [&quot;CMD&quot;...</div></div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/8/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/#content-inner">8</a><span class="page-number current">9</span></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/dong.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Mr.xu</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">82</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">46</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xubaodong0511"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-author-social"><a href="https://github.com/xubaodong0511" target="_blank" rel="noopener"><i class="fab fa-github"></i></a><a href="https://gitee.com/xbd666" target="_blank" rel="noopener"><i class="fab fa-gitee"></i></a><a href="https://www.bilibili.com/" target="_blank" rel="noopener"><i class="fab fa-bilibili"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">相遇即是缘。</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vercel部署Twikoo评论系统"/></a><div class="content"><a class="title" href="/2026/02/04/Vercel%E9%83%A8%E7%BD%B2Twikoo%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F/" title="Vercel部署Twikoo评论系统">Vercel部署Twikoo评论系统</a><time datetime="2026-02-04T05:49:39.000Z" title="发表于 2026-02-04 13:49:39">2026-02-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客"><img src="/img/picture/9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="docker 创建halo博客"/></a><div class="content"><a class="title" href="/2025/11/06/docker-%E5%88%9B%E5%BB%BAhalo%E5%8D%9A%E5%AE%A2/" title="docker 创建halo博客">docker 创建halo博客</a><time datetime="2025-11-06T13:17:32.000Z" title="发表于 2025-11-06 21:17:32">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置"><img src="/img/picture/5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Centos网卡配置"/></a><div class="content"><a class="title" href="/2025/11/06/Centos%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" title="Centos网卡配置">Centos网卡配置</a><time datetime="2025-11-06T13:16:51.000Z" title="发表于 2025-11-06 21:16:51">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp"><img src="/img/picture/20.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="shell添加用户，计算，vsftp"/></a><div class="content"><a class="title" href="/2025/11/06/shell%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%EF%BC%8C%E8%AE%A1%E7%AE%97%EF%BC%8Cvsftp/" title="shell添加用户，计算，vsftp">shell添加用户，计算，vsftp</a><time datetime="2025-11-06T13:13:49.000Z" title="发表于 2025-11-06 21:13:49">2025-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本"><img src="/img/picture/25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="系统工具箱--脚本"/></a><div class="content"><a class="title" href="/2025/11/06/%E7%B3%BB%E7%BB%9F%E5%B7%A5%E5%85%B7%E7%AE%B1-%E8%84%9A%E6%9C%AC/" title="系统工具箱--脚本">系统工具箱--脚本</a><time datetime="2025-11-06T13:13:16.000Z" title="发表于 2025-11-06 21:13:16">2025-11-06</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/operations/"><span class="card-category-list-name">operations</span><span class="card-category-list-count">82</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span><div class="tag-count">标签总数: 46</div></div><div class="card-tag-cloud"><a href="/tags/Ansible/" style="font-size: 1.1em; color: #d9bb85; margin-right: 16px; position: relative; display: inline-block;">Ansible<sup class="tag-sup">3</sup></a><a href="/tags/Centos/" style="font-size: 1.1em; color: #3fad68; margin-right: 16px; position: relative; display: inline-block;">Centos<sup class="tag-sup">1</sup></a><a href="/tags/ChatGPT/" style="font-size: 1.1em; color: #622592; margin-right: 16px; position: relative; display: inline-block;">ChatGPT<sup class="tag-sup">1</sup></a><a href="/tags/Deban/" style="font-size: 1.1em; color: #62fc60; margin-right: 16px; position: relative; display: inline-block;">Deban<sup class="tag-sup">1</sup></a><a href="/tags/Docker/" style="font-size: 1.1em; color: #5d4744; margin-right: 16px; position: relative; display: inline-block;">Docker<sup class="tag-sup">7</sup></a><a href="/tags/ELK/" style="font-size: 1.1em; color: #303851; margin-right: 16px; position: relative; display: inline-block;">ELK<sup class="tag-sup">1</sup></a><a href="/tags/EMQX/" style="font-size: 1.1em; color: #e71cf0; margin-right: 16px; position: relative; display: inline-block;">EMQX<sup class="tag-sup">1</sup></a><a href="/tags/Git/" style="font-size: 1.1em; color: #93a445; margin-right: 16px; position: relative; display: inline-block;">Git<sup class="tag-sup">3</sup></a><a href="/tags/Gitlab/" style="font-size: 1.1em; color: #d6b722; margin-right: 16px; position: relative; display: inline-block;">Gitlab<sup class="tag-sup">2</sup></a><a href="/tags/Hexo/" style="font-size: 1.1em; color: #afd61f; margin-right: 16px; position: relative; display: inline-block;">Hexo<sup class="tag-sup">1</sup></a><a href="/tags/JDK/" style="font-size: 1.1em; color: #dfb236; margin-right: 16px; position: relative; display: inline-block;">JDK<sup class="tag-sup">1</sup></a><a href="/tags/Jenkins/" style="font-size: 1.1em; color: #2b79e; margin-right: 16px; position: relative; display: inline-block;">Jenkins<sup class="tag-sup">2</sup></a><a href="/tags/KVM/" style="font-size: 1.1em; color: #700c86; margin-right: 16px; position: relative; display: inline-block;">KVM<sup class="tag-sup">1</sup></a><a href="/tags/Kubernetes/" style="font-size: 1.1em; color: #b8c840; margin-right: 16px; position: relative; display: inline-block;">Kubernetes<sup class="tag-sup">10</sup></a><a href="/tags/Linux/" style="font-size: 1.1em; color: #4f6dea; margin-right: 16px; position: relative; display: inline-block;">Linux<sup class="tag-sup">82</sup></a><a href="/tags/Markdown/" style="font-size: 1.1em; color: #c96111; margin-right: 16px; position: relative; display: inline-block;">Markdown<sup class="tag-sup">1</sup></a><a href="/tags/Minio/" style="font-size: 1.1em; color: #c1083; margin-right: 16px; position: relative; display: inline-block;">Minio<sup class="tag-sup">1</sup></a><a href="/tags/MongoDB/" style="font-size: 1.1em; color: #6e67ec; margin-right: 16px; position: relative; display: inline-block;">MongoDB<sup class="tag-sup">1</sup></a><a href="/tags/Mysql/" style="font-size: 1.1em; color: #a9071c; margin-right: 16px; position: relative; display: inline-block;">Mysql<sup class="tag-sup">4</sup></a><a href="/tags/Nacos/" style="font-size: 1.1em; color: #d3a7f9; margin-right: 16px; position: relative; display: inline-block;">Nacos<sup class="tag-sup">2</sup></a><a href="/tags/Network/" style="font-size: 1.1em; color: #b51b8; margin-right: 16px; position: relative; display: inline-block;">Network<sup class="tag-sup">1</sup></a><a href="/tags/Nexus/" style="font-size: 1.1em; color: #df5abd; margin-right: 16px; position: relative; display: inline-block;">Nexus<sup class="tag-sup">1</sup></a><a href="/tags/Nginx/" style="font-size: 1.1em; color: #c288fd; margin-right: 16px; position: relative; display: inline-block;">Nginx<sup class="tag-sup">17</sup></a><a href="/tags/Oracle/" style="font-size: 1.1em; color: #de126c; margin-right: 16px; position: relative; display: inline-block;">Oracle<sup class="tag-sup">1</sup></a><a href="/tags/Prometheus/" style="font-size: 1.1em; color: #e2a595; margin-right: 16px; position: relative; display: inline-block;">Prometheus<sup class="tag-sup">2</sup></a><a href="/tags/RabbiMQ/" style="font-size: 1.1em; color: #d391f9; margin-right: 16px; position: relative; display: inline-block;">RabbiMQ<sup class="tag-sup">1</sup></a><a href="/tags/Redis/" style="font-size: 1.1em; color: #8249fe; margin-right: 16px; position: relative; display: inline-block;">Redis<sup class="tag-sup">3</sup></a><a href="/tags/RockerMQ/" style="font-size: 1.1em; color: #d9c98; margin-right: 16px; position: relative; display: inline-block;">RockerMQ<sup class="tag-sup">1</sup></a><a href="/tags/Ruoyi/" style="font-size: 1.1em; color: #7c61c3; margin-right: 16px; position: relative; display: inline-block;">Ruoyi<sup class="tag-sup">2</sup></a><a href="/tags/Rustesk/" style="font-size: 1.1em; color: #d7a420; margin-right: 16px; position: relative; display: inline-block;">Rustesk<sup class="tag-sup">1</sup></a><a href="/tags/SSL/" style="font-size: 1.1em; color: #d4f4d; margin-right: 16px; position: relative; display: inline-block;">SSL<sup class="tag-sup">1</sup></a><a href="/tags/Script/" style="font-size: 1.1em; color: #3a808d; margin-right: 16px; position: relative; display: inline-block;">Script<sup class="tag-sup">6</sup></a><a href="/tags/Shell/" style="font-size: 1.1em; color: #8b4524; margin-right: 16px; position: relative; display: inline-block;">Shell<sup class="tag-sup">1</sup></a><a href="/tags/SyncTV/" style="font-size: 1.1em; color: #b2cfb7; margin-right: 16px; position: relative; display: inline-block;">SyncTV<sup class="tag-sup">1</sup></a><a href="/tags/TDengine/" style="font-size: 1.1em; color: #9de924; margin-right: 16px; position: relative; display: inline-block;">TDengine<sup class="tag-sup">1</sup></a><a href="/tags/Tomcat/" style="font-size: 1.1em; color: #ba43c; margin-right: 16px; position: relative; display: inline-block;">Tomcat<sup class="tag-sup">1</sup></a><a href="/tags/Toolbox/" style="font-size: 1.1em; color: #c6b54d; margin-right: 16px; position: relative; display: inline-block;">Toolbox<sup class="tag-sup">8</sup></a><a href="/tags/Zabbix/" style="font-size: 1.1em; color: #733424; margin-right: 16px; position: relative; display: inline-block;">Zabbix<sup class="tag-sup">2</sup></a><a href="/tags/Zentao/" style="font-size: 1.1em; color: #6c9ca8; margin-right: 16px; position: relative; display: inline-block;">Zentao<sup class="tag-sup">1</sup></a><a href="/tags/Zipkin/" style="font-size: 1.1em; color: #825014; margin-right: 16px; position: relative; display: inline-block;">Zipkin<sup class="tag-sup">1</sup></a><a href="/tags/halo/" style="font-size: 1.1em; color: #a25ea3; margin-right: 16px; position: relative; display: inline-block;">halo<sup class="tag-sup">1</sup></a><a href="/tags/kkFileview/" style="font-size: 1.1em; color: #8ba2ae; margin-right: 16px; position: relative; display: inline-block;">kkFileview<sup class="tag-sup">1</sup></a><a href="/tags/mariadb/" style="font-size: 1.1em; color: #99386e; margin-right: 16px; position: relative; display: inline-block;">mariadb<sup class="tag-sup">1</sup></a><a href="/tags/php/" style="font-size: 1.1em; color: #a19aac; margin-right: 16px; position: relative; display: inline-block;">php<sup class="tag-sup">1</sup></a><a href="/tags/prometheus/" style="font-size: 1.1em; color: #25c140; margin-right: 16px; position: relative; display: inline-block;">prometheus<sup class="tag-sup">1</sup></a><a href="/tags/%E5%9F%9F%E5%90%8D/" style="font-size: 1.1em; color: #81ae3; margin-right: 16px; position: relative; display: inline-block;">域名<sup class="tag-sup">1</sup></a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/02/">
+            <span class="card-archive-list-date">
+              二月 2026
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/11/">
+            <span class="card-archive-list-date">
+              十一月 2025
+            </span>
+            <span class="card-archive-list-count">71</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/01/">
+            <span class="card-archive-list-date">
+              一月 2025
+            </span>
+            <span class="card-archive-list-count">10</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">82</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总浏览量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2026-02-04T10:24:51.243Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">© 2025 - 2026 By <span class="copyright-author">Mr.xu</span></span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div><script src="/js/snow.js"></script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"></div><meting-js server="netease" type="playlist" id="570548381" fixed="true" autoplay="true" theme="#000000" loop="all" order="random" preload="auto" volume="0.7" muted="true" ></meting-js><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/metingjs/dist/Meting.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- 只保留这一行--><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></body></html>
